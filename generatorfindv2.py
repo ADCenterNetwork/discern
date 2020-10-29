@@ -9,14 +9,13 @@ def get_parent(tree):
 def generatorfind(tree):
     functions = []
     for node in ast.walk(tree):
-        nodes = []
         if node.__class__.__name__ == "Yield":
             namespace = []
             parent = node.parent
             while not parent.__class__.__name__ == "Module":
                 if parent.__class__.__name__ == "FunctionDef" or parent.__class__.__name__ == "ClassDef":
-                    namespace.append(parent.name)
-                    nodes.append(parent)
+                    #namespace.append(parent.name)
+                    namespace.insert(0,parent.name)
                 parent = parent.parent  
             functions.append(namespace)
     #zipped = list(zip(functions, nodefunc))
