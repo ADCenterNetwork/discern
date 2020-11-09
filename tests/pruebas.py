@@ -31,6 +31,9 @@ def generator():
 
 next(generator())
 
+g = generator()
+next(g)
+
 #distintas formas de llamar un generator
 #1º forma:
 
@@ -70,10 +73,21 @@ for item in clase.firstn(5):
 
 next(Clase2().Clase3().firstn(5))
 
-nueva_clase = Clase2().Clase3()
+nueva_clase = Clase2()
 
-next(nueva_clase.firstn(5))
+next(nueva_clase.Clase3().firstn(5))
 
+nueva_clase3 = Clase2().Clase3().firstn(5)
+
+next(nueva_clase3)
+
+
+def f():
+    return 'hola'
+
+generator = f()
+
+print(generator)
 
 
 
