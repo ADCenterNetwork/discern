@@ -44,9 +44,17 @@ assignsearch = prueba.assignsearch
 findcall = prueba.findcall
 
 
-
+def test_yieldfind():
+    yieldfind()
+    res = []
+    for sublist in prueba.generators:
+        res.append([])
+        for node in sublist:
+            res[-1].append(node.__class__.__name__)
+    assert res == [['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], ['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], ['Module','FunctionDef', 'FunctionDef', 'FunctionDef', 'While', 'Expr', 'Yield'], ['Module','FunctionDef','Expr', 'Yield']]
+        
 
 def test_generatorfind():
-    yieldfind()
     generatorfind()
     assert prueba.generators == [['Clase1_1', 'Clase1_2', 'firstn'], ['Clase2_1', 'Clase2_2', 'firstn'], ['primera', 'segunda', 'qsfn'], ['generator']]
+
