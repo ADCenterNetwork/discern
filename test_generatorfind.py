@@ -58,3 +58,10 @@ def test_generatorfind():
     generatorfind()
     assert prueba.generators == [['Clase1_1', 'Clase1_2', 'firstn'], ['Clase2_1', 'Clase2_2', 'firstn'], ['primera', 'segunda', 'qsfn'], ['generator']]
 
+def test_findcall():
+    assignsearch()
+    findcall()
+    assert prueba.calls == {['Clase1_1', 'Clase1_2', 'firstn']:[43,50,56,58,62,64,71,72], \
+    ['Clase2_1', 'Clase2_2', 'firstn']:[79,83,86,87], \
+    ['primera', 'segunda', 'qsfn']:[], \
+    ['generator']:[35,37,38]}
