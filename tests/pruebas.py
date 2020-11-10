@@ -1,13 +1,14 @@
 
-class Clasetotal:
-    def firstn(self, n):
-        num = 0
-        while num < n:
-            yield num
-            num += 1
+class Clase1_1:
+    class Clase1_2:
+        def firstn(self, n):
+            num = 0
+            while num < n:
+                yield num
+                num += 1
 
-class Clase2:
-    class Clase3:
+class Clase2_1:
+    class Clase2_2:
         def firstn(self, n):
             num = n**2
             while num > n:
@@ -37,18 +38,18 @@ next(g)
 #distintas formas de llamar un generator
 #1º forma:
 
-next(Clasetotal().firstn(5))
+next(Clase1_1().Clase1_2().firstn(5))
 
 #2ª forma:
 
 
-clase = Clasetotal()
+clase = Clase1_1().Clase1_2()
 
 next(clase.firstn(5))
 
 #3ª forma:
 
-clase = Clasetotal()
+clase = Clase1_1().Clase1_2()
 
 generator = clase.firstn(5)
 
@@ -56,14 +57,14 @@ next(generator)
 
 #4ª forma
 
-generator = Clasetotal().firstn(5)
+generator = Clase1_1().Clase1_2().firstn(5)
 
 next(generator)
 
 ##########################33
 #formas de llamarlo usando un for
 
-clase = Clasetotal()
+clase = Clase1_1().Clase1_2()
 
 for item in clase.firstn(5):
     print(item)
@@ -71,23 +72,17 @@ for item in clase.firstn(5):
 
 #probamos a hacer un call de la segunda
 
-next(Clase2().Clase3().firstn(5))
+asignacion1 = Clase2_1()
 
-nueva_clase = Clase2()
+next(asignacion1.Clase2_2().firstn(5))
 
-next(nueva_clase.Clase3().firstn(5))
+asignacion2_1 = Clase2_1()
+asignacion2_2 = asignacion2_1.Clase2_2()
+next(asignacion2_2.firstn(5))
 
-nueva_clase3 = Clase2().Clase3().firstn(5)
-
-next(nueva_clase3)
-
-
-def f():
-    return 'hola'
-
-generator = f()
-
-print(generator)
+asignacion3_1 = Clase2_1().Clase2_2()
+asignacion3_2 = asignacion3_1.firstn(5)
+next(asignacion3_2)
 
 
 

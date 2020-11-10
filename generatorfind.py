@@ -146,9 +146,9 @@ class Code():
 
 
 
-def main():
+def main(name):
     start = time.time()
-    script = Code(sys.argv[1])
+    script = Code(name)
     saveast()      
     script.yieldfind()
     for i in range(len(script.generators)):
@@ -173,4 +173,11 @@ def main():
     
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1])
+
+
+
+
+
+
+
