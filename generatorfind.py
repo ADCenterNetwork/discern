@@ -80,9 +80,9 @@ class Code():
         print(self.generators)
         for s in range(len(self.generators)):
             #for i in range(len(generators[s])):
-                self.assignfind(self.tree, self.generators[s][-1], self.generators[s], s)
+                self.__assignfind(self.tree, self.generators[s][-1], self.generators[s], s)
 
-    def assignfind(self, node, item, sublista,  s):
+    def __assignfind(self, node, item, sublista,  s):
         try:
             if (node.__class__.__name__ == 'Attribute'):# and (node.value.func.id==item or "generator"==item):
                 if item == node.attr :
@@ -93,7 +93,7 @@ class Code():
             else:
                 if ast.iter_child_nodes(node):
                     for child in ast.iter_child_nodes(node):
-                        self.assignfind(child, item, sublista, s)
+                        self.__assignfind(child, item, sublista, s)
         except AttributeError:
                 pass
 
