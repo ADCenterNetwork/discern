@@ -31,7 +31,7 @@ class Code():
     def __init__(self, name):
         self.tree = ast.parse(open(name).read())
         self.generators = []
-
+    
     def yieldfind(self, node = None, ls = []):
         if node == None:
             node = self.tree
@@ -45,7 +45,27 @@ class Code():
                     for child in ast.iter_child_nodes(node):
                         y = ls[:]
                         self.yieldfind(child, y)
-                
+
+    '''
+    def yieldfind(self, node = None, ls = []):
+        if node == None:
+            node = self.tree
+        if node.__class__.__name__ == 'Import':
+            for i in range(len(node.names)):
+                ls.append(node)
+                tree2 = ast.parse(open(node.names[i].name+'.py').read())
+                self.yieldfind(tree2, ls)
+        elif node.__class__.__name__ == 'Yield':
+            ls.append(node)
+            x = ls[:]
+            self.generators.append(x)
+        else:
+            if ast.iter_child_nodes(node):
+                ls.append(node)
+                for child in ast.iter_child_nodes(node):
+                    y = ls[:]
+                    self.yieldfind(child, y)
+'''
     def generatorfind(self):
         for i in range(len(self.generators)):
             for j in range(len(self.generators[i])-1): 
