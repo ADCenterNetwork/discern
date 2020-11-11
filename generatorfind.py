@@ -35,6 +35,11 @@ class Code():
     def yieldfind(self, node = None, ls = []):
         if node == None:
             node = self.tree
+        if node.__class__.__name__ == 'Import':
+            for i in range(len(node.names)):
+                ls.append(node)
+                tree2 = ast.parse(open(node.names[i].name+'.py').read())
+                self.yieldfind(tree2, ls)
         if node.__class__.__name__ == 'Yield':
                 ls.append(node)
                 x = ls[:]
@@ -46,40 +51,27 @@ class Code():
                         y = ls[:]
                         self.yieldfind(child, y)
 
-    '''
-    def yieldfind(self, node = None, ls = []):
-        if node == None:
-            node = self.tree
-        if node.__class__.__name__ == 'Import':
-            for i in range(len(node.names)):
-                ls.append(node)
-                tree2 = ast.parse(open(node.names[i].name+'.py').read())
-                self.yieldfind(tree2, ls)
-        elif node.__class__.__name__ == 'Yield':
-            ls.append(node)
-            x = ls[:]
-            self.generators.append(x)
-        else:
-            if ast.iter_child_nodes(node):
-                ls.append(node)
-                for child in ast.iter_child_nodes(node):
-                    y = ls[:]
-                    self.yieldfind(child, y)
-'''
     def generatorfind(self):
         for i in range(len(self.generators)):
             for j in range(len(self.generators[i])-1): 
-                print(self.generators[i][-j-1].__class__.__name__) 
                 if  self.generators[i][-j-1].__class__.__name__ == "FunctionDef" :
                     self.generators[i] = self.generators[i][1:-j]
                     break
             for j in range(len(self.generators[i])):
-                self.generators[i][j] = self.generators[i][j].name 
+                if not self.generators[i][j].__class__.__name__ =='Import' and not self.generators[i][j].__class__.__name__ =='Module':
+                    self.generators[i][j] = self.generators[i][j].name
+                elif self.generators[i][j].__class__.__name__ =='Import':
+                    if self.generators[i][j].names[0].asname:
+                        self.generators[i][j] = self.generators[i][j].names[0].asname
+                    else:
+                        self.generators[i][j] = self.generators[i][j].names[0].name
+                else:
+                    self.generators[i][j]=None
+            self.generators[i] = [x for x in self.generators[i] if x is not None]
 
     def assignsearch(self):
         print(self.generators)
         for s in range(len(self.generators)):
-            #for i in range(len(generators[s])):
                 self.__assignfind(self.tree, self.generators[s][-1], self.generators[s], s)
 
     def __assignfind(self, node, item, sublista,  s):
@@ -96,6 +88,37 @@ class Code():
                         self.__assignfind(child, item, sublista, s)
         except AttributeError:
                 pass
+
+    """ We still have to modify succesfully __assignfind to be able to detect multiples assignments.
+        def __assignfind(self, node, item, sublista, s):
+            if node.__class__.__name__=='Import':
+                for n in range(len(node.names)):
+                    if node.names[n].asname==self.generators[s][0]:
+                        tree2 = ast.parse(open(node.names[n].name+'.py').read())
+                        self.__assignfind(tree2, item, sublista, s)
+            else:
+                try:
+                    if (node.__class__.__name__ == 'Attribute') and item == node.attr:# and (node.value.func.id==item or "generator"==item):
+                        x = self.generators[s][:]
+                        x.insert(self.generators[s].index(item)-1, node.value.id) 
+                        x.pop(self.generators[s].index(item))
+                        if not x in self.generators:
+                            self.generators.append(x)
+                        print(self.generators[s].index(item), len(self.generators[s])-1)
+                    elif node.__class__.__name__ == 'Name' and item==get_name(node):
+                        print(node.__dict__, node.__class__.__name__)
+                        x = self.generators[s][:]
+                        x.insert(self.generators[s].index(item)-1, node.value.id) 
+                        x.pop(self.generators[s].index(item))
+                        if not x in self.generators:
+                            self.generators.append(x)
+                    else:
+                        if ast.iter_child_nodes(node):
+                            for child in ast.iter_child_nodes(node):
+                                self.__assignfind(child, item, sublista, s)
+                except AttributeError:
+                        pass
+    """
 
     def findcall(self):
         for node in ast.walk(self.tree):
@@ -164,7 +187,6 @@ def main(name):
     end = time.time()
     print("---------")
     print(end-start)
-    #child_call()
     
 
 
