@@ -41,6 +41,7 @@ class Code():
         self.tree = ast.parse(open(name).read())
         self.generators = []
         self.path = name
+        self.calls = {}
     
     def yieldfind(self, node = None, ls = []):
         if node == None:
@@ -81,6 +82,16 @@ class Code():
                 else:
                     self.generators[i][j]=None
             self.generators[i] = [x for x in self.generators[i] if x is not None]
+
+    def assign_call_find(self, node = None):
+        if node == None:
+            node = self.tree
+        for child in ast.iter_child_nodes(node):
+            pass
+            #__asignfind()
+            #findcall()
+
+
 
     def assignsearch(self):
         print(self.generators)
@@ -141,6 +152,10 @@ class Code():
                         if len(ls) > 1:
                             self.findcall2(ls, node.lineno)
                         else:
+                            try:
+                                self.calls[tuple(ls)].append(node.lineno)
+                            except KeyError:
+                                self.calls[tuple(ls)] = [node.lineno]
                             print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
             elif node.__class__.__name__ == 'Name':
                 for ls in self.generators:
@@ -148,6 +163,10 @@ class Code():
                         if len(ls) > 1:
                             self.findcall2(ls, node.lineno)
                         else:
+                            try:
+                                self.calls[tuple(ls)].append(node.lineno)
+                            except KeyError:
+                                self.calls[tuple(ls)] = [node.lineno]
                             print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
             
             elif node.__class__.__name__ == 'Attribute':
@@ -156,6 +175,10 @@ class Code():
                         if len(ls) > 1:
                             self.findcall2(ls, node.lineno)
                         else:
+                            try:
+                                self.calls[tuple(ls)].append(node.lineno)
+                            except KeyError:
+                                self.calls[tuple(ls)] = [node.lineno]
                             print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
 
     def findcall2(self, ls, lineno, i = 0):
@@ -163,16 +186,28 @@ class Code():
             for node in ast.walk(self.tree):
                 if node.__class__.__name__ == 'Call' and get_name(node) == ls[i+1] and node.lineno == lineno:
                     if i+1 == len(ls) -1:
+                        try:
+                                self.calls[tuple(ls)].append(node.lineno)
+                        except KeyError:
+                                self.calls[tuple(ls)] = [node.lineno]
                         print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
                     else:
                         self.findcall2(ls, node.lineno, i+1)
                 elif node.__class__.__name__ == 'Name' and node.id == ls[i+1] and node.lineno == lineno:
                     if i+1 == len(ls) -1:
+                        try:
+                                self.calls[tuple(ls)].append(node.lineno)
+                        except KeyError:
+                                self.calls[tuple(ls)] = [node.lineno]
                         print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
                     else:
                         self.findcall2(ls, node.lineno, i+1)
                 elif node.__class__.__name__ == 'Attribute' and node.value == ls[i+1] and node.lineno == lineno:
                         if i+1 == len(ls) -1:
+                            try:
+                                self.calls[tuple(ls)].append(node.lineno)
+                            except KeyError:
+                                self.calls[tuple(ls)] = [node.lineno]
                             print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
                         else:
                             self.findcall2(ls, node.lineno, i+1)
@@ -197,6 +232,7 @@ def main(name):
     for i in range(len(script.generators)):
         print('\n', i, ': \n', script.generators[i])
     script.findcall()
+    print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
     end = time.time()
     print("---------")
     print(end-start)
