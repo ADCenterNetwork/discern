@@ -88,5 +88,13 @@ next(asignacion3_2)
 
 
 
+class Clase1:
+    def f():
+        yield 'hola'
+
+class Clase2:
+    def g():
+        yield 'hola'
+
 
 
