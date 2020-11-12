@@ -30,13 +30,18 @@ def saveast():
     f = open("astree.txt", "w")
     f.write(json.dumps(astprint, indent=4))
     f.close()
-
+'''
 def _get_folder(filename):
     for i in range(len(filename)-1):
         j = -i-1
         if filename[j] == '\\':
             path = filename[0:j]
             break
+    full_path = os.path.join(os.getcwd(), path)
+    return full_path
+'''
+def _get_folder(filename):
+    path = os.path.split(filename)[0]
     full_path = os.path.join(os.getcwd(), path)
     return full_path
 
@@ -86,7 +91,13 @@ class Code():
                 else:
                     self.generators[i][j]=None
             self.generators[i] = [x for x in self.generators[i] if x is not None]
-
+    def assign_call_find(self, node = None):
+        if node == None:
+            node = self.tree
+        for child in ast.iter_child_nodes(node):
+            pass
+            #__asignfind()
+            #findcall()
 
     def assignsearch(self):
         for s in range(len(self.generators)):
