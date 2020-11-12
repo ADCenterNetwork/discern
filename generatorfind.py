@@ -17,7 +17,11 @@ def get_name(node):
                 x = node.id
                 return x
             except AttributeError:
-                return None
+                try:
+                    x = node.value.id
+                    return x
+                except AttributeError:
+                    return None
 
 
 def saveast():
@@ -82,56 +86,102 @@ class Code():
                     self.generators[i][j]=None
             self.generators[i] = [x for x in self.generators[i] if x is not None]
 
+
     def assignsearch(self):
-        print(self.generators)
         for s in range(len(self.generators)):
-                self.__assignfind(self.tree, self.generators[s][-1], self.generators[s], s)
+                self.__assignfind(self.tree, self.generators[s][:], self.generators[s], 0, s, [], [])             
+    '''
+        for s in range(len(self.generators)):
+            #for i in range(len(self.generators[s])):
+                self.__assignfind(self.tree, self.generators[s][:], self.generators[s], 0, s, [], [])
+    '''          
+    def __assignfind(self, node, item, sublista, i, s, *args, **kwargs):
 
-    def __assignfind(self, node, item, sublista,  s):
-        try:
-            if (node.__class__.__name__ == 'Attribute'):# and (node.value.func.id==item or "generator"==item):
-                if item == node.attr :
+        if isinstance(node,  ast.ClassDef ) or isinstance(node,  ast.FunctionDef ) :
+            return
+            # Skip Classes and Functions
+
+        elif isinstance(node,  ast.Expr):
+            #TO DO
+            pass
+
+        elif isinstance(node,  ast.Assign):
+            #TO DO
+            for __tree in ast.walk(node):
+                if isinstance(__tree,  ast.Call):
+                    #TO DO: 
+                    #print(__tree.__class__.__name__, get_name(__tree))
+                    #x = [node.targets[0].id,get_name(__tree)] 
                     x = self.generators[s][:]
-                    x.insert(0, node.value.id) 
+                    x.insert(i-1, node.targets[0].id)
+                    x.pop(i)
                     if not x in self.generators:
-                        self.generators.append(x)
-            else:
-                if ast.iter_child_nodes(node):
-                    for child in ast.iter_child_nodes(node):
-                        self.__assignfind(child, item, sublista, s)
-        except AttributeError:
-                pass
+                        self.generators.append(x) 
+                        #x = self.generators[s][:]
+                        #x.insert(0, node.value.id)              
+            pass
+        # TO Change  
+        elif  isinstance(node,  ast.Call) and not isinstance(ast.iter_child_nodes(node), ast.Call) :
+            print(node.__class__.__name__, get_name(node))
+            
+            if isinstance(node,  ast.Name):
+                print("     "+node.__class__.__name__, get_name(node))
+            pass
 
-    """ We still have to modify succesfully __assignfind to be able to detect multiples assignments.
-        def __assignfind(self, node, item, sublista, s):
-            if node.__class__.__name__=='Import':
-                for n in range(len(node.names)):
-                    if node.names[n].asname==self.generators[s][0]:
-                        tree2 = ast.parse(open(node.names[n].name+'.py').read())
-                        self.__assignfind(tree2, item, sublista, s)
-            else:
-                try:
-                    if (node.__class__.__name__ == 'Attribute') and item == node.attr:# and (node.value.func.id==item or "generator"==item):
-                        x = self.generators[s][:]
-                        x.insert(self.generators[s].index(item)-1, node.value.id) 
-                        x.pop(self.generators[s].index(item))
-                        if not x in self.generators:
-                            self.generators.append(x)
-                        print(self.generators[s].index(item), len(self.generators[s])-1)
-                    elif node.__class__.__name__ == 'Name' and item==get_name(node):
-                        print(node.__dict__, node.__class__.__name__)
-                        x = self.generators[s][:]
-                        x.insert(self.generators[s].index(item)-1, node.value.id) 
-                        x.pop(self.generators[s].index(item))
-                        if not x in self.generators:
-                            self.generators.append(x)
-                    else:
-                        if ast.iter_child_nodes(node):
-                            for child in ast.iter_child_nodes(node):
-                                self.__assignfind(child, item, sublista, s)
-                except AttributeError:
-                        pass
-    """
+        elif  isinstance(node,  ast.Attribute):
+            print(node.__class__.__name__, get_name(node))
+            pass
+
+        elif  isinstance(node,  ast.Name):
+            print(node.__class__.__name__, get_name(node))
+      
+        
+        elif isinstance(node, ast.Store) or isinstance(node, ast.Load):
+            print("no more child")
+            pass   
+        #End TO Change
+        else:
+            if ast.iter_child_nodes(node):
+                for child in ast.iter_child_nodes(node):
+                    self.__assignfind(child, item, sublista, i, s, args)
+
+        '''
+        if  isinstance(node,  ast.Assign) :
+            #isinstance(node,  ast.Attribute)  or isinstance(node,  ast.Assign) or  :
+            # #node.__class__.__name__ == 'Assign' : #(node.__class__.__name__ == 'Attribute' or node.__class__.__name__ == 'Name'):# and (node.value.func.id==item or "generator"==item):
+                #for child in ast.iter_child_nodes(node):    
+                #if isinstance(item, node.attr) or isinstance(item, node.id) :
+                #if get_name(item):
+                #if item == node.attr :
+                #if item == node.value.id or item ==node :
+                    list(args).insert(i, node.targets[0].id) 
+                    #x.insert(i, node.id)
+                    #x.pop(i+1)
+
+                    
+                    if not x in generators:
+                        generators.append(x)
+                    
+
+        elif isinstance(node,  ast.Expr):
+            pass
+        #elif isinstance(node,  ast.Call) :#and not isinstance(ast.iter_child_nodes(node), ast.Call):
+        elif  isinstance(node,  ast.Attribute) :
+            print(node.__class__.__name__)
+            #print(args)
+            #if item == node.attr :
+            x = self.generators[s][:]
+            x.insert(0, node.value.id) 
+            #x.insert(0, node.func.value.id)
+            if not x in self.generators:
+                self.generators.append(x)
+        else:
+            if isinstance(node,  ast.ClassDef ) or isinstance(node,  ast.FunctionDef ) :
+                return
+            if ast.iter_child_nodes(node):
+                for child in ast.iter_child_nodes(node):
+                    self.__assignfind(child, item, sublista, i, s, args)
+        '''
 
     def findcall(self):
         for node in ast.walk(self.tree):
