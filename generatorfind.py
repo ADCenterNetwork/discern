@@ -87,18 +87,6 @@ class Code():
                     self.generators[i][j]=None
             self.generators[i] = [x for x in self.generators[i] if x is not None]
 
-<<<<<<< HEAD
-    def assign_call_find(self, node = None):
-        if node == None:
-            node = self.tree
-        for child in ast.iter_child_nodes(node):
-            pass
-            #__asignfind()
-            #findcall()
-
-
-=======
->>>>>>> e6a72f117d7b1a5a661796b8b0f7105f794cd1d2
 
     def assignsearch(self):
         for s in range(len(self.generators)):
