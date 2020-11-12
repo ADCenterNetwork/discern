@@ -144,7 +144,7 @@ class Code():
         else:
             if ast.iter_child_nodes(node):
                 for child in ast.iter_child_nodes(node):
-                    self.__assignfind(child, item, sublista, i, s, args)
+                    self.__assignfind(child, item, sublista, i+1, s, args)
 
         '''
         if  isinstance(node,  ast.Assign) :
