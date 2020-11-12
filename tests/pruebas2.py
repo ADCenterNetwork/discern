@@ -1,4 +1,4 @@
 import pruebas as pr
 
-print(pr.Clasetotal().firstn(5))
+print(pr.Clase1_1().Clase1_2().firstn(5))
 

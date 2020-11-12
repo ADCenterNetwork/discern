@@ -1,5 +1,5 @@
 import ast
-import sys
+import sys, os
 import json
 from ast2json import ast2json
 import time
@@ -27,10 +27,20 @@ def saveast():
     f.write(json.dumps(astprint, indent=4))
     f.close()
 
+def _get_folder(filename):
+    for i in range(len(filename)-1):
+        j = -i-1
+        if filename[j] == '\\':
+            path = filename[0:j]
+            break
+    full_path = os.path.join(os.getcwd(), path)
+    return full_path
+
 class Code():
     def __init__(self, name):
         self.tree = ast.parse(open(name).read())
         self.generators = []
+        self.path = name
     
     def yieldfind(self, node = None, ls = []):
         if node == None:
@@ -38,7 +48,10 @@ class Code():
         if node.__class__.__name__ == 'Import':
             for i in range(len(node.names)):
                 ls.append(node)
-                tree2 = ast.parse(open(node.names[i].name+'.py').read())
+                folder = _get_folder(self.path)
+                imported_file = os.path.join(folder, node.names[i].name+'.py')
+                #tree2 = ast.parse(open(node.names[i].name+'.py').read())
+                tree2 = ast.parse(open(imported_file).read())
                 self.yieldfind(tree2, ls)
         if node.__class__.__name__ == 'Yield':
                 ls.append(node)
