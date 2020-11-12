@@ -56,8 +56,8 @@ class Code():
         if node == None:
             node = self.tree
         if node.__class__.__name__ == 'Import':
+            ls.append(node)
             for i in range(len(node.names)):
-                ls.append(node)
                 folder = _get_folder(self.path)
                 imported_file = os.path.join(folder, node.names[i].name+'.py')
                 #tree2 = ast.parse(open(node.names[i].name+'.py').read())
@@ -91,6 +91,8 @@ class Code():
                 else:
                     self.generators[i][j]=None
             self.generators[i] = [x for x in self.generators[i] if x is not None]
+
+            
     def assign_call_find(self, node = None):
         if node == None:
             node = self.tree
