@@ -229,6 +229,7 @@ def main(name):
     for i in range(len(script.generators)):
         print('\n', i, ': \n', script.generators[i])
     script.findcall()
+    print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
     print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
     end = time.time()
     print("---------")
