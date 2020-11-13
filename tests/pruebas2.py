@@ -1,4 +1,4 @@
-import pruebas as pr
+import pruebas, prueba_simple
 
-print(pr.Clase1_1().Clase1_2().firstn(5))
+print(pruebas.Clase1_1().Clase1_2().firstn(5))
 
