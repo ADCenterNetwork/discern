@@ -1,0 +1,18 @@
+IDEA PARA EL TEMA DE LOS CALLS//ASSIGNS
+
+-Iterar sobre el árbol: buscar assigns o calls
+2 posibilidades:
+	-SI SE ENCUENTRA UN ASSIGN:
+self. assigns debe tener la siguiente estructura: 
+{'nuevo_valor':['namespace','de','variables', 'asignadas']
+
+	-SI SE ENCUENTRA UN CALL:
+para cada elemento llamado, que mire primero si se encuentra como key en assigns:
+si es así, que busque calls a partir del siguiente índice de las sublistas de
+generators cuyo principio coincida con el de las variables asignadas al key 
+del assign. 
+
+Si no es así, simplemente que busque calls de los elementos en generators.
+
+Si un elemento llamado coincide con el último elemento de una de las sublistas, 
+guardarlo como call de generator, y guardar su llamada en self.calls
