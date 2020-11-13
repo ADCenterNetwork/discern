@@ -99,7 +99,6 @@ class Code():
         for s in range(len(self.generators)):
                 self.__assignfind(self.tree, self.generators[s][:], self.generators[s], 0, s, [], []) 
         
-        
     def __assignfind(self, node, item, sublista, i, s, *args, **kwargs):
 
         if isinstance(node,  ast.ClassDef ) or isinstance(node,  ast.FunctionDef ) :
@@ -115,11 +114,16 @@ class Code():
             #print(node.__class__.__name__, node.targets[0].id, node.targets[0].lineno)
             for __tree in ast.walk(node):
                 if isinstance(__tree,  ast.Call):
-                    print(__tree.__class__.__name__, get_name(__tree))
+                    #print(__tree.__class__.__name__, get_name(__tree))
                     if get_name(__tree) in self.generators[s][:]:
-                        self.assigns[get_name(__tree)] = node.targets[0].id
-                        #print(self.assigns)             
-            pass
+                        x = self.generators[s][:]
+                        x.insert(i-1, node.targets[0].id)
+                        x.pop(i)
+                        if not x in self.generators:
+                            self.generators.append(x)
+                            #TO add and replace actual functioning
+                                #self.assigns[get_name(__tree)] = [node.targets[0].id, sublista]
+                                #print(self.assigns)           
         # TO Change  
         elif  isinstance(node,  ast.Call) and not isinstance(ast.iter_child_nodes(node), ast.Call) :
             if isinstance(node,  ast.Name):
@@ -130,9 +134,9 @@ class Code():
 
         elif  isinstance(node,  ast.Name):
             pass
-        
+
         elif isinstance(node, ast.Store) or isinstance(node, ast.Load):
-            pass   
+            pass  
 
         #End TO Change
         else:
