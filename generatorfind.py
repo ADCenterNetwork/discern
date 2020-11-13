@@ -42,6 +42,7 @@ class Code():
         self.generators = []
         self.path = name
         self.calls = {}
+        self.assigns = {}
     
     def yieldfind(self, node = None, ls = []):
         if node == None:
@@ -93,59 +94,46 @@ class Code():
             pass
             #__asignfind()
             #findcall()
-
+        
     def assignsearch(self):
         for s in range(len(self.generators)):
-                self.__assignfind(self.tree, self.generators[s][:], self.generators[s], 0, s, [], [])             
-    '''
-        for s in range(len(self.generators)):
-            #for i in range(len(self.generators[s])):
-                self.__assignfind(self.tree, self.generators[s][:], self.generators[s], 0, s, [], [])
-    '''          
+                self.__assignfind(self.tree, self.generators[s][:], self.generators[s], 0, s, [], []) 
+        
+        
     def __assignfind(self, node, item, sublista, i, s, *args, **kwargs):
 
         if isinstance(node,  ast.ClassDef ) or isinstance(node,  ast.FunctionDef ) :
             return
-            # Skip Classes and Functions
+            # Skip Classes and Functions 
 
         elif isinstance(node,  ast.Expr):
-            #TO DO
+            #TO DO or TO Delete
             pass
 
         elif isinstance(node,  ast.Assign):
             #TO DO
+            #print(node.__class__.__name__, node.targets[0].id, node.targets[0].lineno)
             for __tree in ast.walk(node):
                 if isinstance(__tree,  ast.Call):
-                    #TO DO: 
-                    #print(__tree.__class__.__name__, get_name(__tree))
-                    #x = [node.targets[0].id,get_name(__tree)] 
-                    x = self.generators[s][:]
-                    x.insert(i-1, node.targets[0].id)
-                    x.pop(i)
-                    if not x in self.generators:
-                        self.generators.append(x) 
-                        #x = self.generators[s][:]
-                        #x.insert(0, node.value.id)              
+                    print(__tree.__class__.__name__, get_name(__tree))
+                    if get_name(__tree) in self.generators[s][:]:
+                        self.assigns[get_name(__tree)] = node.targets[0].id
+                        #print(self.assigns)             
             pass
         # TO Change  
         elif  isinstance(node,  ast.Call) and not isinstance(ast.iter_child_nodes(node), ast.Call) :
-            print(node.__class__.__name__, get_name(node))
-            
             if isinstance(node,  ast.Name):
-                print("     "+node.__class__.__name__, get_name(node))
             pass
 
         elif  isinstance(node,  ast.Attribute):
-            print(node.__class__.__name__, get_name(node))
             pass
 
         elif  isinstance(node,  ast.Name):
-            print(node.__class__.__name__, get_name(node))
-      
+            pass
         
         elif isinstance(node, ast.Store) or isinstance(node, ast.Load):
-            print("no more child")
             pass   
+
         #End TO Change
         else:
             if ast.iter_child_nodes(node):
