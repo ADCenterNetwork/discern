@@ -90,15 +90,30 @@ class Code():
     def assign_call_find(self, node = None):
         if node == None:
             node = self.tree
-        for child in ast.iter_child_nodes(node):
-            pass
-            #__asignfind()
-            #findcall()
+        if isinstance(node, ast.Assign):
+            name = node.targets[0].id
+            if name not in self.assigns.keys():
+                self.assigns[name] = []
+            for child in ast.iter_child_nodes(node):
+                self.assignsearch(name, child)
+        if ast.iter_child_nodes(node):
+            for child in ast.iter_child_nodes(node):
+                self.assign_call_find(child)
         
+    def assignsearch(self,new_name, node):
+        #node is a descendent from an assign, though not necessarily a call
+        if isinstance(node, ast.Call):
+            func_name = get_name(node)
+            self.assigns[new_name].insert(0, func_name)
+        if ast.iter_child_nodes(node):
+            for child in ast.iter_child_nodes(node):
+                self.assignsearch(new_name, child)
+
+    '''
     def assignsearch(self):
         for s in range(len(self.generators)):
                 self.__assignfind(self.tree, self.generators[s][:], self.generators[s], 0, s, [], []) 
-        
+        '''
         
     def __assignfind(self, node, item, sublista, i, s, *args, **kwargs):
 
@@ -225,7 +240,8 @@ def main(name):
     for i in range(len(script.generators)):
         print('\n', i, ': \n', script.generators[i])
     print("----------")
-    script.assignsearch()
+    #script.assignsearch()
+    script.assign_call_find()
     for i in range(len(script.generators)):
         print('\n', i, ': \n', script.generators[i])
     script.findcall()
