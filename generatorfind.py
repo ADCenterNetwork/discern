@@ -144,9 +144,11 @@ class Code():
         in order to find if that element has been assigned as a new variable.
         """
         for s in range(len(self.generators)):
-                self.__assignfind(self.tree, self.generators[s][:], self.generators[s], 0, s, [], []) 
+            self.__assignfind(self.tree,  self.generators[s][:], 0, s, [], [])
         
-    def __assignfind(self, node, item, sublista, i, s, *args, **kwargs):
+        print(self.assigns)
+
+    def __assignfind(self, node, sublista, i, s, *args, **kwargs):
         """__assignfind will travel the branches of the tree in order to detect assignments to our element of interest
         in the namespace of 'generators'.
 
@@ -167,19 +169,23 @@ class Code():
 
         elif isinstance(node,  ast.Assign):
             #TO DO
-            #print(node.__class__.__name__, node.targets[0].id, node.targets[0].lineno)
             for __tree in ast.walk(node):
-                if isinstance(__tree,  ast.Call):
-                    #print(__tree.__class__.__name__, get_name(__tree))
-                    if get_name(__tree) in self.generators[s][:]:
-                        x = self.generators[s][:]
-                        x.insert(i-1, node.targets[0].id)
-                        x.pop(i)
-                        if not x in self.generators:
-                            self.generators.append(x)
-                            #TO add and replace actual functioning
-                                #self.assigns[get_name(__tree)] = [node.targets[0].id, sublista]
-                                #print(self.assigns)           
+                if isinstance(__tree,  ast.Call) and not isinstance(ast.iter_child_nodes(__tree), ast.Call):
+                    if get_name(__tree) in sublista: # self.generators[s][:]
+                        #x = self.generators[s][:]
+                        #x.insert(i-1, node.targets[0].id)
+                        #x.pop(i)
+                        #if not x in self.generators:
+                        #    self.generators.append(x)
+                        for j in range(len(sublista)):
+                            if sublista[j] == get_name(__tree):
+                                print("hols"+get_name(__tree))
+                                self.assigns[node.targets[0].id] = sublista[0:j+1]
+                                print(sublista[0:j+1])
+                                break
+
+                                                                         
+   
         # TO Change  
         elif  isinstance(node,  ast.Call) and not isinstance(ast.iter_child_nodes(node), ast.Call) :
             if isinstance(node,  ast.Name):
@@ -198,7 +204,7 @@ class Code():
         else:
             if ast.iter_child_nodes(node):
                 for child in ast.iter_child_nodes(node):
-                    self.__assignfind(child, item, sublista, i+1, s, args)
+                    self.__assignfind(child, sublista, i+1, s, args)
 
 
     def findcall(self):
