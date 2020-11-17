@@ -159,46 +159,17 @@ class Code():
             i ([]): []
             s ([]): []
         """
-        if isinstance(node,  ast.ClassDef ) or isinstance(node,  ast.FunctionDef ) :
-            return
-            # Skip Classes and Functions 
 
-        elif isinstance(node,  ast.Expr):
-            #TO DO or TO Delete
-            pass
-
-        elif isinstance(node,  ast.Assign):
+        if isinstance(node,  ast.Assign):
             #TO DO
             for __tree in ast.walk(node):
-                if isinstance(__tree,  ast.Call) and not isinstance(ast.iter_child_nodes(__tree), ast.Call):
+                if isinstance(__tree,  ast.Call):
                     if get_name(__tree) in sublista: # self.generators[s][:]
-                        #x = self.generators[s][:]
-                        #x.insert(i-1, node.targets[0].id)
-                        #x.pop(i)
-                        #if not x in self.generators:
-                        #    self.generators.append(x)
                         for j in range(len(sublista)):
                             if sublista[j] == get_name(__tree):
                                 self.assigns[node.targets[0].id] = sublista[0:j+1]
                                 break
 
-                                                                         
-   
-        # TO Change  
-        elif  isinstance(node,  ast.Call) and not isinstance(ast.iter_child_nodes(node), ast.Call) :
-            if isinstance(node,  ast.Name):
-               pass
-
-        elif  isinstance(node,  ast.Attribute):
-            pass
-
-        elif  isinstance(node,  ast.Name):
-            pass
-
-        elif isinstance(node, ast.Store) or isinstance(node, ast.Load):
-            pass  
-
-        #End TO Change
         else:
             if ast.iter_child_nodes(node):
                 for child in ast.iter_child_nodes(node):
