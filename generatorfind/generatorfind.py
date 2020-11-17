@@ -70,6 +70,7 @@ class Code():
         self.path = name
         self.calls = {}
         self.assigns = {}
+        self.called = []
     
     def yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
@@ -130,41 +131,44 @@ class Code():
          and it still is in development.
 
         Args:
-            node ([], optional): []. Defaults to None.
+            node ([ast object], optional): [We node we are working in. The idea is to start at the Module node
+            and walk up the tree branches.]. Defaults to None.
         """
         if node == None:
             node = self.tree
         for child in ast.iter_child_nodes(node):
             if isinstance(child, ast.Assign):
                 self.assignsearch(child)
-            self.assign_call_find(child)
-            if isinstance(child, ast.Call):
+            if isinstance(child, ast.Call) or isinstance(child, ast.Name) or isinstance(child, ast.Attribute):
                 #TO DO
-                #findcall()
+                self.findcall(child) #This findcall only detects call to our generator list.
+                                     #We still have to develop an analogous function to detect calls to assigns.
                 pass
+            self.assign_call_find(child)
 
 
-
-            
+      
     def assignsearch(self, node):
         """assignsearch is a function that will search along the namespace of 'generators' and will call to __assignfind
         in order to find if that element has been assigned as a new variable.
+
+        Args:
+            node ([ast object], optional): [We node we are working in.]
         """
         for s in range(len(self.generators)):
             self.__assignfind(node,  self.generators[s][:])
         
-        print(self.assigns)
+        #print(self.assigns)
 
     def __assignfind(self, node, sublista):
         """__assignfind will travel the branches of the tree in order to detect assignments to our element of interest
         in the namespace of 'generators'.
 
+
         Args:
-            node ([]): []
-            item ([]): []
-            sublista ([]): []
-            i ([]): []
-            s ([]): []
+            node ([ast object], optional): [We node we are working in.]
+            sublista([list]): [We are searching assignments of our generators in every node. In sublista we record
+            the generator namespace.]
         """
         for child in ast.walk(node):
             if isinstance(child,  ast.Call):
@@ -174,76 +178,108 @@ class Code():
                             self.assigns[node.targets[0].id] = sublista[0:j+1]
                             break
 
-
-    def findcall(self):
+    def findcall(self, node):
         """findcall will walk up the tree searching the calls to our different generators, and will allow us to record
         some information about the call node, as for example the line of the call.
-        """
-        for node in ast.walk(self.tree):
-            if node.__class__.__name__ == 'Call':
-                for ls in self.generators:
-                    if get_name(node) == ls[0]:
-                        if len(ls) > 1:
-                            self.findcall2(ls, node.lineno)
-                        else:
-                            try:
-                                self.calls[tuple(ls)].append(node.lineno)
-                            except KeyError:
-                                self.calls[tuple(ls)] = [node.lineno]
-                            print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
-            elif node.__class__.__name__ == 'Name':
-                for ls in self.generators:
-                    if node.id == ls[0]:
-                        if len(ls) > 1:
-                            self.findcall2(ls, node.lineno)
-                        else:
-                            try:
-                                self.calls[tuple(ls)].append(node.lineno)
-                            except KeyError:
-                                self.calls[tuple(ls)] = [node.lineno]
-                            print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
-            
-            elif node.__class__.__name__ == 'Attribute':
-                for ls in self.generators:
-                    if node.value == ls[0]:
-                        if len(ls) > 1:
-                            self.findcall2(ls, node.lineno)
-                        else:
-                            try:
-                                self.calls[tuple(ls)].append(node.lineno)
-                            except KeyError:
-                                self.calls[tuple(ls)] = [node.lineno]
-                            print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
 
-    def findcall2(self, ls, lineno, i = 0):
-        for node in ast.walk(self.tree):
-            if node.__class__.__name__ == 'Call' and get_name(node) == ls[i+1] and node.lineno == lineno:
-                if i+1 == len(ls) -1:
+        Args:
+            node ([ast object], optional): [We node we are working in.]
+        """
+        for child in ast.walk(node):
+            if child.__class__.__name__ == 'Call':
+                for ls in self.generators:
+                    if get_name(child) == ls[0]:
+                        if len(ls) > 1:
+                            self.findcall2(child, ls, child.lineno, self.called)
+                        else:
+                            x = [get_name(child), child.lineno]
+                            if not x in self.called:
+                                try:
+                                    self.calls[tuple(ls)].append(child.lineno)
+                                except KeyError:
+                                    self.calls[tuple(ls)] = [child.lineno]
+                                self.called.append(x)
+                                print('Hemos encontrado el call de ', ls, ' en la linea ', child.lineno)
+            elif child.__class__.__name__ == 'Name':
+                for ls in self.generators:
+                    if child.id == ls[0]:
+                        if len(ls) > 1:
+                            self.findcall2(child, ls, child.lineno, self.called)
+                        else:
+                            x = [child.id , child.lineno]
+                            if not x in self.called:
+                                try:
+                                    self.calls[tuple(ls)].append(child.lineno)
+                                except KeyError:
+                                    self.calls[tuple(ls)] = [child.lineno]
+                                self.called.append(x)
+                                print('Hemos encontrado el call de ', ls, ' en la linea ', child.lineno)
+            
+            elif child.__class__.__name__ == 'Attribute':
+                for ls in self.generators:
+                    if child.value == ls[0]:
+                        if len(ls) > 1:
+                            self.findcall2(child, ls, child.lineno, self.called)
+                        else:
+                            x = [child.value, child.lineno]
+                            if not x in self.called:
+                                try:
+                                    self.calls[tuple(ls)].append(child.lineno)
+                                except KeyError:
+                                    self.calls[tuple(ls)] = [child.lineno]
+                                self.called.append(x)
+                                print('Hemos encontrado el call de ', ls, ' en la linea ', child.lineno, self.called)
+
+    def findcall2(self, child, ls, lineno, called, i = 0):
+        """findcall2 is an internal function of findcall that help us to search calls to our generators when 
+        the namespace of our generator has more than one element.
+
+        Args:
+            child ([ast object]): [Node in which we are working. Its name is child because we are walking up the 
+            tree along the child nodes.]
+            ls ([list]): [A nested list with the namespace of a generator.]
+            lineno ([int]): [number of line where the call is located.]
+            called ([list]): [Our search method gives us repeated values of calls, so with this list we control
+            that we do not have unnecessary information. THIS METHOD MAY BE IMPROVED TO AVOID THIS.]
+            i (int, optional): [index of our element of interest in generators list]. Defaults to 0.
+        """
+        #for child in ast.walk(node):
+        if child.__class__.__name__ == 'Call' and child.lineno==lineno: #and get_name(child) == ls[i+1] and child.lineno == lineno:
+            if i+1 == len(ls) -1:
+                x = [ls, lineno]
+                if not x in self.called:
                     try:
-                            self.calls[tuple(ls)].append(node.lineno)
+                            self.calls[tuple(ls)].append(child.lineno)
                     except KeyError:
-                            self.calls[tuple(ls)] = [node.lineno]
-                    print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
-                else:
-                    self.findcall2(ls, node.lineno, i+1)
-            elif node.__class__.__name__ == 'Name' and node.id == ls[i+1] and node.lineno == lineno:
-                if i+1 == len(ls) -1:
+                            self.calls[tuple(ls)] = [child.lineno]
+                    self.called.append(x)
+                    print('Hemos encontrado el call de ', ls, ' en la linea ', child.lineno)
+            else:
+                self.findcall2(child, ls, child.lineno, self.called, i+1)
+        elif child.__class__.__name__ == 'Name' and child.lineno == lineno:#child.id == ls[i+1] and child.lineno == lineno:
+            if i+1 == len(ls) -1:
+                x = [ls, lineno]
+                if not x in self.called:
                     try:
-                            self.calls[tuple(ls)].append(node.lineno)
+                            self.calls[tuple(ls)].append(child.lineno)
                     except KeyError:
-                            self.calls[tuple(ls)] = [node.lineno]
-                    print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
-                else:
-                    self.findcall2(ls, node.lineno, i+1)
-            elif node.__class__.__name__ == 'Attribute' and node.value == ls[i+1] and node.lineno == lineno:
-                    if i+1 == len(ls) -1:
-                        try:
-                            self.calls[tuple(ls)].append(node.lineno)
-                        except KeyError:
-                            self.calls[tuple(ls)] = [node.lineno]
-                        print('Hemos encontrado el call de ', ls, ' en la linea ', node.lineno)
-                    else:
-                        self.findcall2(ls, node.lineno, i+1)
+                            self.calls[tuple(ls)] = [child.lineno]
+                    self.called.append(x)
+                    print('Hemos encontrado el call de ', ls, ' en la linea ', child.lineno)
+            else:
+                self.findcall2(child, ls, child.lineno, self.called, i+1)
+        elif child.__class__.__name__ == 'Attribute' and child.lineno==lineno:#child.value == ls[i+1] and child.lineno == lineno:
+            if i+1 == len(ls) -1:
+                x = [ls, lineno]
+                if not x in self.called:
+                    try:
+                        self.calls[tuple(ls)].append(child.lineno)
+                    except KeyError:
+                        self.calls[tuple(ls)] = [child.lineno]
+                    self.called.append(x)
+                    print('Hemos encontrado el call de ', ls, ' en la linea ', child.lineno)
+            else:
+                self.findcall2(child, ls, child.lineno, self.called, i+1)
 
 
 
@@ -264,7 +300,7 @@ def main(name):
         print('\n', i, ': \n', script.generators[i])
     print("----------")
     script.assign_call_find()
-    script.findcall()
+    #script.findcall()
     print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
     print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
     end = time.time()
