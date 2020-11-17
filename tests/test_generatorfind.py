@@ -1,4 +1,4 @@
-from generatorfind import Code
+from ..generatorfind.generatorfind import Code
 import ast
 import os, pytest, shutil
 
@@ -51,17 +51,17 @@ def test_yieldfind():
         res.append([])
         for node in sublist:
             res[-1].append(node.__class__.__name__)
-    assert res == [['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], ['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], ['Module','FunctionDef', 'FunctionDef', 'FunctionDef', 'While', 'Expr', 'Yield'], ['Module','FunctionDef','Expr', 'Yield']]
+        print(res)
+    assert res == [['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
+        ['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'],\
+        ['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
+        ['Module','FunctionDef', 'FunctionDef', 'FunctionDef', 'While', 'Expr', 'Yield'], ['Module','FunctionDef','Expr', 'Yield']]
         
 
 def test_generatorfind():
     generatorfind()
-    assert prueba.generators == [['Clase1_1', 'Clase1_2', 'firstn'], ['Clase2_1', 'Clase2_2', 'firstn'], ['primera', 'segunda', 'qsfn'], ['generator']]
+    print(prueba.generators)
+    assert prueba.generators == [['Clase1_1', 'Clase1_2', 'firstn'], \
+        ['Clase1_1', 'Clase1_3', 'firstn'], \
+        ['Clase2_1', 'Clase2_2', 'firstn'], ['primera', 'segunda', 'qsfn'], ['generator']]
 
-def test_findcall():
-    assignsearch()
-    findcall()
-    assert prueba.calls == {['Clase1_1', 'Clase1_2', 'firstn']:[43,50,56,58,62,64,71,72], \
-    ['Clase2_1', 'Clase2_2', 'firstn']:[79,83,86,87], \
-    ['primera', 'segunda', 'qsfn']:[], \
-    ['generator']:[35,37,38]}
