@@ -179,9 +179,7 @@ class Code():
                         #    self.generators.append(x)
                         for j in range(len(sublista)):
                             if sublista[j] == get_name(__tree):
-                                print("hols"+get_name(__tree))
                                 self.assigns[node.targets[0].id] = sublista[0:j+1]
-                                print(sublista[0:j+1])
                                 break
 
                                                                          
