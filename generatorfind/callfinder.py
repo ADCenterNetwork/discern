@@ -24,6 +24,8 @@ with open(sys.argv[1]) as f:
 tree = ast.parse(content)
 
 dc = {}
+dc2 = {}
+dc3 = {}
 
 for node in ast.walk(tree):
     if node.__class__.__name__ == 'Call':
@@ -31,24 +33,37 @@ for node in ast.walk(tree):
             dc[node.lineno] += 1
         except KeyError:
             dc[node.lineno] = 1
-
-for keys in dc:
-    print(keys, ': ', dc[keys], '\n')
-
-
-print('#####################################')
-
-
-dc = {}
-
-for node in ast.walk(tree):
-    if node.__class__.__name__ == 'Name':
-        print(node, get_name(node), node.lineno)
+    elif node.__class__.__name__ == 'Name':
         try:
-            dc[node.lineno] += 1
+            dc2[node.lineno] += 1
         except KeyError:
-            dc[node.lineno] = 1
+            dc2[node.lineno] = 1
+    elif node.__class__.__name__ == 'Attribute':
+        try:
+            dc3[node.lineno] += 1
+        except KeyError:
+            dc3[node.lineno] = 1
 
+print('Los de tipo CALL son: \n')
 for keys in dc:
-    print(keys, ': ', dc[keys], '\n')
+    print(keys, ': ', dc[keys])
 
+print('Los de tipo NAME son: \n')
+for keys in dc2:
+    print(keys, ': ', dc2[keys])
+
+print('Los de tipo ASSIGN son: \n')
+for keys in dc3:
+    print(keys, ': ', dc3[keys])
+
+
+
+def tree_walker(node):
+    for child in ast.iter_child_nodes(node):
+        if child.__class__.__name__ == 'Call':
+            ls = [granchild for granchild in ast.iter_child_nodes(child)]
+            print('Tenemos un nodo Call en la linea ', child.lineno, ' y de nombre ', get_name(child) )
+            print('Sus hijos son: ', ls)
+        tree_walker(child)
+
+tree_walker(tree)
