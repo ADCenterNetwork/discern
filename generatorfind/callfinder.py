@@ -67,3 +67,14 @@ def tree_walker(node):
         tree_walker(child)
 
 tree_walker(tree)
+
+
+def tree_walker_names(node):
+    for child in ast.iter_child_nodes(node):
+        if child.__class__.__name__ == 'Name':
+            ls = [granchild for granchild in ast.iter_child_nodes(child)]
+            print('Tenemos un nodo Name en la linea ', child.lineno, ' y de nombre ', get_name(child) )
+            print('Sus hijos son: ', ls)
+        tree_walker_names(child)
+
+tree_walker_names(tree)

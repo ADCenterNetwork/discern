@@ -138,11 +138,9 @@ class Code():
         for child in ast.iter_child_nodes(node):
             if isinstance(child, ast.Assign):
                 self.assignsearch(child)
-            if isinstance(child, ast.Call) or isinstance(child, ast.Name) or isinstance(child, ast.Attribute):
+            if isinstance(child, ast.Call):# or isinstance(child, ast.Name) or isinstance(child, ast.Attribute):
                 #TO DO
                 self.findcall(child) #This findcall only detects call to our generator list.
-                                     #We still have to develop an analogous function to detect calls to assigns.
-                pass
             self.assign_call_find(child)
 
 
@@ -177,6 +175,7 @@ class Code():
                             self.assigns[node.targets[0].id] = sublista[0:j+1]
                             break
 
+    '''
     def findcall(self, node):
         """findcall will walk up the tree searching the calls to our different generators, and will allow us to record
         some information about the call node, as for example the line of the call.
@@ -280,6 +279,7 @@ class Code():
                         print('Hemos encontrado el call de ', ls, ' en la linea ', child.lineno)
                 else:
                     self.findcall2(child, ls, child.lineno, self.called, i+1)
+        '''
     def assign_swap(self, node, i):
         # 'ls' is the sublist of self.generators that we were exploring in 'findcall2'
         if get_name(node) in self.assigns.keys():
@@ -288,8 +288,37 @@ class Code():
         else:
             return (False, i)
 
+    def findcall(self, node):
+        for sublist in self.generators:
+            self.findcall2(node, sublist, len(sublist)-1)
+            #self.findcall(node)
 
+    def findcall2(self, node, ls, i):
+        if node.__class__.__name__ == 'Call':
+            if get_name(node) == ls[i]:
+                print('hay una coincidencia entre ', get_name(node), ' y ', ls, ' en la linea ', node.lineno)
+                self.findcall3(node, ls, i)  
+        elif node.__class__.__name__ == 'Name':
+            #we will enter here when we do not have a 'call', to check if it's an assigned variable
+            if get_name(node) in self.assigns:
+                i = len(self.assigns[get_name(node)]) - 1
+                self.findcall3(node, ls, i)
+        else:
+            for child in ast.iter_child_nodes(node):
+                self.findcall2(child, ls, i)
 
+    def findcall3(self, node, ls, i):
+        '''we create this function to simplify 'findcall2' and add the list to our
+        dictionary of calls if we're in index 0, or continue
+        in findcall2 otherwise'''
+        if i == 0: #if this is the case, we want to add this list as a call
+            if tuple(ls) in self.calls.keys():
+                self.calls[tuple(ls)].append(node.lineno)
+            else:
+                self.calls[tuple(ls)] = [node.lineno]
+        else: #otherwise, we want to continue the same process with its children
+            for child in ast.iter_child_nodes(node):
+                self.findcall2(child, ls, i-1)
 
 def main(name):
     start = time.time()
