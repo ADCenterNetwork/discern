@@ -340,8 +340,11 @@ class Code():
             #we will enter here when we do not have a 'call', to check if it's an assigned variable
             if get_name(node) in self.assigns:
                 print('SEGUNDO PRINT: ', get_name(node), ' en la linea ', node.lineno)
-                i = len(self.assigns[get_name(node)]) - 1
-                self.findcall3(node, ls, i)
+                j = i
+                i = i - len(self.assigns[get_name(node)])
+                original_variables = self.assigns[get_name(node)]
+                if set(original_variables).issubset(ls):
+                    self.findcall3(node, ls, i)
         else:
             for child in ast.iter_child_nodes(node):
                 self.findcall2(child, ls, i)
