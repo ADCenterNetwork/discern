@@ -27,6 +27,23 @@ dc = {}
 dc2 = {}
 dc3 = {}
 
+def funcion(node):
+    for child in ast.iter_child_nodes(node):
+        if child.__class__.__name__ == 'Call':
+            print(get_name(child))
+        funcion(child)
+
+for node in ast.walk(tree):
+    if node.__class__.__name__ == 'Call':
+        if get_name(node) == 'firstn':
+            if node.lineno == 68:
+                funcion(node)
+
+
+
+
+'''
+
 for node in ast.walk(tree):
     if node.__class__.__name__ == 'Call':
         try:
@@ -78,3 +95,4 @@ def tree_walker_names(node):
         tree_walker_names(child)
 
 tree_walker_names(tree)
+'''

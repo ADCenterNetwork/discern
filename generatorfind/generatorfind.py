@@ -29,7 +29,11 @@ def get_name(node):
                     x = node.value.id
                     return x
                 except AttributeError:
-                    return None
+                    try:
+                        x = node.targets[0].id
+                        return x
+                    except AttributeError:
+                        return None
 
 
 def saveast():
@@ -71,6 +75,7 @@ class Code():
         self.calls = {}
         self.assigns = {}
         self.called = []
+        self.new_variable = None
     
     def yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
@@ -137,9 +142,9 @@ class Code():
             node = self.tree
         for child in ast.iter_child_nodes(node):
             if isinstance(child, ast.Assign):
+                self.new_variable = child
                 self.assignsearch(child)
             if isinstance(child, ast.Call):# or isinstance(child, ast.Name) or isinstance(child, ast.Attribute):
-                #TO DO
                 self.findcall(child) #This findcall only detects call to our generator list.
             self.assign_call_find(child)
 
@@ -153,11 +158,11 @@ class Code():
             node ([ast object], optional): [We node we are working in.]
         """
         for s in range(len(self.generators)):
-            self.__assignfind(node,  self.generators[s][:])
+            self.__assignfind(node, node,  self.generators[s][:], 0)
         
         #print(self.assigns)
 
-    def __assignfind(self, node, sublista):
+    def __assignfind(self, new_variable, node, ls, i):
         """__assignfind will travel the branches of the tree in order to detect assignments to our element of interest
         in the namespace of 'generators'.
 
@@ -167,6 +172,7 @@ class Code():
             sublista([list]): [We are searching assignments of our generators in every node. In sublista we record
             the generator namespace.]
         """
+        '''
         for child in ast.walk(node):
             if isinstance(child,  ast.Call):
                 if get_name(child) in sublista: # self.generators[s][:]
@@ -174,6 +180,39 @@ class Code():
                         if sublista[j] == get_name(child):
                             self.assigns[node.targets[0].id] = sublista[0:j+1]
                             break
+        '''
+        #'node' is an assign variable, and 'ls', the list we're working on 
+        #THE FUNCTION IS NOT WORKING CORRECTLY YET, BECAUSE WE HAVE A PROBLEM WITH INDEXES
+        #BECAUSE WE DON'T KNOW WHERE TO START: REMEMBER THAT THE CALLS ON THE LEFT ARE THE CHILDREN OF THOSE ON THE RIGHT
+        #new_variable = node
+        for child in ast.iter_child_nodes(node):
+            if child.__class__.__name__ == 'Call':
+                if child in ls:
+                    i = ls.index(child)
+                    self.assigns[get_name(new_variable)] = [get_name(child)]
+                    self.__assignfind2(new_variable, child, ls, i-1)
+            elif child.__class__.__name__ == 'Name':
+                if child in self.assigns.keys():
+                    self.assigns[get_name(new_variable)] = self.assigns[get_name(child)]
+            else:
+                self.__assignfind(new_variable, child, ls, i)
+
+    def __assignfind2(self,new_variable, node, ls, i):
+        '''we want to check if any of the descendants of 'node' is in our list ls in the index i'''
+        for child in ast.iter_child_nodes(node):
+            if child.__class__.__name__ == 'Call':
+                if get_name(child) == ls[i]:
+                    self.assigns[get_name(new_variable)].insert(0, get_name(child))
+                    i = i-1
+            elif child.__class__.__name__ == 'Name':
+                if get_name(child) in self.assigns.keys():
+                    for item in self.assigns[get_name(child)]:
+                        i = len(self.assigns[get_name(child)]) - 1
+                        self.assigns[get_name(new_variable)].insert(0, get_name(item))
+            if i >= 0:
+                self.__assignfind2(new_variable, child, ls, i)
+            
+
 
     '''
     def findcall(self, node):
