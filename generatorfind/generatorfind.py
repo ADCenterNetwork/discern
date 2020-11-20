@@ -182,35 +182,33 @@ class Code():
                             break
         '''
         #'node' is an assign variable, and 'ls', the list we're working on 
-        #THE FUNCTION IS NOT WORKING CORRECTLY YET, BECAUSE WE HAVE A PROBLEM WITH INDEXES
-        #BECAUSE WE DON'T KNOW WHERE TO START: REMEMBER THAT THE CALLS ON THE LEFT ARE THE CHILDREN OF THOSE ON THE RIGHT
-        #new_variable = node
         for child in ast.iter_child_nodes(node):
             if child.__class__.__name__ == 'Call':
-                if child in ls:
-                    i = ls.index(child)
+                if get_name(child) in ls:
+                    i = ls.index(get_name(child))
                     self.assigns[get_name(new_variable)] = [get_name(child)]
                     self.__assignfind2(new_variable, child, ls, i-1)
             elif child.__class__.__name__ == 'Name':
-                if child in self.assigns.keys():
+                if get_name(child) in self.assigns.keys():
                     self.assigns[get_name(new_variable)] = self.assigns[get_name(child)]
             else:
                 self.__assignfind(new_variable, child, ls, i)
 
     def __assignfind2(self,new_variable, node, ls, i):
         '''we want to check if any of the descendants of 'node' is in our list ls in the index i'''
-        for child in ast.iter_child_nodes(node):
-            if child.__class__.__name__ == 'Call':
-                if get_name(child) == ls[i]:
-                    self.assigns[get_name(new_variable)].insert(0, get_name(child))
-                    i = i-1
-            elif child.__class__.__name__ == 'Name':
-                if get_name(child) in self.assigns.keys():
-                    for item in self.assigns[get_name(child)]:
-                        i = len(self.assigns[get_name(child)]) - 1
-                        self.assigns[get_name(new_variable)].insert(0, get_name(item))
-            if i >= 0:
-                self.__assignfind2(new_variable, child, ls, i)
+        if i >= 0:
+            for child in ast.iter_child_nodes(node):
+                if child.__class__.__name__ == 'Call':
+                    if get_name(child) == ls[i]:
+                        self.assigns[get_name(new_variable)].insert(0, get_name(child))
+                        i = i-1
+                elif child.__class__.__name__ == 'Name':
+                    if get_name(child) in self.assigns.keys():
+                        for item in self.assigns[get_name(child)]:
+                            i = len(self.assigns[get_name(child)]) - 1
+                            self.assigns[get_name(new_variable)].insert(0, item)
+                if i >= 0:
+                    self.__assignfind2(new_variable, child, ls, i)
             
 
 
@@ -335,11 +333,13 @@ class Code():
     def findcall2(self, node, ls, i):
         if node.__class__.__name__ == 'Call':
             if get_name(node) == ls[i]:
-                print('hay una coincidencia entre ', get_name(node), ' y ', ls, ' en la linea ', node.lineno)
+                #print('hay una coincidencia entre ', get_name(node), ' y ', ls, ' en la linea ', node.lineno)
                 self.findcall3(node, ls, i)  
         elif node.__class__.__name__ == 'Name':
+            print('EL NOMBRE DEL NODO ES ', get_name(node), ' en la linea ', node.lineno)
             #we will enter here when we do not have a 'call', to check if it's an assigned variable
             if get_name(node) in self.assigns:
+                print('SEGUNDO PRINT: ', get_name(node), ' en la linea ', node.lineno)
                 i = len(self.assigns[get_name(node)]) - 1
                 self.findcall3(node, ls, i)
         else:
@@ -350,7 +350,7 @@ class Code():
         '''we create this function to simplify 'findcall2' and add the list to our
         dictionary of calls if we're in index 0, or continue
         in findcall2 otherwise'''
-        if i == 0: #if this is the case, we want to add this list as a call
+        if i <= 0: #if this is the case, we want to add this list as a call
             if tuple(ls) in self.calls.keys():
                 self.calls[tuple(ls)].append(node.lineno)
             else:
