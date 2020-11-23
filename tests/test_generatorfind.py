@@ -27,6 +27,7 @@ def yieldnodes():
             res[-1].append(node.__class__.__name__)
     return res
 
+ 
 #@pytest.fixture
 def yieldnodes2():
     """yieldnodes2 works in pruebas2.py: we detect its generators and we save the namespace's nodes of this 
@@ -43,6 +44,7 @@ def yieldnodes2():
             res[-1].append(node.__class__.__name__)
     return res
 
+
 #@pytest.fixture
 def namespaces():
     """namespaces works in pruebas.py and it get the namespace of the generators in pruebas.py.
@@ -50,9 +52,10 @@ def namespaces():
     Returns:
         [list]: [list containing the namespaces of the generators.]
     """
-    prueba.yieldfind()
+    #prueba.yieldfind()
     prueba.generatorfind()
     return prueba.generators
+
 
 #@pytest.fixture
 def namespaces2():
@@ -61,9 +64,10 @@ def namespaces2():
     Returns:
         [list]: [list containing the namespaces of the generators.]
     """
-    pruebas2.yieldfind()
+    #pruebas2.yieldfind()
     pruebas2.generatorfind()
     return pruebas2.generators
+
 
 def test_yieldfind():
     """test_yieldfind asserts yieldnodes obtains the expected value. 
@@ -74,43 +78,32 @@ def test_yieldfind():
         ['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
         ['Module','FunctionDef', 'FunctionDef', 'FunctionDef', 'While', 'Expr', 'Yield'], ['Module','FunctionDef','Expr', 'Yield']]
 
-'''
+
 def test_yieldfind2():
     """test_yieldfind2 asserts yieldnodes2 obtains the expected value. 
     """
-    nodeclasses = yieldnodes2()
-    print(nodeclasses)
-    assert nodeclasses == [['Module','Module', 'Import', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
+    nodeclasses2 = yieldnodes2()
+    print(nodeclasses2)
+    assert nodeclasses2 == [['Module','Module', 'Import', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
         ['Module','Module', 'Import', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'],\
         ['Module','Module', 'Import', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
         ['Module','Module', 'Import', 'Module', 'FunctionDef', 'FunctionDef', 'FunctionDef', 'While', 'Expr', 'Yield'], \
         ['Module','Module', 'Import', 'Module', 'FunctionDef','Expr', 'Yield'], \
         ['Module','Module', 'Import', 'Module', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','Expr', 'Yield'], \
         ['Module','Module', 'Import', 'Module', 'Module', 'FunctionDef','Expr', 'Yield']]
-        '''
+
 
 
 def test_generatorfind():
     """test_generatorfind asserts that namespaces obtains the expected value.
     """
     namespace = namespaces()
+    print(namespace)
     assert namespace == [['Clase1_1', 'Clase1_2', 'firstn'], \
         ['Clase1_1', 'Clase1_3', 'firstn'], \
         ['Clase2_1', 'Clase2_2', 'firstn'], ['primera', 'segunda', 'qsfn'], ['generator']]
 
 
-def test_yieldfind2():
-    """test_yieldfind2 asserts yieldnodes2 obtains the expected value. 
-    """
-    nodeclasses = yieldnodes2()
-    assert nodeclasses == [['Module', 'Import', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
-        ['Module', 'Import', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'],\
-        ['Module', 'Import', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
-        ['Module', 'Import', 'Module', 'FunctionDef', 'FunctionDef', 'FunctionDef', 'While', 'Expr', 'Yield'], \
-        ['Module', 'Import', 'Module', 'FunctionDef','Expr', 'Yield'], \
-        ['Module', 'Import', 'Module', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','Expr', 'Yield'], \
-        ['Module', 'Import', 'Module', 'Module', 'FunctionDef','Expr', 'Yield']]
-        
 
 def test_generatorfind2():
     """test_generatorfind2 asserts that namespaces2 obtains the expected value.
@@ -123,4 +116,3 @@ def test_generatorfind2():
         ['pruebas', 'generator'], \
         ['prueba_simple', 'Clase1', 'Clase2', 'f'], \
         ['prueba_simple', 'f']]
-
