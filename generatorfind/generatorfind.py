@@ -334,12 +334,15 @@ class Code():
         if node.__class__.__name__ == 'Call':
             if get_name(node) == ls[i]:
                 #print('hay una coincidencia entre ', get_name(node), ' y ', ls, ' en la linea ', node.lineno)
-                self.findcall3(node, ls, i)  
+                self.findcall3(node, ls, i) 
+            else:
+                for child in ast.iter_child_nodes(node):
+                    self.findcall2(child, ls, i) 
         elif node.__class__.__name__ == 'Name':
-            print('EL NOMBRE DEL NODO ES ', get_name(node), ' en la linea ', node.lineno)
+            ##print('EL NOMBRE DEL NODO ES ', get_name(node), ' en la linea ', node.lineno)
             #we will enter here when we do not have a 'call', to check if it's an assigned variable
             if get_name(node) in self.assigns:
-                print('SEGUNDO PRINT: ', get_name(node), ' en la linea ', node.lineno)
+                ##print('SEGUNDO PRINT: ', get_name(node), ' en la linea ', node.lineno)
                 j = i
                 i = i - len(self.assigns[get_name(node)])
                 original_variables = self.assigns[get_name(node)]
@@ -355,7 +358,8 @@ class Code():
         in findcall2 otherwise'''
         if i <= 0: #if this is the case, we want to add this list as a call
             if tuple(ls) in self.calls.keys():
-                self.calls[tuple(ls)].append(node.lineno)
+                if not node.lineno in self.calls[tuple(ls)]:
+                    self.calls[tuple(ls)].append(node.lineno)
             else:
                 self.calls[tuple(ls)] = [node.lineno]
         else: #otherwise, we want to continue the same process with its children
