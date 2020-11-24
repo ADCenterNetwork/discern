@@ -76,6 +76,11 @@ class Code():
         self.assigns = {}
         self.new_variable = None
     
+    def get_generators(self):
+        #preparar generator
+
+        return self.generators
+    
     def yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
         that contain that generator.
@@ -104,11 +109,14 @@ class Code():
                     for child in ast.iter_child_nodes(node):
                         y = ls[:]
                         self.yieldfind(child, y)
+        return self.generators
 
     def generatorfind(self):
         """generatorfind works with our list 'generators' in order to obtain the correct namespace instead of all the
         nodes information.
         """
+        self.generators = []
+        self.generators = self.yieldfind()
         for i in range(len(self.generators)):
             k = 0
             for j in range(len(self.generators[i])-1): 
@@ -127,7 +135,7 @@ class Code():
                     else:
                         self.generators[i][j] = self.generators[i][j].names[k-1].name
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'Module']
-
+        return self.generators
             
     def assign_call_find(self, node = None):
         """assign_call_find is an idea to search the call to new assignments at the moment they are assigned
@@ -137,6 +145,7 @@ class Code():
             node ([ast object], optional): [We node we are working in. The idea is to start at the Module node
             and walk up the tree branches.]. Defaults to None.
         """
+        self.generatorfind()
         if node == None:
             node = self.tree
         for child in ast.iter_child_nodes(node):
@@ -147,7 +156,7 @@ class Code():
                 self.findcall(child) #This findcall only detects call to our generator list.
             self.assign_call_find(child)
 
-
+        return self.calls
       
     def assignsearch(self, node):
         """assignsearch is a function that will search along the namespace of 'generators' and will call to __assignfind
@@ -158,6 +167,7 @@ class Code():
         """
         for s in range(len(self.generators)):
             self.__assignfind(node, node,  self.generators[s][:], 0)
+
 
     def __assignfind(self, new_variable, node, ls, i):
         """__assignfind will travel the branches of the tree in order to detect assignments to our element of interest
@@ -221,6 +231,8 @@ class Code():
                 original_variables = self.assigns[get_name(node)]
                 if set(original_variables).issubset(ls):
                     self.findcall3(node, ls, i)
+            elif get_name(node) == ls[i]:
+                self.findcall3(node, ls, i)
         else:
             for child in ast.iter_child_nodes(node):
                 self.findcall2(child, ls, i)
@@ -243,7 +255,7 @@ def main(name):
     start = time.time()
     script = Code(name)
     saveast()      
-    script.yieldfind()
+    #script.yieldfind()
     '''
     print('-----------------------------------------------------------------------------------------------------\n')
     print('In the following list we find the node\'s namespace of the generators defined in the script of interest:')
@@ -251,13 +263,14 @@ def main(name):
         print('\n', i, ': \n', script.generators[i])
     print("----------")
     '''
-    script.generatorfind()
+    #script.generatorfind()
     '''
     print('In the following list we find the namespace of the generators defined in the script of interest:')
     for i in range(len(script.generators)):
         print('\n', i, ': \n', script.generators[i])
     print("----------")
     '''
+    print(script.generatorfind())
     script.assign_call_find()
     
     print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
