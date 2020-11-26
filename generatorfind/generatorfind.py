@@ -190,8 +190,22 @@ class Code():
             elif child.__class__.__name__ == 'Name':
                 if get_name(child) in self.assigns.keys():
                     self.assigns[get_name(new_variable)] = self.assigns[get_name(child)]
+            elif child.__class__.__name__ == 'Tuple':
+                for j in range(len(node.value.elts)):
+
+                    self.__assignfind_multiple(node.targets[0].elts[j], node.value.elts[j], ls)
             else:
                 self.__assignfind(new_variable, child, ls, i)
+
+    def __assignfind_multiple(self, left_side, right_side, ls):
+        if right_side.__class__.__name__ == 'Call':
+            if get_name(right_side) in ls:
+                i = ls.index(get_name(right_side))
+                self.assigns[get_name(left_side)] = [get_name(right_side)]
+                self.__assignfind2(left_side, right_side, ls, i-1)
+        if right_side.__class__.__name__ == 'Name':
+            if get_name(right_side) in self.assigns.keys():
+                    self.assigns[get_name(left_side)] = self.assigns[get_name(right_side)]
 
     def __assignfind2(self,new_variable, node, ls, i):
         '''we want to check if any of the descendants of 'node' is in our list ls in the index i'''
@@ -226,7 +240,6 @@ class Code():
             #we will enter here when we do not have a 'call', to check if it's an assigned variable
             if get_name(node) in self.assigns:
                 ##print('SEGUNDO PRINT: ', get_name(node), ' en la linea ', node.lineno)
-                j = i
                 i = i - len(self.assigns[get_name(node)])
                 original_variables = self.assigns[get_name(node)]
                 if set(original_variables).issubset(ls):

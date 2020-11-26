@@ -27,6 +27,31 @@ dc = {}
 dc2 = {}
 dc3 = {}
 
+def funcion(tree = tree, i=0):
+    for node in ast.iter_child_nodes(tree):
+        if node.__class__.__name__ == 'Assign':
+            print('node.__dict__: \n', node.__dict__)
+            if node.lineno == 9:
+                print('Sus HIJOS son: \n')
+                for child in ast.iter_child_nodes(node):
+                    print('Tipo del hijo', )
+                    print(child.__class__.__name__)
+                    print('child.__dict__:')
+                    print(child.__dict__)
+                print('y todos sus DESCENDIENTES son: \n')
+                for child in ast.walk(node):
+                    print('child.__class__.__name__')
+                    print(child.__class__.__name__)
+                    print('child.__dict__')
+                    print(child.__dict__)
+        funcion(node, i+1)
+
+
+funcion()
+
+
+'''
+
 def funcion(node):
     for child in ast.iter_child_nodes(node):
         if child.__class__.__name__ == 'Call':
@@ -38,7 +63,7 @@ for node in ast.walk(tree):
         if get_name(node) == 'firstn':
             if node.lineno == 68:
                 funcion(node)
-
+'''
 
 
 
