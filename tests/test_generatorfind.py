@@ -2,106 +2,51 @@ from ..generatorfind.generatorfind import Code
 import ast
 import os, pytest, shutil
 
-# READ BEFORE RUNNING TEST:
-# Sometimes, when running all test simultaneously, some test appears in red (apparently failed), If this happens,
-#just run every failed test individually and they will work succesfully.
 
-path = os.path.join(os.getcwd(), 'tests', 'pruebas.py')
-prueba = Code(path)
-path2 = os.path.join(os.getcwd(), 'tests', 'pruebas2.py')
-pruebas2 = Code(path2)
+@pytest.fixture
+def setup():
+    path = os.path.join(os.getcwd(), 'tests', 'pruebas.py')
+    prueba = Code(path)
+    return prueba
 
-#@pytest.fixture
-def yieldnodes():
-    """yieldnodes works in pruebas.py: we detect its generators and we save the namespace's nodes of this 
-    generators.
+@pytest.fixture
+def setup_imports():
+    path_imports = os.path.join(os.getcwd(), 'tests', 'pruebas2.py')
+    prueba_imports = Code(path_imports)
+    return prueba_imports
 
-    Returns:
-        [list]: [list containing the node type of namespace's nodes.]
+
+@pytest.fixture
+def setup_multiple_assign():
+    path = os.path.join(os.getcwd(), 'tests', 'multiple_assign.py')
+    prueba = Code(path)
+    return prueba
+
+@pytest.fixture
+def setup_multiple_assign():
+    path = os.path.join(os.getcwd(), 'tests', 'folder')
+    prueba = Code(path)
+    return prueba
+
+
+def test_namespace_pruebas(setup):
+    """test_namespace_pruebas asserts that namespaces obtains the expected value.
     """
-    prueba.yieldfind()
-    res = []
-    for sublist in prueba.generators:
-        res.append([])
-        for node in sublist:
-            res[-1].append(node.__class__.__name__)
-    return res
-
-#@pytest.fixture
-def yieldnodes2():
-    """yieldnodes2 works in pruebas2.py: we detect its generators and we save the namespace's nodes of this 
-    generators.
-
-    Returns:
-        [list]: [list containing the node type of namespace's nodes.]
-    """
-    pruebas2.yieldfind()
-    res = []
-    for sublist in pruebas2.generators:
-        res.append([])
-        for node in sublist:
-            res[-1].append(node.__class__.__name__)
-    return res
-
-#@pytest.fixture
-def namespaces():
-    """namespaces works in pruebas.py and it get the namespace of the generators in pruebas.py.
-
-    Returns:
-        [list]: [list containing the namespaces of the generators.]
-    """
-    prueba.yieldfind()
-    prueba.generatorfind()
-    return prueba.generators
-
-#@pytest.fixture
-def namespaces2():
-    """namespaces2 works in pruebas2.py and it get the namespace of the generators in pruebas2.py.
-
-    Returns:
-        [list]: [list containing the namespaces of the generators.]
-    """
-    pruebas2.yieldfind()
-    pruebas2.generatorfind()
-    return pruebas2.generators
-
-def test_yieldfind():
-    """test_yieldfind asserts yieldnodes obtains the expected value. 
-    """
-    nodeclasses = yieldnodes()   #print(nodeclasses)
-    assert nodeclasses == [['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
-        ['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'],\
-        ['Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
-        ['Module','FunctionDef', 'FunctionDef', 'FunctionDef', 'While', 'Expr', 'Yield'], ['Module','FunctionDef','Expr', 'Yield']]
-        
-
-def test_generatorfind():
-    """test_generatorfind asserts that namespaces obtains the expected value.
-    """
-    namespace = namespaces()
-    assert namespace == [['Clase1_1', 'Clase1_2', 'firstn'], \
+    assert setup.generatorfind() == [['Clase1_1', 'Clase1_2', 'firstn'], \
         ['Clase1_1', 'Clase1_3', 'firstn'], \
         ['Clase2_1', 'Clase2_2', 'firstn'], ['primera', 'segunda', 'qsfn'], ['generator']]
 
-
-def test_yieldfind2():
-    """test_yieldfind2 asserts yieldnodes2 obtains the expected value. 
+def test_callsites_pruebas(setup):
+    """test_callsites_pruebas will check that the calls to the generators are the expected.
     """
-    nodeclasses = yieldnodes2()
-    assert nodeclasses == [['Module', 'Import', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
-        ['Module', 'Import', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'],\
-        ['Module', 'Import', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','While','Expr', 'Yield'], \
-        ['Module', 'Import', 'Module', 'FunctionDef', 'FunctionDef', 'FunctionDef', 'While', 'Expr', 'Yield'], \
-        ['Module', 'Import', 'Module', 'FunctionDef','Expr', 'Yield'], \
-        ['Module', 'Import', 'Module', 'Module', 'ClassDef', 'ClassDef', 'FunctionDef','Expr', 'Yield'], \
-        ['Module', 'Import', 'Module', 'Module', 'FunctionDef','Expr', 'Yield']]
-        
+    assert setup.assign_call_find() ==  {('generator',): [41, 43, 44], ('Clase1_1', 'Clase1_2', 'firstn'): [49, 56, 68, 77], ('Clase1_1', 'Clase1_3', 'firstn'): [62, 64], 
+('Clase2_1', 'Clase2_2', 'firstn'): [85, 89, 92, 93]}
 
-def test_generatorfind2():
-    """test_generatorfind2 asserts that namespaces2 obtains the expected value.
+def test_namespace_imports(setup_imports):
+    """test_namespace_imports asserts that namespaces obtains the expected value with a specific
+    case in which generators are in other imported files.
     """
-    namespace = namespaces2()
-    assert namespace == [['pruebas', 'Clase1_1', 'Clase1_2', 'firstn'], \
+    assert setup_imports.generatorfind() == [['pruebas', 'Clase1_1', 'Clase1_2', 'firstn'], \
         ['pruebas', 'Clase1_1', 'Clase1_3', 'firstn'], \
         ['pruebas', 'Clase2_1', 'Clase2_2', 'firstn'], \
         ['pruebas', 'primera', 'segunda', 'qsfn'], \
@@ -109,3 +54,25 @@ def test_generatorfind2():
         ['prueba_simple', 'Clase1', 'Clase2', 'f'], \
         ['prueba_simple', 'f']]
 
+def test_callsites_imports(setup_imports):
+    """test_callsites_imports will check that the calls to the generators are the expected with a specific
+    case in which generators are in other imported files.
+    """
+    assert setup_imports.assign_call_find() ==  {('pruebas', 'Clase1_1', 'Clase1_2', 'firstn'): [3]}
+
+def test_generatorfind_multiple_assign(setup_multiple_assign):
+    assert setup_multiple_assign.assign_call_find() =={('Clase', 'f'):[9,11], ('Clase2', 'g'):[9,13]}
+
+
+"""def test_working_with_folder(setup_folder):
+    assert setup_folder.generatorfind() == {\
+    'pruebas.py': [\
+        ['Clase1_1', 'Clase1_2', 'firstn'], \
+        ['Clase1_1', 'Clase1_3', 'firstn'], \
+        ['Clase2_1', 'Clase2_2', 'firstn'], \
+        ['primera', 'segunda', 'qsfn'], \
+        ['generator']],\
+    'prueba_simple.py': [\
+        ['Clase1', 'Clase2', 'f'], \
+        ['f']]}
+"""
