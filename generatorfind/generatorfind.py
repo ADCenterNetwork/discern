@@ -61,13 +61,16 @@ def _get_folder(filename):
 
 class Code():
     """Code is a class that contains all the functions involved in the work with the ast of the file of interest.
+	_ one inner level
+	__two inner levels
+	___three inner levels
     """
     def __init__(self, name):
         """we define some variables that are essential in the process of obtaining information and other variables 
         that will store the information of interest.
 
         Args:
-            name ([string]): [The name of the file that we are obtaining information when we execute generatorfind.py ]
+            name ([string]): [The name of the file that we are obtaining information when we execute _generatorfind.py ]
         """
         self.tree = ast.parse(open(name).read())
         self.generators = []
@@ -75,13 +78,9 @@ class Code():
         self.calls = {}
         self.assigns = {}
         self.new_variable = None
+ 
     
-    def get_generators(self):
-        #preparar generator
-
-        return self.generators
-    
-    def yieldfind(self, node = None, ls = []):
+    def __yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
         that contain that generator.
 
@@ -92,31 +91,94 @@ class Code():
         """
         if node == None:
             node = self.tree
+
         if node.__class__.__name__ == 'Import':
             ls.append(node)
             for i in range(len(node.names)):
                 folder = _get_folder(self.path)
-                imported_file = os.path.join(folder, node.names[i].name+'.py')
-                tree2 = ast.parse(open(imported_file).read())
-                self.yieldfind(tree2, ls)
+                importpath = node.names[i].name
+                importpath = importpath.split('.')
+                for j in range(len(importpath)):
+                    fullpath = os.path.join(folder, importpath[j])
+                    if os.path.isfile(fullpath+'.py'):
+                        fileimp = fullpath+'.py'
+                        treeimp = ast.parse(open(fileimp).read())
+                        self.__yieldfind(treeimp, ls) 
+                        break
+                    else:
+                        if j == (len(importpath)-1):
+                            for root, directories, files in os.walk(fullpath):
+                                for filename in files:
+                                    fileimp2 = os.path.join(fullpath, filename)
+                                    if filename.endswith('.py'):
+                                        treeimp2 = ast.parse(open(fileimp2).read())
+                                        self.__yieldfind(treeimp2, ls)
+                        else:
+                            pass
+
+        if node.__class__.__name__ == 'ImportFrom':
+            '''In a node like this one, the attribute 'module' contains the name of the left side (from left_side
+            import right_side), in the same way it's represented in code (separated by dots)
+
+            And the attribute node.names will return a list, where each element is an 'Alias' and it represents
+            the element we're importing, i.e, the right_side. To get its name we apply the attribute '.name', 
+
+            If there is a python file, we know this either has to be on the last element of the left_side, or it 
+            will be on the right side
+            '''
+            left_side = node.module.split('.') 
+            right_side = node.names
+            #we now form a path from the elements on the left_side
+            full_path = os.path.join(os.getcwd(), _get_folder(self.path))
+            for item in left_side:
+                full_path = os.path.join(full_path, item)
+            filename = full_path + '.py'
+
+            if os.path.isfile(filename):
+                tree2 = ast.parse(open(filename).read())
+                self.__yieldfind(tree2, ls)
+
+            else: #in this case, it means we have to access the right_side and look for files
+                for alias in right_side:
+                    alias_filename = alias.name + '.py'
+                    filename_path = os.path.join(full_path, alias_filename)
+                    if os.path.isfile(filename_path):
+                        ls.append(alias) #we need to append the name of the file because that's how we'll call it in the function
+                        tree2 = ast.parse(open(filename_path).read())
+                        self.__yieldfind(tree2, ls)
+        
         if node.__class__.__name__ == 'Yield':
                 ls.append(node)
                 x = ls[:]
                 self.generators.append(x)
+       
         else:
                 if ast.iter_child_nodes(node):
                     ls.append(node)
                     for child in ast.iter_child_nodes(node):
                         y = ls[:]
-                        self.yieldfind(child, y)
+                        self.__yieldfind(child, y)
+
         return self.generators
 
-    def generatorfind(self):
-        """generatorfind works with our list 'generators' in order to obtain the correct namespace instead of all the
+    
+    def __yieldfind_imports(self, node):
+        ''' node is a node whose __class__.__name__ is ImportFrom. 
+        We want to explore its 'module' and 'names' attributes until we find a Python file.
+        When we do, we want to enter this file and explore its generators.
+        
+        We take into account that the way we will call these generators in our main file, will be by calling
+        the last element in 'names' first.'''
+        pass
+        
+
+
+    def _generatorfind(self):
+        """_generatorfind works with our list 'generators' in order to obtain the correct namespace instead of all the
         nodes information.
         """
         self.generators = []
-        self.generators = self.yieldfind()
+        self.generators = self.__yieldfind()
         for i in range(len(self.generators)):
             k = 0
             for j in range(len(self.generators[i])-1): 
@@ -134,6 +196,11 @@ class Code():
                         self.generators[i][j] = self.generators[i][j].names[k-1].asname
                     else:
                         self.generators[i][j] = self.generators[i][j].names[k-1].name
+                elif self.generators[i][j].__class__.__name__ == 'ImportFrom':
+                    if self.generators[i][j].names[k-1].asname:
+                        self.generators[i][j] = self.generators[i][j].names[k-1].asname
+                    elif self.generators[i][j].names[k-1].name:
+                        self.generators[i][j] = self.generators[i][j].names[k-1].name
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'Module']
         return self.generators
             
@@ -145,21 +212,22 @@ class Code():
             node ([ast object], optional): [We node we are working in. The idea is to start at the Module node
             and walk up the tree branches.]. Defaults to None.
         """
-        self.generatorfind()
+        self._generatorfind()
         if node == None:
             node = self.tree
+
         for child in ast.iter_child_nodes(node):
             if isinstance(child, ast.Assign):
                 self.new_variable = child
-                self.assignsearch(child)
+                self._assignsearch(child)
             if isinstance(child, ast.Call):# or isinstance(child, ast.Name) or isinstance(child, ast.Attribute):
-                self.findcall(child) #This findcall only detects call to our generator list.
+                self._findcall(child) #This _findcall only detects call to our generator list.
             self.assign_call_find(child)
 
         return self.calls
       
-    def assignsearch(self, node):
-        """assignsearch is a function that will search along the namespace of 'generators' and will call to __assignfind
+    def _assignsearch(self, node):
+        """_assignsearch is a function that will search along the namespace of 'generators' and will call to __assignfind
         in order to find if that element has been assigned as a new variable.
 
         Args:
@@ -186,7 +254,7 @@ class Code():
                 if get_name(child) in ls:
                     i = ls.index(get_name(child))
                     self.assigns[get_name(new_variable)] = [get_name(child)]
-                    self.__assignfind2(new_variable, child, ls, i-1)
+                    self.___assignfind(new_variable, child, ls, i-1)
             elif child.__class__.__name__ == 'Name':
                 if get_name(child) in self.assigns.keys():
                     self.assigns[get_name(new_variable)] = self.assigns[get_name(child)]
@@ -198,16 +266,18 @@ class Code():
                 self.__assignfind(new_variable, child, ls, i)
 
     def __assignfind_multiple(self, left_side, right_side, ls):
+        
         if right_side.__class__.__name__ == 'Call':
             if get_name(right_side) in ls:
                 i = ls.index(get_name(right_side))
                 self.assigns[get_name(left_side)] = [get_name(right_side)]
-                self.__assignfind2(left_side, right_side, ls, i-1)
+                self.___assignfind(left_side, right_side, ls, i-1)
+
         if right_side.__class__.__name__ == 'Name':
             if get_name(right_side) in self.assigns.keys():
                     self.assigns[get_name(left_side)] = self.assigns[get_name(right_side)]
 
-    def __assignfind2(self,new_variable, node, ls, i):
+    def ___assignfind(self,new_variable, node, ls, i):
         '''we want to check if any of the descendants of 'node' is in our list ls in the index i'''
         if i >= 0:
             for child in ast.iter_child_nodes(node):
@@ -221,20 +291,20 @@ class Code():
                             i = len(self.assigns[get_name(child)]) - 1
                             self.assigns[get_name(new_variable)].insert(0, item)
                 if i >= 0:
-                    self.__assignfind2(new_variable, child, ls, i)
+                    self.___assignfind(new_variable, child, ls, i)
 
-    def findcall(self, node):
+    def _findcall(self, node):
         for sublist in self.generators:
-            self.findcall2(node, sublist, len(sublist)-1)
+            self.__findcall(node, sublist, len(sublist)-1) # 
 
-    def findcall2(self, node, ls, i):
+    def __findcall(self, node, ls, i):
         if node.__class__.__name__ == 'Call':
             if get_name(node) == ls[i]:
                 #print('hay una coincidencia entre ', get_name(node), ' y ', ls, ' en la linea ', node.lineno)
-                self.findcall3(node, ls, i) 
+                self.___findcall(node, ls, i) 
             else:
                 for child in ast.iter_child_nodes(node):
-                    self.findcall2(child, ls, i) 
+                    self.__findcall(child, ls, i) 
         elif node.__class__.__name__ == 'Name':
             ##print('EL NOMBRE DEL NODO ES ', get_name(node), ' en la linea ', node.lineno)
             #we will enter here when we do not have a 'call', to check if it's an assigned variable
@@ -243,17 +313,17 @@ class Code():
                 i = i - len(self.assigns[get_name(node)])
                 original_variables = self.assigns[get_name(node)]
                 if set(original_variables).issubset(ls):
-                    self.findcall3(node, ls, i)
+                    self.___findcall(node, ls, i)
             elif get_name(node) == ls[i]:
-                self.findcall3(node, ls, i)
+                self.___findcall(node, ls, i)
         else:
             for child in ast.iter_child_nodes(node):
-                self.findcall2(child, ls, i)
+                self.__findcall(child, ls, i)
 
-    def findcall3(self, node, ls, i):
-        '''we create this function to simplify 'findcall2' and add the list to our
+    def ___findcall(self, node, ls, i):
+        '''we create this function to simplify '__findcall' and add the list to our
         dictionary of calls if we're in index 0, or continue
-        in findcall2 otherwise'''
+        in __findcall otherwise'''
         if i <= 0: #if this is the case, we want to add this list as a call
             if tuple(ls) in self.calls.keys():
                 if not node.lineno in self.calls[tuple(ls)]:
@@ -262,7 +332,21 @@ class Code():
                 self.calls[tuple(ls)] = [node.lineno]
         else: #otherwise, we want to continue the same process with its children
             for child in ast.iter_child_nodes(node):
-                self.findcall2(child, ls, i-1)
+                self.__findcall(child, ls, i-1)
+
+class callsites_folder():
+    def __init__(self, name):
+        self.allcall = {}
+        self.path = name
+        
+    def callsites(self):
+        for root, directories, files in os.walk(self.path):
+            for filename in files:
+                filepath = os.path.join(self.path, filename)
+                if filename.endswith('.py'):
+                    filecode = Code(filepath)
+                    self.allcall[os.path.join(filename)] = filecode.assign_call_find()
+        return self.allcall
 
 def main(name):
     start = time.time()
@@ -276,14 +360,14 @@ def main(name):
         print('\n', i, ': \n', script.generators[i])
     print("----------")
     '''
-    #script.generatorfind()
+    #script._generatorfind()
     '''
     print('In the following list we find the namespace of the generators defined in the script of interest:')
     for i in range(len(script.generators)):
         print('\n', i, ': \n', script.generators[i])
     print("----------")
     '''
-    print(script.generatorfind())
+    print(script._generatorfind())
     script.assign_call_find()
     
     print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
