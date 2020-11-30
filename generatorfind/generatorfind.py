@@ -96,28 +96,33 @@ class Code():
                 tree2 = ast.parse(open(imported_file).read())
                 self.yieldfind(tree2, ls)
         if node.__class__.__name__ == 'ImportFrom':
-            print(node.lineno)
             '''In a node like this one, the attribute 'module' contains the name of the left side (from left_side
             import right_side), in the same way it's represented in code (separated by dots)
 
             And the attribute node.names will return a list, where each element is an 'Alias' and it represents
             the element we're importing, i.e, the right_side. To get its name we apply the attribute '.name', 
+
+            If there is a python file, we know this either has to be on the last element of the left_side, or it 
+            will be on the right side
             '''
             left_side = node.module.split('.') 
-            right_side = node.names 
-            #we now get the actual name of the right_side
-            right_side_names = [alias.name for alias in right_side]
-            full_path = left_side + right_side_names
-            print('PARA LOS NODOS DE TIPO IMPORT_FROM TENEMOS:')
-            print(full_path)
-            #we now find which element of 'full_path' represents the file we're looking for
-            cur_dir = os.getcwd()
-            file_path = cur_dir
-            for item in full_path:
-                filename = item + '.py'
-                if os.path.isfile(filename):
-                    tree2 = ast.parse(open(filename).read())
-                    self.yieldfind(tree2, ls)
+            right_side = node.names
+            #we now form a path from the elements on the left_side
+            full_path = os.getcwd()
+            for item in left_side:
+                full_path = os.path.join(full_path, item)
+            filename = full_path + '.py'
+            if os.path.isfile(filename):
+                tree2 = ast.parse(open(filename).read())
+                self.yieldfind(tree2, ls)
+            else: #in this case, it means we have to access the right_side and look for files
+                for alias in right_side:
+                    alias_filename = alias.name + '.py'
+                    filename_path = os.path.join(full_path, alias_filename)
+                    if os.path.isfile(filename_path):
+                        ls.append(alias) #we need to append the name of the file because that's how we'll call it in the function
+                        tree2 = ast.parse(open(filename_path).read())
+                        self.yieldfind(tree2, ls)
         if node.__class__.__name__ == 'Yield':
                 ls.append(node)
                 x = ls[:]
