@@ -22,12 +22,6 @@ def setup_multiple_assign():
     prueba = Code(path)
     return prueba
 
-@pytest.fixture
-def setup_multiple_assign():
-    path = os.path.join(os.getcwd(), 'tests', 'folder')
-    prueba = Code(path)
-    return prueba
-
 
 def test_namespace_pruebas(setup):
     """test_namespace_pruebas asserts that namespaces obtains the expected value.
@@ -62,17 +56,3 @@ def test_callsites_imports(setup_imports):
 
 def test_generatorfind_multiple_assign(setup_multiple_assign):
     assert setup_multiple_assign.assign_call_find() =={('Clase', 'f'):[9,11], ('Clase2', 'g'):[9,13]}
-
-
-"""def test_working_with_folder(setup_folder):
-    assert setup_folder.generatorfind() == {\
-    'pruebas.py': [\
-        ['Clase1_1', 'Clase1_2', 'firstn'], \
-        ['Clase1_1', 'Clase1_3', 'firstn'], \
-        ['Clase2_1', 'Clase2_2', 'firstn'], \
-        ['primera', 'segunda', 'qsfn'], \
-        ['generator']],\
-    'prueba_simple.py': [\
-        ['Clase1', 'Clase2', 'f'], \
-        ['f']]}
-"""

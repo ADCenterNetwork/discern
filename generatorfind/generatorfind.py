@@ -76,6 +76,11 @@ class Code():
         self.assigns = {}
         self.new_variable = None
     
+    def get_generators(self):
+        #preparar generator
+
+        return self.generators
+    
     def yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
         that contain that generator.
@@ -94,46 +99,6 @@ class Code():
                 imported_file = os.path.join(folder, node.names[i].name+'.py')
                 tree2 = ast.parse(open(imported_file).read())
                 self.yieldfind(tree2, ls)
-        if node.__class__.__name__ == 'ImportFrom':
-            ls.append(node)
-
-            ##Presento los siguientes casos a diferenciar:
-
-            ###Diferenciar 'from <file.py>...' de 'from <package>...' con libreria os:
-            ###si existe archivo node.module+'.py', estamos ante el caso 'from <file.py>...', en caso contrario,
-            ###estamos ante un caso 'from <package>...'.
-
-            ###EN TODOS LOS CASOS HAY QUE CONSIDERAR (Y AÑADIR) EL NIVEL DE IMPORT RELATIVO (node.level). SI NO 
-            ###SE ESPECIFICA, ESTAMOS CONSIDERANDO node.level=0, ES DECIR, SIN IMPORT RELATIVO.
-
-            ###TAMBIÉN ESTAMOS CONSIDERANDO IMPORT NO MÚLTIPLES (UNA COSA IMPORTADA POR LINEA). NO OBSTANTE,
-            ###AMPLIAR A IMPORTS FROM MÚLTIPLES UNA VEZ DIFERENCIEMOS LOS POSIBLES CASOS DE IMPORTS FROM
-            ###SERÁ SENCILLO TOMANDO COMO EJEMPLO LOS NODOS IMPORTS.
-
-            ##-->'from <file.py> import <object>': queremos importar un objeto del archivo .py. 
-            folder = _get_folder(self.path) #Modificar con level (ir tantos directorios atrás como número level)
-            imported_file = os.path.join(folder, node.module+'.py')
-            tree3 = ast.parse(open(imported_file).read())
-            self.yieldfind(tree3, ls) #SOLUCIONADO
-
-            ##-->'from <package/folder> import <module or object>': node.module es una carpeta, 
-            ##y queremos importar un module(file.py) o objeto. En realidad es parecido al otro caso, solamente que
-            ##hay que distinguir previamente que sea una carpeta.
-            """
-            folder = _get_folder(self.path)
-            imported_file = os.path.join(folder, node.module, )
-            """
-
-            ##-->'from <package/folder> import <subpackage>': node.module es una carpeta, y queremos
-            #importar otra carpeta.
-
-            ##La idea es: encontrar la carpeta de node.module con la libreria os (teniendo en cuenta niveles de
-            ##directorios), hacerle os.join() a la carpeta node.name. Hecho esto, estamos en la carpeta de interes,
-            ##estando aquí solo tenemos que hacer recursivamente yieldfind a TODOS los archivos que se encuentren
-            #en esa carpeta.
-            """
-            """
-
         if node.__class__.__name__ == 'Yield':
                 ls.append(node)
                 x = ls[:]
@@ -160,7 +125,7 @@ class Code():
                     break
             for m in range(len(self.generators[i])):
                 j = -m - 1
-                if not self.generators[i][j].__class__.__name__ =='Import' and not self.generators[i][j].__class__.__name__ =='Module' and not self.generators[i][j].__class__.__name__ =='ImportFrom':
+                if not self.generators[i][j].__class__.__name__ =='Import' and not self.generators[i][j].__class__.__name__ =='Module':
                     self.generators[i][j] = self.generators[i][j].name
                 elif self.generators[i][j].__class__.__name__ == 'Module':
                     k +=1
@@ -169,9 +134,6 @@ class Code():
                         self.generators[i][j] = self.generators[i][j].names[k-1].asname
                     else:
                         self.generators[i][j] = self.generators[i][j].names[k-1].name
-                elif self.generators[i][j].__class__.__name__ == 'ImportFrom':
-                    #TO DO
-                    pass
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'Module']
         return self.generators
             
@@ -304,12 +266,9 @@ class Code():
 
 def main(name):
     start = time.time()
-
-    #if not name.endswith('.py'):
-
-
     script = Code(name)
     saveast()      
+    #script.yieldfind()
     '''
     print('-----------------------------------------------------------------------------------------------------\n')
     print('In the following list we find the node\'s namespace of the generators defined in the script of interest:')
@@ -317,6 +276,7 @@ def main(name):
         print('\n', i, ': \n', script.generators[i])
     print("----------")
     '''
+    #script.generatorfind()
     '''
     print('In the following list we find the namespace of the generators defined in the script of interest:')
     for i in range(len(script.generators)):
