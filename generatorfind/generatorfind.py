@@ -108,7 +108,7 @@ class Code():
             left_side = node.module.split('.') 
             right_side = node.names
             #we now form a path from the elements on the left_side
-            full_path = os.getcwd()
+            full_path = os.path.join(os.getcwd(), _get_folder(self.path))
             for item in left_side:
                 full_path = os.path.join(full_path, item)
             filename = full_path + '.py'
@@ -169,6 +169,11 @@ class Code():
                     if self.generators[i][j].names[k-1].asname:
                         self.generators[i][j] = self.generators[i][j].names[k-1].asname
                     else:
+                        self.generators[i][j] = self.generators[i][j].names[k-1].name
+                elif self.generators[i][j].__class__.__name__ == 'ImportFrom':
+                    if self.generators[i][j].names[k-1].asname:
+                        self.generators[i][j] = self.generators[i][j].names[k-1].asname
+                    elif self.generators[i][j].names[k-1].name:
                         self.generators[i][j] = self.generators[i][j].names[k-1].name
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'Module']
         return self.generators

@@ -13,6 +13,6 @@ from import_test.import_test import Clase
 from import_test.import_test import Clase
 
 Clase().funcion()
-
+import_test.Clase().funcion()
 
 #from generatorfind.generatorfind import Code
