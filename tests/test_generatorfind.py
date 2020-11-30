@@ -23,11 +23,13 @@ def setup_multiple_assign():
     prueba = Code(path)
     return prueba
 
+
 @pytest.fixture
 def setup_folder():
     path = os.path.join(os.getcwd(), 'tests', 'folder')
     prueba = callsites_folder(path)
     return prueba
+
 
 def test_namespace_pruebas(setup):
     """test_namespace_pruebas asserts that namespaces obtains the expected value.

@@ -116,6 +116,7 @@ class Code():
                         else:
                             pass
 
+
         if node.__class__.__name__ == 'ImportFrom':
             '''In a node like this one, the attribute 'module' contains the name of the left side (from left_side
             import right_side), in the same way it's represented in code (separated by dots)
@@ -334,6 +335,7 @@ class Code():
             for child in ast.iter_child_nodes(node):
                 self.__findcall(child, ls, i-1)
 
+
 class callsites_folder():
     def __init__(self, name):
         self.allcall = {}
@@ -347,6 +349,7 @@ class callsites_folder():
                     filecode = Code(filepath)
                     self.allcall[os.path.join(filename)] = filecode.assign_call_find()
         return self.allcall
+
 
 def main(name):
     start = time.time()

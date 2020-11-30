@@ -10,7 +10,7 @@ In short, this program is aimed to find all of the callsites of generators in a 
 
 So, for instance, if we have the following code:
 
-```
+```python
 class Clase1_1:
     class Clase1_2:
         def firstn(self, n):
@@ -55,16 +55,18 @@ next(clase.Clase2_2().firstn(5)) #line 41
 
 The output of this program should be:
 
-```
+```python
 {['Clase1_1', 'Clase1_2', 'firstn']:[37,38], ['Clase2_1', 'Clase2_2', 'firstn']:[41]
 ```
 
 ## How to use it
 
 One way to use this program is to run it from the terminal. Once you have the main folder downloaded, go to `./generatorfind` and let's say you want to count the callsites in the program `/home/username/files/test.py`, then you need to do the following:
-```
+
+```sh
 python generatorfind.py /home/username/files/test.py
 ```
+
 and you will get the previously mentioned output.
 
 You may also run your code as  package from another code you have. Simply import the following: `import generatorfind` and then do: `calls = generatorfind.main('path/to/my/program')` and then `calls` will have the dictionary with the callsites. 
