@@ -27,6 +27,48 @@ dc = {}
 dc2 = {}
 dc3 = {}
 
+
+def imports(tree = tree):
+    for node in ast.walk(tree):
+        if node.__class__.__name__ == 'Import':
+            print('PARA LOS QUE SON DE TIPO Import:')
+            print('Nodo import de la linea ', node.lineno)
+            print('Su __dict__ es ', node.__dict__)
+            print('Sus hijos son:')
+            for child in ast.iter_child_nodes(node):
+                print(child.__class__.__name__)
+                print('child.dict: \n', child.__dict__)
+            print('Sus descendientes son: ')
+            for child in ast.walk(node):
+                print(child.__class__.__name__)
+                print('child.dict: \n', child.__dict__)
+        if node.__class__.__name__ == 'ImportFrom':
+            print('\n\n\n Para los que son de tipo ImportFrom')
+            print('Nodo ImportFrom de la linea ', node.lineno)
+            print('Su dict es ', node.__dict__)
+            print('Sus hijos son:')
+            for child in ast.iter_child_nodes(node):
+                print(child.__class__.__name__)
+                print(child.__dict__)
+            print('Sus descendientes son ')
+            for child in ast.walk(node):
+                print(child.__class__.__name__)
+                print(child.__dict__)
+
+imports(tree)
+
+
+def tree_walker(tree= tree):
+    for node in ast.walk(tree):
+        try:
+            print(node.lineno, ': ', node.__class__.__name__)
+        except Exception:
+            pass
+
+
+tree_walker()
+
+
 def funcion(tree = tree, i=0):
     for node in ast.iter_child_nodes(tree):
         if node.__class__.__name__ == 'Assign':
@@ -44,10 +86,10 @@ def funcion(tree = tree, i=0):
                     print(child.__class__.__name__)
                     print('child.__dict__')
                     print(child.__dict__)
+        print('\n\n\n\n Para los que son de tipo ImportFrom')
+
         funcion(node, i+1)
 
-
-funcion()
 
 
 '''
