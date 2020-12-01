@@ -56,8 +56,7 @@ def _get_folder(filename):
         [string]: [the full path of the file we are interested.]
     """
     path = os.path.split(filename)[0]
-    full_path = os.path.join(os.getcwd(), path)
-    return full_path
+    return path
 
 class Code():
     """Code is a class that contains all the functions involved in the work with the ast of the file of interest.
