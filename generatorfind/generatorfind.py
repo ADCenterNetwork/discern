@@ -96,9 +96,25 @@ class Code():
             ls.append(node)
             for i in range(len(node.names)):
                 folder = _get_folder(self.path)
-                imported_file = os.path.join(folder, node.names[i].name+'.py')
-                tree2 = ast.parse(open(imported_file).read())
-                self.__yieldfind(tree2, ls)
+                importpath = node.names[i].name
+                importpath = importpath.split('.')
+                for j in range(len(importpath)):
+                    fullpath = os.path.join(folder, importpath[j])
+                    if os.path.isfile(fullpath+'.py'):
+                        fileimp = fullpath+'.py'
+                        treeimp = ast.parse(open(fileimp).read())
+                        self.__yieldfind(treeimp, ls) 
+                        break
+                    else:
+                        if j == (len(importpath)-1):
+                            for root, directories, files in os.walk(fullpath):
+                                for filename in files:
+                                    fileimp2 = os.path.join(fullpath, filename)
+                                    if filename.endswith('.py'):
+                                        treeimp2 = ast.parse(open(fileimp2).read())
+                                        self.__yieldfind(treeimp2, ls)
+                        else:
+                            pass
 
         if node.__class__.__name__ == 'ImportFrom':
             '''In a node like this one, the attribute 'module' contains the name of the left side (from left_side
@@ -317,6 +333,20 @@ class Code():
         else: #otherwise, we want to continue the same process with its children
             for child in ast.iter_child_nodes(node):
                 self.__findcall(child, ls, i-1)
+
+class callsites_folder():
+    def __init__(self, name):
+        self.allcall = {}
+        self.path = name
+        
+    def callsites(self):
+        for root, directories, files in os.walk(self.path):
+            for filename in files:
+                filepath = os.path.join(self.path, filename)
+                if filename.endswith('.py'):
+                    filecode = Code(filepath)
+                    self.allcall[os.path.join(filename)] = filecode.assign_call_find()
+        return self.allcall
 
 def main(name):
     start = time.time()
