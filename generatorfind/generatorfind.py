@@ -133,11 +133,10 @@ class Code():
             for item in left_side:
                 full_path = os.path.join(full_path, item)
             filename = full_path + '.py'
-
+            #hasta aquí todo bien
             if os.path.isfile(filename):
                 tree2 = ast.parse(open(filename).read())
                 self.__yieldfind(tree2, ls)
-
             else: #in this case, it means we have to access the right_side and look for files
                 for alias in right_side:
                     alias_filename = alias.name + '.py'
@@ -334,6 +333,7 @@ class Code():
             for child in ast.iter_child_nodes(node):
                 self.__findcall(child, ls, i-1)
 
+
 class callsites_folder():
     def __init__(self, name):
         self.allcall = {}
@@ -342,33 +342,37 @@ class callsites_folder():
     def callsites(self):
         for root, directories, files in os.walk(self.path):
             for filename in files:
-                filepath = os.path.join(self.path, filename)
+                filepath = os.path.join(root, filename)
                 if filename.endswith('.py'):
                     filecode = Code(filepath)
-                    self.allcall[os.path.join(filename)] = filecode.assign_call_find()
+                    self.allcall[filepath] = filecode.assign_call_find()
         return self.allcall
 
 def main(name):
     start = time.time()
-    script = Code(name)
-    saveast()      
-    #script.yieldfind()
-    '''
-    print('-----------------------------------------------------------------------------------------------------\n')
-    print('In the following list we find the node\'s namespace of the generators defined in the script of interest:')
-    for i in range(len(script.generators)):
-        print('\n', i, ': \n', script.generators[i])
-    print("----------")
-    '''
-    #script._generatorfind()
-    '''
-    print('In the following list we find the namespace of the generators defined in the script of interest:')
-    for i in range(len(script.generators)):
-        print('\n', i, ': \n', script.generators[i])
-    print("----------")
-    '''
-    print(script._generatorfind())
-    script.assign_call_find()
+    if name.endswith('.py'):
+        script = Code(name)
+        saveast()      
+        #script.yieldfind()
+        '''
+        print('-----------------------------------------------------------------------------------------------------\n')
+        print('In the following list we find the node\'s namespace of the generators defined in the script of interest:')
+        for i in range(len(script.generators)):
+            print('\n', i, ': \n', script.generators[i])
+        print("----------")
+        '''
+        #script._generatorfind()
+        '''
+        print('In the following list we find the namespace of the generators defined in the script of interest:')
+        for i in range(len(script.generators)):
+            print('\n', i, ': \n', script.generators[i])
+        print("----------")
+        '''
+        print(script._generatorfind())
+        script.assign_call_find()
+    else:
+        script = callsites_folder(name)
+        script.callsites()
     
     print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
     print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
