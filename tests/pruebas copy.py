@@ -8,6 +8,7 @@ class Clase1_1:
             while num < n:
                 yield num
                 num += 1
+
     class Clase1_3:
         def firstn(self, n):
             num = 0
@@ -22,6 +23,14 @@ class Clase2_1:
             while num > n:
                 yield num
                 num -= 1
+
+class Clase3_1:
+    class Clase2_2:
+        def firstn(self, n):
+            num = n**2
+            while num > n:
+                return num
+
 
 
 def primera():
@@ -89,6 +98,10 @@ asignacion2_2 = asignacion2_1.Clase2_2()
 next(asignacion2_2.firstn(5))
 
 asignacion3_1 = Clase2_1().Clase2_2()
+asignacion3_2 = asignacion3_1.firstn(5)
+next(asignacion3_2)
+
+asignacion3_1 = Clase3_1().Clase2_2()
 asignacion3_2 = asignacion3_1.firstn(5)
 next(asignacion3_2)
 
