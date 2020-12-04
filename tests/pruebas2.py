@@ -1,4 +1,3 @@
-import pruebas, prueba_simple
+import folder.pruebas
 
-print(pruebas.Clase1_1().Clase1_2().firstn(5))
-
+print(folder.pruebas.Clase1_1().Clase1_2().firstn(5))
