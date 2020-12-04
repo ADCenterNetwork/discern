@@ -1,4 +1,4 @@
-from ..generatorfind.generatorfind import Discern
+from ..generatorfind.generatorfind import Discern, FolderCalls
 import ast
 import os, pytest, shutil
 
@@ -22,6 +22,11 @@ def setup_multiple_assign():
     prueba = Discern(path)
     return prueba
 
+@pytest.fixture
+def setup_folder():
+    path = os.path.join(os.getcwd(), 'tests', 'folder')
+    prueba = FolderCalls(path)
+    return prueba
 
 def test_namespace_pruebas(setup):
     """test_namespace_pruebas asserts that namespaces obtains the expected value.
@@ -55,3 +60,9 @@ def test_callsites_imports(setup_imports):
 
 def test_generatorfind_multiple_assign(setup_multiple_assign):
     assert setup_multiple_assign.assign_call_find() =={('Clase', 'f'):[9,11], ('Clase2', 'g'):[9,13]}
+
+def test_generatorfind_folder(setup_folder):
+    assert setup_folder.callsites()  == {\
+        'pruebas.py': {('generator',): [41, 43, 44], ('Clase1_1', 'Clase1_2', 'firstn'): [49, 56, 68, 77], ('Clase1_1', 'Clase1_3', 'firstn'): [62, 64], ('Clase2_1', 'Clase2_2', 'firstn'): [85, 89, 92, 93]},\
+        'prueba_simple.py': {('Clase1', 'Clase2', 'f'): [7], ('f',): [7, 19, 20, 21]},\
+        '__init__.py': {}}
