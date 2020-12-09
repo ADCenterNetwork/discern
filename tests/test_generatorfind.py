@@ -65,6 +65,7 @@ def test_generatorfind_multiple_assign(setup_multiple_assign):
 
 def test_generatorfind_folder(setup_folder):
     assert setup_folder.callsites()  == {\
-        'pruebas.py': {('generator',): [41, 43, 44], ('Clase1_1', 'Clase1_2', 'firstn'): [49, 56, 68, 77], ('Clase1_1', 'Clase1_3', 'firstn'): [62, 64], ('Clase2_1', 'Clase2_2', 'firstn'): [85, 89, 92, 93]},\
-        'prueba_simple.py': {('Clase1', 'Clase2', 'f'): [7], ('f',): [7, 19, 20, 21]},\
-        '__init__.py': {}}
+        'c:\\Users\\adomingu\\Documents\\generatorfind\\nueva_version\\tests\\folder\\pruebas.py': {('generator',): [41, 43, 44], \
+        ('Clase1_1', 'Clase1_2', 'firstn'): [49, 56, 68, 77], ('Clase1_1', 'Clase1_3', 'firstn'): [62, 64], ('Clase2_1', 'Clase2_2', 'firstn'): [85, 89, 92, 93]},\
+        'c:\\Users\\adomingu\\Documents\\generatorfind\\nueva_version\\tests\\folder\\prueba_simple.py': {('Clase1', 'Clase2', 'f'): [7], ('f',): [7, 19, 20, 21]},\
+        'c:\\Users\\adomingu\\Documents\\generatorfind\\nueva_version\\tests\\folder\\__init__.py': {}}
