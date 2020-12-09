@@ -1,0 +1,2 @@
+def generator():
+    yield 'hola'
