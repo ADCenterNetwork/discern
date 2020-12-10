@@ -374,8 +374,7 @@ class Discern2():
                     fileimp = fullpath+'.py'
                     treeimp = ast.parse(open(fileimp).read())
                     self.__yieldfind(treeimp, ls)
-                    for n in range(len(importpath)+1):
-                        ls.pop(0) 
+                    [ ls.pop(0) for n in range(len(importpath)+1) ] 
                 else: #We are in a folder. We have to modify:
                     for root, directories, files in os.walk(fullpath):
                         for filename in files:
