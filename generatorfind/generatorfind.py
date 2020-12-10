@@ -365,7 +365,10 @@ class Discern2():
                 fullpath = folder
                 for j in range(len(importpath)):
                     fullpath = os.path.join(fullpath, importpath[j])
-                if os.path.isfile(fullpath+'.py'):
+                absolute_path = os.path.join(os.getcwd(), fullpath)
+                print('El path absoluto es: ', str(absolute_path))
+                print('Y self.modules es: ',self.modules)
+                if os.path.isfile(fullpath+'.py')  and (absolute_path+'.py' in self.modules):
                     if node.names[i].asname:
                         ls.append(node.names[i].asname)
                     else:
@@ -407,7 +410,7 @@ class Discern2():
             for item in left_side:
                 full_path = os.path.join(full_path, item)
             filename = full_path + '.py'
-            if os.path.isfile(filename):
+            if os.path.isfile(filename) and (filename in self.modules):
                 tree2 = ast.parse(open(filename).read())
                 self.__yieldfind(tree2, ls)
             #in this case, it means we have to access the right_side and look for files
@@ -613,36 +616,71 @@ class FolderCalls():
 
 def main(name):
     start = time.time()
-    if name.endswith('.py'):
-        script = Discern(name)
-        saveast()      
-        #script.yieldfind()
-        '''
+    if len(sys.argv) == 2:
+        if name.endswith('.py'):
+            script = Discern(name)
+            saveast()      
+            #script.yieldfind()
+            '''
+            print('-----------------------------------------------------------------------------------------------------\n')
+            print('In the following list we find the node\'s namespace of the generators defined in the script of interest:')
+            for i in range(len(script.generators)):
+                print('\n', i, ': \n', script.generators[i])
+            print("----------")
+            '''
+            #script._generatorfind()
+            '''
+            print('In the following list we find the namespace of the generators defined in the script of interest:')
+            for i in range(len(script.generators)):
+                print('\n', i, ': \n', script.generators[i])
+            print("----------")
+            '''
+            print(script._generatorfind())
+            script.assign_call_find()
+        else:
+            script = FolderCalls(name)
+            script.callsites()
+        
+        print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
+        print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
+        end = time.time()
+        print("---------")
+        print('Execution time:', end-start, 'seconds.')
         print('-----------------------------------------------------------------------------------------------------\n')
-        print('In the following list we find the node\'s namespace of the generators defined in the script of interest:')
-        for i in range(len(script.generators)):
-            print('\n', i, ': \n', script.generators[i])
-        print("----------")
-        '''
-        #script._generatorfind()
-        '''
-        print('In the following list we find the namespace of the generators defined in the script of interest:')
-        for i in range(len(script.generators)):
-            print('\n', i, ': \n', script.generators[i])
-        print("----------")
-        '''
-        print(script._generatorfind())
-        script.assign_call_find()
-    else:
-        script = FolderCalls(name)
-        script.callsites()
-    
-    print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
-    print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
-    end = time.time()
-    print("---------")
-    print('Execution time:', end-start, 'seconds.')
-    print('-----------------------------------------------------------------------------------------------------\n')
+    elif len(sys.argv) >= 2:
+        if name.endswith('.py'):
+            ls = sys.argv[2:]
+            script = Discern2(name, ls)
+            saveast()      
+            #script.yieldfind()
+            '''
+            print('-----------------------------------------------------------------------------------------------------\n')
+            print('In the following list we find the node\'s namespace of the generators defined in the script of interest:')
+            for i in range(len(script.generators)):
+                print('\n', i, ': \n', script.generators[i])
+            print("----------")
+            '''
+            #script._generatorfind()
+            '''
+            print('In the following list we find the namespace of the generators defined in the script of interest:')
+            for i in range(len(script.generators)):
+                print('\n', i, ': \n', script.generators[i])
+            print("----------")
+            '''
+            print(script._generatorfind())
+            script.assign_call_find()
+            print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
+            print('LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
+            print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
+            end = time.time()
+            print("---------")
+            print('Execution time:', end-start, 'seconds.')
+            print('---------------------------------------------------------------------------------------------\n')
+        else: 
+            #TO DO  in this case we're in a folder. We need to make a 'FolderCalls' class for Discern2
+            pass
+
+
 
 
 if __name__ == '__main__':
