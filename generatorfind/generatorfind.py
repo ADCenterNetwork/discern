@@ -35,7 +35,6 @@ def get_name(node):
                     except AttributeError:
                         return None
 
-
 def saveast():
     """saveast is a function that will create in our directory a .txt file with a pretty print of the tree. 
     This file can help us to understand the structure of the ast.
@@ -78,7 +77,6 @@ class Discern():
         self.assigns = {}
         self.new_variable = None
  
-    
     def __yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
         that contain that generator.
@@ -90,7 +88,6 @@ class Discern():
         """
         if node == None:
             node = self.tree
-
         if node.__class__.__name__ == 'Import':
             for i in range(len(node.names)):
                 folder = _get_folder(self.path)
@@ -127,6 +124,7 @@ class Discern():
                             pass
                             ls.append(importpath[j])
 
+
         if node.__class__.__name__ == 'ImportFrom':
             '''In a node like this one, the attribute 'module' contains the name of the left side (from left_side
             import right_side), in the same way it's represented in code (separated by dots)
@@ -144,11 +142,9 @@ class Discern():
             for item in left_side:
                 full_path = os.path.join(full_path, item)
             filename = full_path + '.py'
-
             if os.path.isfile(filename):
                 tree2 = ast.parse(open(filename).read())
                 self.__yieldfind(tree2, ls)
-
             #in this case, it means we have to access the right_side and look for files
             else: 
                 for alias in right_side:
@@ -164,27 +160,13 @@ class Discern():
                 ls.append(node)
                 x = ls[:]
                 self.generators.append(x)
-       
         else:
                 if ast.iter_child_nodes(node):
                     ls.append(node)
                     for child in ast.iter_child_nodes(node):
                         y = ls[:]
                         self.__yieldfind(child, y)
-
         return self.generators
-
-    
-    def __yieldfind_imports(self, node):
-        ''' node is a node whose __class__.__name__ is ImportFrom. 
-        We want to explore its 'module' and 'names' attributes until we find a Python file.
-        When we do, we want to enter this file and explore its generators.
-        
-        We take into account that the way we will call these generators in our main file, will be by calling
-        the last element in 'names' first.'''
-        pass
-        
-
 
     def _generatorfind(self):
         """_generatorfind works with our list 'generators' in order to obtain the correct namespace instead of all the
@@ -397,16 +379,5 @@ def main(name):
     print('-----------------------------------------------------------------------------------------------------\n')
 
 
-    
-    
-    
-
 if __name__ == '__main__':
     main(sys.argv[1])
-
-
-
-
-
-
-
