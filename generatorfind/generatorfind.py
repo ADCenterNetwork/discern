@@ -104,7 +104,7 @@ class Discern():
                     fileimp = fullpath+'.py'
                     treeimp = ast.parse(open(fileimp).read())
                     self.__yieldfind(treeimp, ls)
-                    [ ls.pop(0) for n in range(len(importpath)) ]
+                    [ ls.pop(0) for n in range(len(importpath)+1) ]
                 else: #We are in a folder. We have to modify:
                     for root, directories, files in os.walk(fullpath):
                         for filename in files:
@@ -326,8 +326,6 @@ class Discern():
             for child in ast.iter_child_nodes(node):
                 self.__findcall(child, ls, i-1)
 
-<<<<<<< HEAD
-=======
 class Discern2():
     """Discern2 is a class that contains all the functions involved in the work with the ast of the file of interest.
 	_ one inner level
@@ -599,7 +597,6 @@ class Discern2():
             for child in ast.iter_child_nodes(node):
                 self.__findcall(child, ls, i-1)
 
->>>>>>> cc12b3a0d0f203642759761f282388124203b66c
 
 class FolderCalls():
     def __init__(self, name):
