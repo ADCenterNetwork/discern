@@ -366,7 +366,10 @@ class Discern2():
                 fullpath = folder
                 for j in range(len(importpath)):
                     fullpath = os.path.join(fullpath, importpath[j])
-                if os.path.isfile(fullpath+'.py'):
+                absolute_path = os.path.join(os.getcwd(), fullpath)
+                print('El path absoluto es: ', str(absolute_path))
+                print('Y self.modules es: ',self.modules)
+                if os.path.isfile(fullpath+'.py')  and (absolute_path+'.py' in self.modules):
                     if node.names[i].asname:
                         ls.append(node.names[i].asname)
                     else:
@@ -409,7 +412,7 @@ class Discern2():
             for item in left_side:
                 full_path = os.path.join(full_path, item)
             filename = full_path + '.py'
-            if os.path.isfile(filename):
+            if os.path.isfile(filename) and (filename in self.modules):
                 tree2 = ast.parse(open(filename).read())
                 self.__yieldfind(tree2, ls)
             #in this case, it means we have to access the right_side and look for files
@@ -669,6 +672,7 @@ def main(name):
             print(script._generatorfind())
             script.assign_call_find()
             print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
+            print('LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
             print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
             end = time.time()
             print("---------")
