@@ -91,40 +91,39 @@ class Discern():
         if node.__class__.__name__ == 'Import':
             for i in range(len(node.names)):
                 folder = _get_folder(self.path)
-                importpath = node.names[i].name
-                importpath = importpath.split('.')
+                importpath = node.names[i].name.split('.')
+                fullpath = folder
                 for j in range(len(importpath)):
-                    fullpath = os.path.join(folder, importpath[j])
-                    if os.path.isfile(fullpath+'.py'):
-                        if node.names[i].asname:
-                            ls.append(node.names[i].asname)
-                        else:
-                            ls.append(importpath[j])
-                        fileimp = fullpath+'.py'
-                        treeimp = ast.parse(open(fileimp).read())
-                        self.__yieldfind(treeimp, ls[:]) 
-                        for n in range(len(importpath)):
-                            ls.pop(0)
-                        break
+                    fullpath = os.path.join(fullpath, importpath[j])
+                if os.path.isfile(fullpath+'.py'):
+                    if node.names[i].asname:
+                        ls.append(node.names[i].asname)
                     else:
-                        if j == (len(importpath)-1): #We are in a folder.
-                            for root, directories, files in os.walk(fullpath):
-                                for filename in files:
-                                    fileimp2 = os.path.join(fullpath, filename)
-                                    if filename.endswith('.py'):
-                                        if node.names[i].asname:
-                                            ls.append(node.names[i].asname)
-                                        else:
-                                            filename2 = filename.split('.')
-                                            ls.append(importpath[j])
-                                            ls.append(filename2[0])
-                                        treeimp2 = ast.parse(open(fileimp2).read())
-                                        self.__yieldfind(treeimp2, ls[:])
-                                        ls=[]
-                        else:
-                            if not node.names[i].asname:
-                                pass
-                                ls.append(importpath[j])
+                        for item in importpath:
+                            ls.append(item)
+                    fileimp = fullpath+'.py'
+                    treeimp = ast.parse(open(fileimp).read())
+                    self.__yieldfind(treeimp, ls) 
+                    break
+                else:
+                    if j == (len(importpath)-1):
+                        for root, directories, files in os.walk(fullpath):
+                            for filename in files:
+                                fileimp2 = os.path.join(fullpath, filename)
+                                if filename.endswith('.py'):
+                                    if node.names[i].asname:
+                                        ls.append(node.names[i].asname)
+                                    else:
+                                        filename2 = filename.split('.')
+                                        ls.append(importpath[j])
+                                        ls.append(filename2[0])
+                                    treeimp2 = ast.parse(open(fileimp2).read())
+                                    self.__yieldfind(treeimp2, ls)
+                    else:
+                        if not node.names[i].asname:
+                            pass
+                            ls.append(importpath[j])
+
 
         if node.__class__.__name__ == 'ImportFrom':
             '''In a node like this one, the attribute 'module' contains the name of the left side (from left_side
