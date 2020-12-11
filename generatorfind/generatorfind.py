@@ -375,8 +375,7 @@ class Discern2():
                     fileimp = fullpath+'.py'
                     treeimp = ast.parse(open(fileimp).read())
                     self.__yieldfind(treeimp, ls)
-                    for n in range(len(importpath)+1):
-                        ls.pop(0) 
+                    [ ls.pop(0) for n in range(len(importpath)+1) ]
                 elif absolute_path in self.modules: #We are in a folder. We have to modify:
                     if node.names[i].asname:
                         ls.append(node.names[i].asname)
