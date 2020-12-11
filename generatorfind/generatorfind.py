@@ -378,6 +378,11 @@ class Discern2():
                     for n in range(len(importpath)+1):
                         ls.pop(0) 
                 elif absolute_path in self.modules: #We are in a folder. We have to modify:
+                    if node.names[i].asname:
+                        ls.append(node.names[i].asname)
+                    else:
+                        for item in importpath:
+                            ls.append(item)
                     self.__yieldfind_folders(absolute_path, ls)
 
 
@@ -441,12 +446,7 @@ class Discern2():
                     if os.path.isfile(left_side_path+'.py'):
                         filename = left_side_path+'.py'
                         tree2 = ast.parse(open(filename).read())
-                        print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
                         self.__yieldfind(tree2, ls)
-                    '''
-                    Reporte de situacion actual con el programa:
-                    vemos que no entra en el 'if' de la linea 458 al probar el programa
-                    con pruebas3, y sin embargo sí debería. Mirar por qué no está ocurriendo esto'''
 
 
     def _generatorfind(self):
@@ -680,7 +680,6 @@ def main(name):
                 print('\n', i, ': \n', script.generators[i])
             print("----------")
             '''
-            print(script._generatorfind())
             script.assign_call_find()
             print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
             print('LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
