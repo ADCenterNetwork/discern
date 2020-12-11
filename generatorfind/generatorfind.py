@@ -367,8 +367,6 @@ class Discern2():
                 for j in range(len(importpath)):
                     fullpath = os.path.join(fullpath, importpath[j])
                 absolute_path = os.path.join(os.getcwd(), fullpath)
-                print('El path absoluto es: ', str(absolute_path))
-                print('Y self.modules es: ',self.modules)
                 if os.path.isfile(fullpath+'.py')  and (absolute_path+'.py' in self.modules):
                     if node.names[i].asname:
                         ls.append(node.names[i].asname)
@@ -435,15 +433,14 @@ class Discern2():
             self.__yieldfind(init_tree, ls)
             for node in ast.walk(init_tree):
                 if node.__class__.__name__ == 'ImportFrom':
-                    print('Hemos encontrado un nodo ImportFrom')
                     left_side = node.module.split('.')
                     left_side = list(filter(None, left_side))
-                    print('El left side es :', left_side)
                     right_side = node.names
                     left_side_path = absolute_path
                     for item in left_side:
-                        os.path.join(left_side_path, item)
+                        left_side_path = os.path.join(left_side_path, item)
                     if os.path.isfile(left_side_path+'.py'):
+                        filename = left_side_path+'.py'
                         tree2 = ast.parse(open(filename).read())
                         print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
                         self.__yieldfind(tree2, ls)
