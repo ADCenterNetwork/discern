@@ -380,19 +380,8 @@ class Discern2():
                     self.__yieldfind(treeimp, ls)
                     for n in range(len(importpath)+1):
                         ls.pop(0) 
-                else: #We are in a folder. We have to modify:
-                    for root, directories, files in os.walk(fullpath):
-                        for filename in files:
-                            fileimp2 = os.path.join(fullpath, filename)
-                            if filename.endswith('.py'):
-                                if node.names[i].asname:
-                                    ls.append(node.names[i].asname)
-                                else:
-                                    filename2 = filename.split('.')
-                                    ls.append(importpath[j])
-                                    ls.append(filename2[0])
-                                treeimp2 = ast.parse(open(fileimp2).read())
-                                self.__yieldfind(treeimp2, ls)
+                elif absolute_path in self.modules: #We are in a folder. We have to modify:
+                    self.__yieldfind_folders(absolute_path, ls)
 
 
         if node.__class__.__name__ == 'ImportFrom':
@@ -437,6 +426,32 @@ class Discern2():
                         y = ls[:]
                         self.__yieldfind(child, y)
         return self.generators
+
+        
+    def __yieldfind_folders(self, absolute_path, ls):
+        init_filename = os.path.join(absolute_path, '__init__.py')
+        if os.path.exists(init_filename):
+            init_tree = ast.parse(open(init_filename).read())
+            self.__yieldfind(init_tree, ls)
+            for node in ast.walk(init_tree):
+                if node.__class__.__name__ == 'ImportFrom':
+                    print('Hemos encontrado un nodo ImportFrom')
+                    left_side = node.module.split('.')
+                    left_side = list(filter(None, left_side))
+                    print('El left side es :', left_side)
+                    right_side = node.names
+                    left_side_path = absolute_path
+                    for item in left_side:
+                        os.path.join(left_side_path, item)
+                    if os.path.isfile(left_side_path+'.py'):
+                        tree2 = ast.parse(open(filename).read())
+                        print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+                        self.__yieldfind(tree2, ls)
+                    '''
+                    Reporte de situacion actual con el programa:
+                    vemos que no entra en el 'if' de la linea 458 al probar el programa
+                    con pruebas3, y sin embargo sí debería. Mirar por qué no está ocurriendo esto'''
+
 
     def _generatorfind(self):
         """_generatorfind works with our list 'generators' in order to obtain the correct namespace instead of all the
