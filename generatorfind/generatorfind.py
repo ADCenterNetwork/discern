@@ -252,7 +252,6 @@ class Discern():
                     self.assigns[get_name(new_variable)] = self.assigns[get_name(child)]
             elif child.__class__.__name__ == 'Tuple':
                 for j in range(len(node.value.elts)):
-
                     self.__assignfind_multiple(node.targets[0].elts[j], node.value.elts[j], ls)
             else:
                 self.__assignfind(new_variable, child, ls, i)
@@ -663,6 +662,8 @@ def main(name):
     elif len(sys.argv) >= 2:
         if name.endswith('.py'):
             ls = sys.argv[2:]
+            for i in range(len(ls)):
+                ls[i] = os.path.abspath(ls[i])
             script = Discern2(name, ls)
             saveast()      
             #script.yieldfind()
