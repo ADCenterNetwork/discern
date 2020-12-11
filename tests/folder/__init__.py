@@ -1,1 +1,1 @@
-import pruebas
+from .pruebas import Clase1_1
