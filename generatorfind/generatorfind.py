@@ -648,12 +648,13 @@ def main(name):
             '''
             print(script._generatorfind())
             script.assign_call_find()
+            print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
+            print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
         else:
             script = FolderCalls(name)
-            script.callsites()
+            print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.callsites())
         
-        print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
-        print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
+        
         end = time.time()
         print("---------")
         print('Execution time:', end-start, 'seconds.')
