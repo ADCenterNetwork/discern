@@ -2,7 +2,7 @@
 
 ## What it does
 
-This program will read a file as input, and it will look for all the instances that every single generator function is called. 
+This program has two functionalities. The first one is to read a file as input, and it will look for all the instances that every single generator function is called. The second one is the same as above, but with the singularity that first input file only searches 'calls' and the other inputs look for "generators". Those inputs could be a file or folder or both 
 
 The output that we will receive is a dictionary, in which the keys are the names of all of our generators in our program, and the values of these keys are lists with numbers, representing the lines of our program in which these generators were called.
 
@@ -61,6 +61,8 @@ The output of this program should be:
 
 ## How to use it
 
+### Case 1
+
 One way to use this program is to run it from the terminal. Once you have the main folder downloaded, go to `./generatorfind` and let's say you want to count the callsites in the program `/home/username/files/test.py`, then you need to do the following:
 
 ```sh
@@ -70,3 +72,6 @@ python generatorfind.py /home/username/files/test.py
 and you will get the previously mentioned output.
 
 You may also run your code as  package from another code you have. Simply import the following: `import generatorfind` and then do: `calls = generatorfind.main('path/to/my/program')` and then `calls` will have the dictionary with the callsites. 
+
+
+### Case 2
