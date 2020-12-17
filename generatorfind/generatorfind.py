@@ -76,6 +76,7 @@ class Discern():
         self.calls = {}
         self.assigns = {}
         self.new_variable = None
+        self.temporalassign = {}
  
     def __yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
@@ -245,14 +246,20 @@ class Discern():
             if child.__class__.__name__ == 'Call':
                 if get_name(child) in ls:
                     i = ls.index(get_name(child))
-                    self.assigns[get_name(new_variable)] = [get_name(child)]
+                    self.temporalassign[get_name(new_variable)] = [get_name(child)]
                     self.___assignfind(new_variable, child, ls, i-1)
             elif child.__class__.__name__ == 'Name':
                 if get_name(child) in self.assigns.keys():
-                    self.assigns[get_name(new_variable)] = self.assigns[get_name(child)]
+                    try:
+                        self.assigns[node.targets[0].id] = self.assigns[get_name(child)]
+                    except:
+                        pass
             elif child.__class__.__name__ == 'Tuple':
-                for j in range(len(node.value.elts)):
-                    self.__assignfind_multiple(node.targets[0].elts[j], node.value.elts[j], ls)
+                try: #We put a try/except for cases a,b = function_that_returns_two_objects. We have to include this case.
+                    for j in range(len(node.value.elts)):
+                        self.__assignfind_multiple(node.targets[0].elts[j], node.value.elts[j], ls)
+                except AttributeError:
+                    pass
             else:
                 self.__assignfind(new_variable, child, ls, i)
 
@@ -270,19 +277,20 @@ class Discern():
 
     def ___assignfind(self,new_variable, node, ls, i):
         '''we want to check if any of the descendants of 'node' is in our list ls in the index i'''
-        if i >= 0:
+        if ast.iter_child_nodes(node) and i >= 0:
             for child in ast.iter_child_nodes(node):
                 if child.__class__.__name__ == 'Call':
                     if get_name(child) == ls[i]:
-                        self.assigns[get_name(new_variable)].insert(0, get_name(child))
+                        self.temporalassign[get_name(new_variable)].insert(0, get_name(child))
                         i = i-1
                 elif child.__class__.__name__ == 'Name':
                     if get_name(child) in self.assigns.keys():
                         for item in self.assigns[get_name(child)]:
                             i = len(self.assigns[get_name(child)]) - 1
-                            self.assigns[get_name(new_variable)].insert(0, item)
-                if i >= 0:
-                    self.___assignfind(new_variable, child, ls, i)
+                            self.temporalassign[get_name(new_variable)].insert(0, item)
+                self.___assignfind(new_variable, child, ls, i)
+        else:
+            self.assigns[get_name(new_variable)] = self.temporalassign[get_name(new_variable)]
 
     def _findcall(self, node):
         for sublist in self.generators:
@@ -345,6 +353,7 @@ class Discern2():
         self.assigns = {}
         self.new_variable = None
         self.modules = ls_modules
+        self.temporalassign = {}
  
     def __yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
@@ -529,15 +538,20 @@ class Discern2():
             if child.__class__.__name__ == 'Call':
                 if get_name(child) in ls:
                     i = ls.index(get_name(child))
-                    self.assigns[get_name(new_variable)] = [get_name(child)]
+                    self.temporalassign[get_name(new_variable)] = [get_name(child)]
                     self.___assignfind(new_variable, child, ls, i-1)
             elif child.__class__.__name__ == 'Name':
                 if get_name(child) in self.assigns.keys():
-                    self.assigns[get_name(new_variable)] = self.assigns[get_name(child)]
+                    try:
+                        self.assigns[node.targets[0].id] = self.assigns[get_name(child)]
+                    except:
+                        pass
             elif child.__class__.__name__ == 'Tuple':
-                for j in range(len(node.value.elts)):
-
-                    self.__assignfind_multiple(node.targets[0].elts[j], node.value.elts[j], ls)
+                try: #We put a try/except for cases a,b = function_that_returns_two_objects. We have to include this case.
+                    for j in range(len(node.value.elts)):
+                        self.__assignfind_multiple(node.targets[0].elts[j], node.value.elts[j], ls)
+                except AttributeError:
+                    pass
             else:
                 self.__assignfind(new_variable, child, ls, i)
 
@@ -555,19 +569,21 @@ class Discern2():
 
     def ___assignfind(self,new_variable, node, ls, i):
         '''we want to check if any of the descendants of 'node' is in our list ls in the index i'''
-        if i >= 0:
+        if ast.iter_child_nodes(node) and i >= 0:
             for child in ast.iter_child_nodes(node):
                 if child.__class__.__name__ == 'Call':
                     if get_name(child) == ls[i]:
-                        self.assigns[get_name(new_variable)].insert(0, get_name(child))
+                        self.temporalassign[get_name(new_variable)].insert(0, get_name(child))
                         i = i-1
                 elif child.__class__.__name__ == 'Name':
                     if get_name(child) in self.assigns.keys():
                         for item in self.assigns[get_name(child)]:
                             i = len(self.assigns[get_name(child)]) - 1
-                            self.assigns[get_name(new_variable)].insert(0, item)
-                if i >= 0:
-                    self.___assignfind(new_variable, child, ls, i)
+                            self.temporalassign[get_name(new_variable)].insert(0, item)
+                self.___assignfind(new_variable, child, ls, i)
+        else:
+            self.assigns[get_name(new_variable)] = self.temporalassign[get_name(new_variable)]
+
 
     def _findcall(self, node):
         for sublist in self.generators:
@@ -629,6 +645,9 @@ def main(name):
     start = time.time()
     if len(sys.argv) == 2:
         if name.endswith('.py'):
+            print("***************************************\n")
+            print("***Estamos trabajando con DISCERN1.***\n")
+            print("***************************************\n")
             script = Discern(name)
             saveast()      
             #script.yieldfind()
@@ -648,19 +667,25 @@ def main(name):
             '''
             print(script._generatorfind())
             script.assign_call_find()
-            print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
-            print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
         else:
+            print("***************************************\n")
+            print("***Estamos trabajando con FOLDER.***\n")
+            print("***************************************\n")
             script = FolderCalls(name)
-            print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.callsites())
+            script.callsites()
         
-        
+        print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
+        print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
         end = time.time()
         print("---------")
         print('Execution time:', end-start, 'seconds.')
         print('-----------------------------------------------------------------------------------------------------\n')
     elif len(sys.argv) >= 2:
         if name.endswith('.py'):
+            print("***************************************\n")
+            print("***Estamos trabajando con DISCERN2.***\n")
+            print("***************************************\n")
+
             ls = sys.argv[2:]
             for i in range(len(ls)):
                 ls[i] = os.path.abspath(ls[i])
