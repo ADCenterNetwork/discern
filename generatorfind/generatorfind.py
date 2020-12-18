@@ -57,6 +57,18 @@ def _get_folder(filename):
     path = os.path.split(filename)[0]
     return path
 
+
+def self_finder(node, class_name, dc):
+    if node.__class__.__name__ == 'ClassDef':
+        class_name = node.name
+    if node.__class__.__name__ == 'Name':
+        if node.id == 'self':
+            dc[node] = class_name
+    for child in ast.iter_child_nodes(node):
+        self_finder(child, class_name, dc)
+    return dc
+
+
 class Discern():
     """Discern is a class that contains all the functions involved in the work with the ast of the file of interest.
 	_ one inner level
@@ -77,6 +89,7 @@ class Discern():
         self.assigns = {}
         self.new_variable = None
         self.temporalassign = {}
+        self.self_dictionary = self_finder(self.tree, '', {})
  
     def __yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
@@ -312,6 +325,10 @@ class Discern():
                     self.___findcall(node, ls, i)
             elif get_name(node) == ls[i]:
                 self.___findcall(node, ls, i)
+            elif node.id == 'self':
+                if node in self.self_dictionary.keys():
+                    if self.self_dictionary[node] == ls[i]:
+                        self.___findcall(node, ls, i)
         elif node.__class__.__name__ == 'Attribute' and node.value.__class__.__name__ == 'Attribute':
             if node.value.attr == ls[i]:
                 self.___findcall(node.value, ls, i) 
@@ -354,6 +371,7 @@ class Discern2():
         self.new_variable = None
         self.modules = ls_modules
         self.temporalassign = {}
+        self.self_dictionary = self_finder(self.tree, '', {})
  
     def __yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
@@ -605,6 +623,10 @@ class Discern2():
                     self.___findcall(node, ls, i)
             elif get_name(node) == ls[i]:
                 self.___findcall(node, ls, i)
+            elif node.id == 'self':
+                if node in self.self_dictionary.keys():
+                    if self.self_dictionary[node] == ls[i]:
+                        self.___findcall(node, ls, i)
         elif node.__class__.__name__ == 'Attribute' and node.value.__class__.__name__ == 'Attribute':
             if node.value.attr == ls[i]:
                 self.___findcall(node.value, ls, i) 
