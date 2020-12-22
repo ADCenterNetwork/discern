@@ -10,3 +10,4 @@ correct2 = correct
 next(correct2)
 #si hago correct2 = correct() no lo detecta como assign pero aparece en calls la linea 9
 incorrect = Clase2().funcion()
+next(incorrect)
