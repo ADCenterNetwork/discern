@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 ast2json = "*"
 pytest = "*"
+gitpython = "*"
 
 [requires]
 python_version = "3.8"

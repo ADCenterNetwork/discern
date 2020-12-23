@@ -3,6 +3,28 @@ import sys, os
 import json
 from ast2json import ast2json
 import time
+import shutil
+
+from repos import download_repos
+
+def get_repos(full_list):
+    ''' 'full_list' contains ALL of the modules that we pass as arguments to our program, regardless
+    of whether they are modules in our folder of they are external. Our objective with this function
+    is to determine which modules to get from github (those which are given as URLs) and download them'''
+    repos_list = []
+    path = os.path.join(os.getcwd(), 'downloaded_modules')
+    try:
+        os.mkdir(path)
+    except:
+        pass
+    for module in full_list:
+        if not os.path.exists(module): 
+            #in this case, we interpret it as a github url
+            repos_list.append(module)
+    download_repos(repos_list, path)
+
+
+
 
 def get_name(node):
     """get_name get_name will help us ocassionally to obtain the name that the node refers to.
@@ -421,6 +443,24 @@ class Discern2():
                         for item in importpath:
                             ls.append(item)
                     self.__yieldfind_folders(absolute_path, ls)
+                else:
+                    #we check if it's one of the downloaded files from github
+                    importpath = node.names[i].name.split('.')
+                    fullpath = os.path.join(os.getcwd(), 'downloaded_modules')
+                    for j in range(len(importpath)):
+                        fullpath = os.path.join(fullpath, importpath[j])
+                    fullpath = fullpath + '.py'
+                    if os.path.exists(fullpath):
+                        if node.names[i].asname:
+                            ls.append(node.names[i].asname)
+                    else:
+                        for item in importpath:
+                            ls.append(item)
+                    fileimp = fullpath+'.py'
+                    treeimp = ast.parse(open(fileimp).read())
+                    self.__yieldfind(treeimp, ls)
+                    [ ls.pop(0) for n in range(len(importpath)+1) ]
+                        
 
 
         if node.__class__.__name__ == 'ImportFrom':
@@ -733,8 +773,8 @@ def main(name):
             print("***************************************\n")
             print("***Estamos trabajando con DISCERN2.***\n")
             print("***************************************\n")
-
             ls = sys.argv[2:]
+            get_repos(ls)
             for i in range(len(ls)):
                 ls[i] = os.path.abspath(ls[i])
             script = Discern2(name, ls)
@@ -762,6 +802,8 @@ def main(name):
             print("---------")
             print('Execution time:', end-start, 'seconds.')
             print('---------------------------------------------------------------------------------------------\n')
+            #we delete the folder we created in the beginning for downloaded folders
+            shutil.rmtree('downloaded_modules', ignore_errors=True)
         else: 
             #TO DO  in this case we're in a folder. We need to make a 'FolderCalls' class for Discern2
             pass
