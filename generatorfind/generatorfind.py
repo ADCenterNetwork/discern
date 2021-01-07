@@ -3,28 +3,6 @@ import sys, os
 import json
 from ast2json import ast2json
 import time
-import shutil
-
-from repos import download_repos
-
-def get_repos(full_list):
-    ''' 'full_list' contains ALL of the modules that we pass as arguments to our program, regardless
-    of whether they are modules in our folder of they are external. Our objective with this function
-    is to determine which modules to get from github (those which are given as URLs) and download them'''
-    repos_list = []
-    path = os.path.join(os.getcwd(), 'downloaded_modules')
-    try:
-        os.mkdir(path)
-    except:
-        pass
-    for module in full_list:
-        if not os.path.exists(module): 
-            #in this case, we interpret it as a github url
-            repos_list.append(module)
-    download_repos(repos_list, path)
-
-
-
 
 def get_name(node):
     """get_name get_name will help us ocassionally to obtain the name that the node refers to.
@@ -90,6 +68,45 @@ def self_finder(node, class_name, dc):
         self_finder(child, class_name, dc)
     return dc
 
+def _management_imports(content, level, path):
+    if content != []:
+        imports_ini = [] # import, alias, importFrom
+        aux = content.split('\n') # separo por saltos de linea
+        aux_tmp = aux[:]
+        for i in range(len(aux)):
+            if aux[i].startswith("import"):
+                #imports_ini.insert(0, [aux[i], level, path])
+                imports_ini.insert(0, [aux[i], level])
+                aux_tmp.remove(aux[i])
+
+            elif aux[i].startswith("from"):
+                #imports_ini.insert(0, [aux[i], level, path])
+                imports_ini.insert(0, [aux[i], level])
+                aux_tmp.remove(aux[i])  
+            else:
+                pass
+        return imports_ini
+    
+def _management_files(content, imports, level):
+    tree = ast.parse(content)
+    astprint = ast2json(tree)
+    string = json.dumps(astprint, indent=2**level)
+    return string
+
+def _reader(filename):
+    content = []
+    with open(filename, encoding='iso-8859-15') as file:
+        #try:
+            for line in file:
+                if line.startswith('#'):# or line.startswith(' """ ') or line.endswith(' """ '):
+                    continue  # skip comments
+                content.append(line.strip())
+        #except: UnicodeDecodeError
+    return str(content)
+
+def _save_only(string):
+    with open('diagram.txt','w') as f:
+        f.write('\n'.join(map(str, string)))
 
 class Discern():
     """Discern is a class that contains all the functions involved in the work with the ast of the file of interest.
@@ -443,24 +460,6 @@ class Discern2():
                         for item in importpath:
                             ls.append(item)
                     self.__yieldfind_folders(absolute_path, ls)
-                else:
-                    #we check if it's one of the downloaded files from github
-                    importpath = node.names[i].name.split('.')
-                    fullpath = os.path.join(os.getcwd(), 'downloaded_modules')
-                    for j in range(len(importpath)):
-                        fullpath = os.path.join(fullpath, importpath[j])
-                    fullpath = fullpath + '.py'
-                    if os.path.exists(fullpath):
-                        if node.names[i].asname:
-                            ls.append(node.names[i].asname)
-                    else:
-                        for item in importpath:
-                            ls.append(item)
-                    fileimp = fullpath+'.py'
-                    treeimp = ast.parse(open(fileimp).read())
-                    self.__yieldfind(treeimp, ls)
-                    [ ls.pop(0) for n in range(len(importpath)+1) ]
-                        
 
 
         if node.__class__.__name__ == 'ImportFrom':
@@ -773,8 +772,8 @@ def main(name):
             print("***************************************\n")
             print("***Estamos trabajando con DISCERN2.***\n")
             print("***************************************\n")
+
             ls = sys.argv[2:]
-            get_repos(ls)
             for i in range(len(ls)):
                 ls[i] = os.path.abspath(ls[i])
             script = Discern2(name, ls)
@@ -794,6 +793,41 @@ def main(name):
                 print('\n', i, ': \n', script.generators[i])
             print("----------")
             '''
+
+            folder = sys.argv[1]   
+            info = [0,0] # empty, no empty
+            imports_ini = []
+            all_ini = []
+            body = []
+            body_all = []
+
+            some_dir = folder.rstrip(os.path.sep)
+            num_sep = some_dir.count(os.path.sep)
+
+            for i in os.walk(folder):
+                dirpath, dirname, filnames = i[0], i[1], i[2]
+    
+                for s_file in filnames:
+                    level = abs(num_sep-dirpath.count(os.path.sep))
+                    fullpath = os.path.join(dirpath, s_file)
+                    if s_file.endswith('.py'):
+                        if s_file == '__init__.py' and os.path.getsize(fullpath) == 0:
+                            info[0] += 1
+                        elif s_file == '__init__.py' and os.path.getsize(fullpath) != 0:
+                            info[1] += 1
+                            content = _reader(fullpath)
+                            imports_ini = _management_imports(content, level, dirpath.rstrip(os.path.sep))
+                            all_ini.insert(0, imports_ini)
+                        else:
+                            content = _reader(fullpath)
+                            body = _management_files(content, imports_ini, level)
+                            body_all.append(body)
+            
+            all_ini = list(filter(None, all_ini))
+            print(info)
+            #_save_only(all_ini)
+            _save_only(body_all)
+
             script.assign_call_find()
             print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
             print('LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
@@ -802,8 +836,6 @@ def main(name):
             print("---------")
             print('Execution time:', end-start, 'seconds.')
             print('---------------------------------------------------------------------------------------------\n')
-            #we delete the folder we created in the beginning for downloaded folders
-            shutil.rmtree('downloaded_modules', ignore_errors=True)
         else: 
             #TO DO  in this case we're in a folder. We need to make a 'FolderCalls' class for Discern2
             pass
