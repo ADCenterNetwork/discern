@@ -3,6 +3,7 @@ import sys, os
 import json
 from ast2json import ast2json
 import time
+from io import open
 
 def get_name(node):
     """get_name get_name will help us ocassionally to obtain the name that the node refers to.
@@ -94,14 +95,10 @@ def _management_files(content, imports, level):
     return string
 
 def _reader(filename):
+    # To Do: Delete comments {# and ''' """"}
     content = []
-    with open(filename, encoding='iso-8859-15') as file:
-        #try:
-            for line in file:
-                if line.startswith('#'):# or line.startswith(' """ ') or line.endswith(' """ '):
-                    continue  # skip comments
-                content.append(line.strip())
-        #except: UnicodeDecodeError
+    with open(filename,'r', encoding="iso-8859-15", errors='ignore') as file:
+        content = file.read()
     return str(content)
 
 def _save_only(string):
