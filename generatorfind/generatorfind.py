@@ -180,12 +180,47 @@ class Discern():
             If there is a python file, we know this either has to be on the last element of the left_side, or it 
             will be on the right side
             '''
-            left_side = node.module.split('.') 
-            right_side = node.names
-            #we now form a path from the elements on the left_side
-            full_path = os.path.join(os.getcwd(), _get_folder(self.path))
-            for item in left_side:
-                full_path = os.path.join(full_path, item)
+            getfolder = _get_folder(self.path).split('/')
+            if node.module == None: 
+                right_side = node.names
+                full_path2 = os.getcwd()
+                for item in getfolder:
+                    full_path2 = os.path.join(full_path2, item)
+                full_path2 = full_path2.split('\\')
+                if node.level > 0:
+                    for i in range(node.level-1):
+                        full_path2.pop(-1) 
+                full_path = full_path2[0]
+                full_path2.pop(0)
+                variable = 0
+                for item in full_path2:
+                    if not variable == 0:
+                        full_path = os.path.join(full_path,item)
+                    else:
+                        full_path = os.path.join(full_path + os.sep,item)
+                        variable+=1
+            else:
+                left_side = node.module.split('.') 
+                right_side = node.names
+                #we now form a path from the elements on the left_side
+                full_path2 = os.getcwd()
+                for item in getfolder:
+                    full_path2 = os.path.join(full_path2, item)
+                full_path2 = full_path2.split('\\')
+                if node.level >0:
+                    for i in range(node.level-1):
+                        full_path2.pop(-1)
+                full_path = full_path2[0]
+                full_path2.pop(0)
+                variable=0
+                for item in full_path2:
+                    if not variable == 0:
+                        full_path = os.path.join(full_path, item)
+                    else:
+                        full_path = os.path.join(full_path + os.sep, item)
+                        variable+=1
+                for item in left_side:
+                    full_path = os.path.join(full_path, item)
             filename = full_path + '.py'
             if os.path.isfile(filename):
                 tree2 = ast.parse(open(filename).read())
@@ -199,8 +234,7 @@ class Discern():
                         #we need to append the name of the file because that's how we'll call it in the function
                         ls.append(alias) 
                         tree2 = ast.parse(open(filename_path).read())
-                        self.__yieldfind(tree2, ls)
-        
+                        self.__yieldfind(tree2, ls)        
         if node.__class__.__name__ == 'Yield':
                 ls.append(node)
                 x = ls[:]
@@ -469,12 +503,47 @@ class Discern2():
             If there is a python file, we know this either has to be on the last element of the left_side, or it 
             will be on the right side
             '''
-            left_side = node.module.split('.') 
-            right_side = node.names
-            #we now form a path from the elements on the left_side
-            full_path = os.path.join(os.getcwd(), _get_folder(self.path))
-            for item in left_side:
-                full_path = os.path.join(full_path, item)
+            getfolder = _get_folder(self.path).split('/')
+            if node.module == None: 
+                right_side = node.names
+                full_path2 = os.getcwd()
+                for item in getfolder:
+                    full_path2 = os.path.join(full_path2, item)
+                full_path2 = full_path2.split('\\')
+                if node.level > 0:
+                    for i in range(node.level-1):
+                        full_path2.pop(-1) 
+                full_path = full_path2[0]
+                full_path2.pop(0)
+                variable = 0
+                for item in full_path2:
+                    if not variable == 0:
+                        full_path = os.path.join(full_path,item)
+                    else:
+                        full_path = os.path.join(full_path + os.sep,item)
+                        variable+=1
+            else:                
+                left_side = node.module.split('.') 
+                right_side = node.names
+                #we now form a path from the elements on the left_side
+                full_path2 = os.getcwd()
+                for item in getfolder:
+                    full_path2 = os.path.join(full_path2, item)
+                full_path2 = full_path2.split('\\')
+                if node.level >0:
+                    for i in range(node.level-1):
+                        full_path2.pop(-1)
+                full_path = full_path2[0]
+                full_path2.pop(0)
+                variable=0
+                for item in full_path2:
+                    if not variable == 0:
+                        full_path = os.path.join(full_path, item)
+                    else:
+                        full_path = os.path.join(full_path + os.sep, item)
+                        variable+=1
+                for item in left_side:
+                    full_path = os.path.join(full_path, item)
             filename = full_path + '.py'
             
             if not filename in self.print:

@@ -52,6 +52,12 @@ def setup_pruebas_assign():
     prueba = Discern(path)
     return prueba
 
+@pytest.fixture
+def setup_discern2_relativeimports():
+    path = os.path.join(os.getcwd(), 'tests', 'folder', 'relativeimports.py')
+    prueba = Discern2(path, [os.path.abspath("tests\\ejemplo\\prueba_simple.py")])
+    return prueba
+
 def test_namespace_pruebas(setup):
     """test_namespace_pruebas asserts that namespaces obtains the expected value on a simple file.
     """
@@ -113,7 +119,8 @@ def test_generatorfind_folder(setup_folder):
         'pruebas.py': {('generator',): [41, 43, 44], \
         ('Clase1_1', 'Clase1_2', 'firstn'): [49, 56, 68, 70, 77], ('Clase1_1', 'Clase1_3', 'firstn'): [62, 64], ('Clase2_1', 'Clase2_2', 'firstn'): [85, 89, 92, 93]},\
         'prueba_simple.py': {('Clase1', 'Clase2', 'f'): [7], ('f',): [7, 19, 20, 21]},\
-        '__init__.py': {}}
+        '__init__.py': {},\
+        'relativeimports.py': {}}
 
 def test_discern_callsites_pruebas2(setup_discern2_pruebas2):
     """test_discern_callsites_pruebas2 will check that the calls to the generators are the expected with a specific
@@ -128,3 +135,8 @@ def test_discern_importpackage(setup_discern2_importpackage):
     """
     assert setup_discern2_importpackage.assign_call_find() ==  {('folder', 'Clase1_1', 'Clase1_2', 'firstn'): [3]}
 
+def test_relativeimports(setup_discern2_relativeimports):
+    """test_namespace_imports asserts that namespaces obtains the expected value with a specific
+    case in which generators are in other imported files.
+    """
+    assert setup_discern2_relativeimports._generatorfind() == [['prueba_simple', 'Clase1', 'Clase2', 'f'], ['prueba_simple', 'f']]
