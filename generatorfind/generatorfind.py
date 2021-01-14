@@ -684,8 +684,7 @@ class Discern2():
         #'node' is an assign variable, and 'ls', the list we're working on 
         for child in ast.iter_child_nodes(node):
             if child.__class__.__name__ == 'Call':
-                if get_name(child) in ls[i]:
-                    print(get_name(node))
+                if get_name(child) == ls[i]:
                     i = ls.index(get_name(child))
                     self.assigns[get_name(new_variable)] = [get_name(child)]
                     self.___assignfind(new_variable, child, ls, i-1)
