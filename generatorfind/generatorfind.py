@@ -89,10 +89,17 @@ def _management_imports(content, level, path):
         return imports_ini
     
 def _management_files(content, imports, level):
-    tree = ast.parse(content)
-    astprint = ast2json(tree)
-    string = json.dumps(astprint, indent=2**level)
-    return string
+    string = ""
+    try:
+        tree = ast.parse(content)
+        astprint = ast2json(tree) # exception occurred
+        string = json.dumps(astprint, indent=2**level)
+        return string
+    except:
+        # pending solve exception: "Exception: unknown case for 'Ellipsis' of type '<class 'ellipsis'>'"
+        # in project file: faceswap\lib\convert.py AND line exception ocurred
+
+        pass
 
 def _reader(filename):
     # To Do: Delete comments {# and ''' """"}
@@ -677,7 +684,8 @@ class Discern2():
         #'node' is an assign variable, and 'ls', the list we're working on 
         for child in ast.iter_child_nodes(node):
             if child.__class__.__name__ == 'Call':
-                if get_name(child) in ls:
+                if get_name(child) in ls[i]:
+                    print(get_name(node))
                     i = ls.index(get_name(child))
                     self.assigns[get_name(new_variable)] = [get_name(child)]
                     self.___assignfind(new_variable, child, ls, i-1)
@@ -710,7 +718,7 @@ class Discern2():
             if get_name(right_side) in self.assigns.keys():
                     self.assigns[get_name(left_side)] = self.assigns[get_name(right_side)]
 
-    def ___assignfind(self,new_variable, node, ls, i):
+    def ___assignfind(self,new_variable, node, ls, i, *args, **kwargs):
         '''we want to check if any of the descendants of 'node' is in our list ls in the index i'''
         #if ast.iter_child_nodes(node) and i >= 0:
         for child in ast.iter_child_nodes(node):
@@ -860,7 +868,7 @@ def main(name):
             print("----------")
             '''
 
-            folder = sys.argv[1]   
+            folder = sys.argv[2]   
             info = [0,0] # empty, no empty
             imports_ini = []
             all_ini = []
