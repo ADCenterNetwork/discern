@@ -867,7 +867,7 @@ def main(name):
             print("----------")
             '''
 
-            folder = sys.argv[2]   
+            folder = sys.argv[-1] # project folder  
             info = [0,0] # empty, no empty
             imports_ini = []
             all_ini = []
