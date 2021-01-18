@@ -1,9 +1,20 @@
+#from __future__ import absolute_import
+##from .fulltree import FullTree, core
+#from ..generatorfind.fulltree import FullTree, core
+#from ...discern.generatorfind.fulltree import core, FullTree
+#import fulltree as ft
+
+
 import ast
 import sys, os
 import json
 from ast2json import ast2json
 import time
 from io import open
+
+
+
+
 
 def get_name(node):
     """get_name get_name will help us ocassionally to obtain the name that the node refers to.
@@ -68,49 +79,6 @@ def self_finder(node, class_name, dc):
     for child in ast.iter_child_nodes(node):
         self_finder(child, class_name, dc)
     return dc
-
-def _management_imports(content, level, path):
-    if content != []:
-        imports_ini = [] # import, alias, importFrom
-        aux = content.split('\n') # separo por saltos de linea
-        aux_tmp = aux[:]
-        for i in range(len(aux)):
-            if aux[i].startswith("import"):
-                #imports_ini.insert(0, [aux[i], level, path])
-                imports_ini.insert(0, [aux[i], level])
-                aux_tmp.remove(aux[i])
-
-            elif aux[i].startswith("from"):
-                #imports_ini.insert(0, [aux[i], level, path])
-                imports_ini.insert(0, [aux[i], level])
-                aux_tmp.remove(aux[i])  
-            else:
-                pass
-        return imports_ini
-    
-def _management_files(content, imports, level):
-    string = ""
-    try:
-        tree = ast.parse(content)
-        astprint = ast2json(tree) # exception occurred
-        string = json.dumps(astprint, indent=2**level)
-        return string
-    except:
-        # pending solve exception: "Exception: unknown case for 'Ellipsis' of type '<class 'ellipsis'>'"
-        # in project file: faceswap\lib\convert.py AND line exception ocurred
-
-        pass
-
-def _reader(filename):
-    # To Do: Delete comments {# and ''' """"}
-    content = []
-    with open(filename,'r', encoding="iso-8859-15", errors='ignore') as file:
-        content = file.read()
-    return str(content)
-
-def _save_only(string):
-    with open('diagram.txt','w') as f:
-        f.write('\n'.join(map(str, string)))
 
 class Discern():
     """Discern is a class that contains all the functions involved in the work with the ast of the file of interest.
@@ -555,6 +523,7 @@ class Discern2():
             
             if not filename in self.print:
                 print("Tenemos un ImportFrom al archivo", filename, "\n y queremos entrar en alguno de los siguientes paths:\n", self.modules, "\n Coincide con alguno:", filename in self.modules)
+                print(filename)
                 self.print.append(filename)
             if os.path.isfile(filename) and (filename in self.modules):
                 tree2 = ast.parse(open(filename).read())
@@ -846,6 +815,7 @@ def main(name):
             print("***Estamos trabajando con DISCERN2.***\n")
             print("***************************************\n")
 
+            # TO DO [2:-2] until fulltree works
             ls = sys.argv[2:]
             for i in range(len(ls)):
                 ls[i] = os.path.abspath(ls[i])
@@ -866,41 +836,11 @@ def main(name):
                 print('\n', i, ': \n', script.generators[i])
             print("----------")
             '''
-
-            folder = sys.argv[-1] # project folder  
-            info = [0,0] # empty, no empty
-            imports_ini = []
-            all_ini = []
-            body = []
-            body_all = []
-
-            some_dir = folder.rstrip(os.path.sep)
-            num_sep = some_dir.count(os.path.sep)
-
-            for i in os.walk(folder):
-                dirpath, dirname, filnames = i[0], i[1], i[2]
-    
-                for s_file in filnames:
-                    level = abs(num_sep-dirpath.count(os.path.sep))
-                    fullpath = os.path.join(dirpath, s_file)
-                    if s_file.endswith('.py'):
-                        if s_file == '__init__.py' and os.path.getsize(fullpath) == 0:
-                            info[0] += 1
-                        elif s_file == '__init__.py' and os.path.getsize(fullpath) != 0:
-                            info[1] += 1
-                            content = _reader(fullpath)
-                            imports_ini = _management_imports(content, level, dirpath.rstrip(os.path.sep))
-                            all_ini.insert(0, imports_ini)
-                        else:
-                            content = _reader(fullpath)
-                            body = _management_files(content, imports_ini, level)
-                            body_all.append(body)
-            
-            all_ini = list(filter(None, all_ini))
-            print(info)
-            #_save_only(all_ini)
-            _save_only(body_all)
-
+            # TO DO 
+            """
+            pj = ft.FullTree(sys.argv[-1])
+            ft.core(pj)
+            """
             script.assign_call_find()
             print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
             print('LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
