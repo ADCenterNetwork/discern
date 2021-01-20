@@ -43,3 +43,19 @@ def clone_repos(lst_repos: List[str], to_base_path: str) -> List[git.Repo]:
             print(f'GitCommandError: Repository {repo} not found')
     return res
 
+def get_repos(full_list):
+    ''' 'full_list' contains ALL of the modules that we pass as arguments to our program, regardless
+    of whether they are modules in our folder of they are external. Our objective with this function
+    is to determine which modules to get from github (those which are given as URLs) and download them'''
+    repos_list = []
+    path = os.path.join(os.getcwd(), 'downloaded_modules')
+    try:
+        os.mkdir(path)
+    except:
+        pass
+    for module in full_list:
+        if not os.path.exists(module): 
+            #in this case, we interpret it as a github url
+            repos_list.append(module)
+    download_repos(repos_list, path)
+

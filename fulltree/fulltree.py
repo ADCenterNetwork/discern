@@ -83,7 +83,7 @@ def core(pj):
                     pj.body_all.append(body)
 
     pj.all_ini = list(filter(None, pj.all_ini))
-    print(pj.info)
+    print("\nEmpty init files "+ str(pj.info[0]) +' VS '+ "NON empty init files "+ str(pj.info[1])+"\n")
     #_save_only(all_ini)
     pj._save_only(pj.body_all)
 

@@ -1,6 +1,12 @@
-from ..generatorfind.generatorfind import Discern, FolderCalls, Discern2
-import ast
+import ast, sys
 import os, pytest, shutil
+
+#print(sys.path)
+#print(os.getcwd())
+from generatorfind.generatorfind import Discern, FolderCalls, Discern2
+
+
+
 
 
 @pytest.fixture
