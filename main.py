@@ -53,7 +53,7 @@ def main(name):
 
 
             # TO DO [2:-2] until fulltree works
-            ls = sys.argv[2:-2]
+            ls = sys.argv[2:]
             for i in range(len(ls)):
                 ls[i] = os.path.abspath(ls[i])
             script = Discern2(name, ls)
