@@ -1,4 +1,4 @@
-# Generatorfind
+# Main
 
 ## What it does
 
@@ -65,13 +65,13 @@ The output of this program should be:
 
 One way to do it, is to simply pass one file to the program. Following the example from above, if we run 
 ```
-python generatorfind\generatorfind.py tests\pruebas.py
+python main.py tests\pruebas.py
 ```
 Then our program will look for all of the generators in that file; it will also look for all the generators that we're importing in our file from external sources, and it will return an output with the dictionary of all the namespaces of these generators as keys, and the lines in our program in which these generators were called. We can see the output of this program in the section before this one.
 
 ### Pass several files as input
 
-In case we pass more than one program to `generatorfind.py` as input, then our program will do the following: 
+In case we pass more than one program to `main.py` as input, then our program will do the following: 
 
 It will enter all programs from the second one until the end and it will look for all the generators defined in these programs. 
 
@@ -89,7 +89,7 @@ print(folder.pruebas.Clase1_1().Clase1_2().firstn(5))
 
 So if we run 
 ```
-python generatorfind\generatorfind.py tests\pruebas2.py tests\folder\pruebas.py
+python main.py tests\pruebas2.py tests\folder\pruebas.py
 ```
 
 Then we get:
@@ -110,7 +110,7 @@ folder.Clase1_1().Clase1_2().firstn(5)
 
 So we want to go into `folder` to check if there are any generators, and in case there are, we want to know if any of them is being called in `pruebas3.py`, so we do:
 
-So, for example, if we run `python generatorfind\generatorfind.py tests\pruebas3.py tests\folder`, and then we get:
+So, for example, if we run `python main.py tests\pruebas3.py tests\folder`, and then we get:
 
 
 ```python
@@ -121,7 +121,7 @@ So, for example, if we run `python generatorfind\generatorfind.py tests\pruebas3
 
 We can pass a single folder as input, same way we did with files. In this case, it will look for all the generators in the folder, and get the instances in which these are called. 
 
-So, if we call our program this way: `python generatorfind\generatorfind.py folder`, we will get this output:
+So, if we call our program this way: `python main.py folder`, we will get this output:
 
 ```python
 {'pruebas.py': {('generator',): [41, 43, 44], ('Clase1_1', 'Clase1_2', 'firstn'): [49, 56, 68, 77], ('Clase1_1', 'Clase1_3', 'firstn'): [62, 64], ('Clase2_1', 'Clase2_2', 'firstn'): [85, 89, 92, 93]}, 'prueba_simple.py': {('Clase1', 'Clase2', 'f'): [7], ('f',): [7, 19, 20, 21]}, '__init__.py': {}}
