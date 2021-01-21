@@ -4,6 +4,21 @@ import json
 from ast2json import ast2json
 from io import open
 
+def singleton(cls):
+    
+    instances = dict() # diccionario de clases
+
+    def wrap(*args, **kwargs):
+        # validamos
+        if cls  not in instances:
+            # [clase] = instancia: "Generamos una instancia de nuestra clase"
+            instances[cls] = cls(*args, **kwargs)
+        
+        return instances[cls]
+
+    return wrap
+
+@singleton
 class FullTree():
 
     def __init__(self, rootfolder):

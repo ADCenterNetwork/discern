@@ -48,16 +48,11 @@ def main(name):
             print("***Estamos trabajando con DISCERN2.***\n")
             print("***************************************\n")
 
-
-            
-
-
-            # TO DO [2:-2] until fulltree works
             ls = sys.argv[2:]
             for i in range(len(ls)):
                 ls[i] = os.path.abspath(ls[i])
             script = Discern2(name, ls)
-            saveast()      
+            #saveast()      
             #script.yieldfind()
             '''
             print('-----------------------------------------------------------------------------------------------------\n')
@@ -73,12 +68,11 @@ def main(name):
                 print('\n', i, ': \n', script.generators[i])
             print("----------")
             '''
-
-            # TO DO 
-
+            
             pj = FullTree(sys.argv[-1])
             core(pj)
             
+            # TO DO 
             #get_repos(ls)
             
             script.assign_call_find()

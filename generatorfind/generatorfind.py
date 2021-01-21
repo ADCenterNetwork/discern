@@ -46,7 +46,7 @@ def saveast():
     """
     tree = ast.parse(open(sys.argv[1]).read())
     astprint = ast2json(tree)
-    f = open("astree.txt", "w")
+    f = open("astree.txt", "w",  encoding="iso-8859-15", errors='ignore')
     f.write(json.dumps(astprint, indent=4))
     f.close()
 
@@ -529,7 +529,7 @@ class Discern2():
                     if os.path.isfile(filename_path):
                         #we need to append the name of the file because that's how we'll call it in the function
                         ls.append(alias) 
-                        tree2 = ast.parse(open(filename_path).read())
+                        tree2 = ast.parse(open(filename_path, encoding="iso-8859-15", errors='ignore').read())
                         self.__yieldfind(tree2, ls)
         
         if node.__class__.__name__ == 'Yield':
