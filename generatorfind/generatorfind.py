@@ -516,7 +516,7 @@ class Discern2():
             
             if not filename in self.print:
                 print("Tenemos un ImportFrom al archivo", filename, "\n y queremos entrar en alguno de los siguientes paths:\n", self.modules, "\n Coincide con alguno:", filename in self.modules)
-                print(filename)
+                #print(filename)
                 self.print.append(filename)
             if os.path.isfile(filename) and (filename in self.modules):
                 tree2 = ast.parse(open(filename).read())
@@ -526,7 +526,7 @@ class Discern2():
                 for alias in right_side:
                     alias_filename = alias.name + '.py'
                     filename_path = os.path.join(full_path, alias_filename)
-                    if os.path.isfile(filename_path):
+                    if os.path.isfile(filename_path) and (filename_path in self.modules):
                         #we need to append the name of the file because that's how we'll call it in the function
                         ls.append(alias) 
                         tree2 = ast.parse(open(filename_path, encoding="iso-8859-15", errors='ignore').read())
@@ -578,7 +578,7 @@ class Discern2():
                     break
             for m in range(len(self.generators[i])):
                 j = -m - 1
-                if not self.generators[i][j].__class__.__name__ =='Import' and not self.generators[i][j].__class__.__name__ =='Module':
+                if not self.generators[i][j].__class__.__name__ =='Import' and not self.generators[i][j].__class__.__name__ =='Module' and not self.generators[i][j].__class__.__name__ =='If':
                     if not type(self.generators[i][j]) == str:
                         self.generators[i][j] = self.generators[i][j].name
                 elif self.generators[i][j].__class__.__name__ == 'Module':
@@ -593,7 +593,10 @@ class Discern2():
                         self.generators[i][j] = self.generators[i][j].names[k-1].asname
                     elif self.generators[i][j].names[k-1].name:
                         self.generators[i][j] = self.generators[i][j].names[k-1].name
+                elif self.generators[i][j].__class__.__name__ =='If':
+                    pass
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'Module']
+            self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'If']
         return self.generators
             
     def assign_call_find(self, node = None):
