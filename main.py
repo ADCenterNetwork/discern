@@ -76,12 +76,18 @@ def main(name):
             #get_repos(ls)
             
             script.assign_call_find()
-            print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
-            print('LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
-            print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
+            print('->LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
+            print('\n-> LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
+            print('\n-> LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
             end = time.time()
             print("---------")
-            print('Execution time:', end-start, 'seconds.')
+            tiempoej = end-start
+            if tiempoej > 120:
+                tiempoejmin = tiempoej//60
+                tiempoejsec = tiempoej%60
+                print('Execution time:', tiempoejmin, 'min and ', tiempoejsec,  'seconds.')
+            else:
+                print('Execution time:', end-start, 'seconds.')
             print('---------------------------------------------------------------------------------------------\n')
 
             #we delete the folder we created in the beginning for downloaded folders
