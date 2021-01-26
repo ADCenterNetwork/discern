@@ -762,7 +762,8 @@ class Discern2():
             if tuple(ls) in self.calls.keys():
                 if not node.lineno in self.calls[tuple(ls)]:
                     self.calls[tuple(ls)].append(node.lineno)
-                    self.sm[tuple(ls)].append([node, node.lineno])
+                    if not [node, node.lineno] in self.sm[tuple(ls)]:
+                        self.sm[tuple(ls)].append([node, node.lineno])
                     
                     """
                     {self.path : 
@@ -771,7 +772,7 @@ class Discern2():
                     """
             else:
                 self.calls[tuple(ls)] = [node.lineno]
-                self.sm[tuple(ls)] = [node, node.lineno]
+                self.sm[tuple(ls)] = [[node, node.lineno]]
 
                 #self.sourcemap[self.path] 
         else: #otherwise, we want to continue the same process with its children
