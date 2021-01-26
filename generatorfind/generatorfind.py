@@ -46,7 +46,7 @@ def saveast():
     """
     tree = ast.parse(open(sys.argv[1]).read())
     astprint = ast2json(tree)
-    f = open("astree.txt", "w",  encoding="iso-8859-15", errors='ignore')
+    f = open("astree.txt", "w",  encoding="utf8", errors='ignore')
     f.write(json.dumps(astprint, indent=4))
     f.close()
 
@@ -412,7 +412,7 @@ class Discern2():
         Args:
             name ([string]): [The name of the file that we are obtaining information when we execute _generatorfind.py ]
         """
-        self.tree = ast.parse(open(name).read())
+        self.tree = ast.parse( open(name, encoding="iso-8859-15", errors='ignore').read() )
         self.generators = []
         self.path = name
         self.calls = {}
@@ -422,6 +422,7 @@ class Discern2():
         self.temporalassign = {}
         self.self_dictionary = self_finder(self.tree, '', {})
         self.print = []
+        self.sourcemap = {}
  
     def __yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
@@ -449,7 +450,7 @@ class Discern2():
                         for item in importpath:
                             ls.append(item)
                     fileimp = fullpath+'.py'
-                    treeimp = ast.parse(open(fileimp).read())
+                    treeimp = ast.parse(open(fileimp, encoding="iso-8859-15", errors='ignore').read())
                     self.__yieldfind(treeimp, ls)
                     [ ls.pop(0) for n in range(len(importpath)+1) ]
                 elif absolute_path in self.modules: #We are in a folder. We have to modify:
@@ -520,7 +521,7 @@ class Discern2():
                 #print(filename)
                 self.print.append(filename)
             if os.path.isfile(filename) and (filename in self.modules):
-                tree2 = ast.parse(open(filename).read())
+                tree2 = ast.parse(open(filename, encoding="iso-8859-15", errors='ignore').read())
                 self.__yieldfind(tree2, ls)
             #in this case, it means we have to access the right_side and look for files
             else: 
@@ -530,9 +531,9 @@ class Discern2():
                     if os.path.isfile(filename_path) and (filename_path in self.modules):
                         #we need to append the name of the file because that's how we'll call it in the function
                         ls.append(alias) 
-                        tree2 = ast.parse(open(filename_path, encoding="iso-8859-15", errors='ignore').read())
+                        tree2 = ast.parse(open(filename_path,encoding="iso-8859-15", errors='ignore').read())
                         self.__yieldfind(tree2, ls)
-        
+        #iso-8859-15
         if node.__class__.__name__ == 'Yield':
                 ls.append(node)
                 x = ls[:]
@@ -549,7 +550,7 @@ class Discern2():
     def __yieldfind_folders(self, absolute_path, ls):
         init_filename = os.path.join(absolute_path, '__init__.py')
         if os.path.exists(init_filename):
-            init_tree = ast.parse(open(init_filename).read())
+            init_tree = ast.parse(open(init_filename, encoding="iso-8859-15", errors='ignore').read())
             self.__yieldfind(init_tree, ls)
             for node in ast.walk(init_tree):
                 if node.__class__.__name__ == 'ImportFrom':
@@ -561,7 +562,7 @@ class Discern2():
                         left_side_path = os.path.join(left_side_path, item)
                     if os.path.isfile(left_side_path+'.py'):
                         filename = left_side_path+'.py'
-                        tree2 = ast.parse(open(filename).read())
+                        tree2 = ast.parse(open(filename, encoding="iso-8859-15", errors='ignore').read())
                         self.__yieldfind(tree2, ls)
 
 
@@ -579,7 +580,7 @@ class Discern2():
                     break
             for m in range(len(self.generators[i])):
                 j = -m - 1
-                if not self.generators[i][j].__class__.__name__ =='Import' and not self.generators[i][j].__class__.__name__ =='Module' and not self.generators[i][j].__class__.__name__ =='If' and not self.generators[i][j].__class__.__name__ =='For':
+                if not self.generators[i][j].__class__.__name__ =='Import' and not self.generators[i][j].__class__.__name__ =='Module' and not self.generators[i][j].__class__.__name__ =='If' and not self.generators[i][j].__class__.__name__ =='For' and not self.generators[i][j].__class__.__name__ =='If' and not self.generators[i][j].__class__.__name__ =='Try':
                     if not type(self.generators[i][j]) == str:
                         self.generators[i][j] = self.generators[i][j].name
                 elif self.generators[i][j].__class__.__name__ == 'Module':
@@ -598,9 +599,12 @@ class Discern2():
                     pass
                 elif self.generators[i][j].__class__.__name__ =='For':
                     pass
+                elif self.generators[i][j].__class__.__name__ =='Try':
+                    pass
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'Module']
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'If']
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'For']
+            self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'Try']
         return self.generators
             
     def assign_call_find(self, node = None):
@@ -748,25 +752,52 @@ class Discern2():
         if i <= 0: #if this is the case, we want to add this list as a call
             if tuple(ls) in self.calls.keys():
                 if not node.lineno in self.calls[tuple(ls)]:
-                    self.calls[tuple(ls)].append(node.lineno)
+                    self.calls[tuple(ls)].append([node, node.lineno])
+                    
+                    """
+                    {self.path : 
+                        self.calls[tuple(ls)]: 
+                            [node, node.lineno}]}
+                    """
             else:
-                self.calls[tuple(ls)] = [node.lineno]
+                self.calls[tuple(ls)] = [node, node.lineno]
+                #self.sourcemap[self.path] 
         else: #otherwise, we want to continue the same process with its children
             for child in ast.iter_child_nodes(node):
                 self.__findcall(child, ls, i-1)
+    
+    def _mapeo(self):
+        
+        self.sourcemap[self.path] = self.calls
 
+        #with open('sourcemap2.json','w') as f:
+        #    json.dump(str(self.sourcemap), f, indent=4)
+   
+        return 
 
 class FolderCalls():
-    def __init__(self, name):
+    def __init__(self, name, ls_modules):
         self.allcall = {}
         self.path = name
-        
+        self.sourcemapfolder = {} 
+        self.modules = ls_modules
+
     def callsites(self):
         for root, directories, files in os.walk(self.path):
             for filename in files:
                 filepath = os.path.join(root, filename)
-                if filename.endswith('.py'):
-                    filecode = Discern(filepath)
-                    self.allcall[filename] = filecode.assign_call_find()
-        return self.allcall
+                if filename.endswith('.py') and not filename.startswith('__init__'):
+                    filecode = Discern2(filepath, self.modules)
+                    filecode._generatorfind
+                    filecode.assign_call_find()
+                    #self.allcall[filename] = filecode.assign_call_find()
+                    self.sourcemapfolder[filepath] = filecode.calls
 
+
+    def gen_json(self):
+        print(self.sourcemapfolder)
+        json_data = self.sourcemapfolder
+        #json_data_rep = json_data.replace("\'", "\"")
+        #print(json_data_rep)
+        with open('sourcemapproject.json','w', encoding="iso-8859-15", errors='ignore') as f:
+            json.dump(str(json_data), f, indent=4)

@@ -69,8 +69,8 @@ def main(name):
             print("----------")
             '''
             
-            pj = FullTree(sys.argv[-1])
-            core(pj)
+            #pj = FullTree(sys.argv[-1])
+            #core(pj)
             
             # TO DO 
             #get_repos(ls)
@@ -79,23 +79,40 @@ def main(name):
             print('->LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
             print('\n-> LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
             print('\n-> LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
-            end = time.time()
-            print("---------")
-            tiempoej = end-start
-            if tiempoej > 120:
-                tiempoejmin = tiempoej//60
-                tiempoejsec = tiempoej%60
-                print('Execution time:', tiempoejmin, 'min and ', tiempoejsec,  'seconds.')
-            else:
-                print('Execution time:', end-start, 'seconds.')
+            print('\n SOURCEMAP: ', script._mapeo())
+            
             print('---------------------------------------------------------------------------------------------\n')
+
+
 
             #we delete the folder we created in the beginning for downloaded folders
             #shutil.rmtree('downloaded_modules', ignore_errors=True)
             
         else: 
-            #TO DO  in this case we're in a folder. We need to make a 'FolderCalls' class for Discern2
-            pass
+            
+            print("***************************************\n")
+            print("***Estamos trabajando con FOLDER Y DISCERN2.***\n")
+            print("***************************************\n")
+
+            ls = sys.argv[2:]
+            for i in range(len(ls)):
+                ls[i] = os.path.abspath(ls[i])
+        
+            script = FolderCalls(name, ls)
+            script.callsites()
+            script.gen_json()
+
+        end = time.time()
+        print("---------")
+        tiempoej = end-start
+        if tiempoej > 60:
+            tiempoejmin = tiempoej//60
+            tiempoejsec = tiempoej%60
+            print('Execution time:', tiempoejmin, 'min and ', tiempoejsec,  'seconds.')
+        else:
+            print('Execution time:', end-start, 'seconds.')
+        print('-----------------------------------------------------------------------------------------------------\n')
+
 
 
 
