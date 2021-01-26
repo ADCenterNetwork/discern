@@ -621,6 +621,8 @@ class Discern2():
             node = self.tree
 
         for child in ast.iter_child_nodes(node):
+            if self.generators == []:
+                break
             if isinstance(child, ast.Assign):
                 self.new_variable = child
                 self._assignsearch(child)
@@ -802,7 +804,10 @@ class FolderCalls():
                 if filename.endswith('.py') and not filename.startswith('__init__'):
                     filecode = Discern2(filepath, self.modules)
                     filecode._generatorfind
+                    startacf = time.time()
                     filecode.assign_call_find()
+                    endacf = time.time()
+                    print('Tiempo en assigncallfind para', filename, endacf-startacf)
                     #self.allcall[filename] = filecode.assign_call_find()
                     self.sourcemapfolder[filepath] = filecode.sm
                     self.allcall[filename] = filecode.calls
