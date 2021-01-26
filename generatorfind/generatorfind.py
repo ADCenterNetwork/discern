@@ -423,6 +423,7 @@ class Discern2():
         self.self_dictionary = self_finder(self.tree, '', {})
         self.print = []
         self.sourcemap = {}
+        self.sm = {}
  
     def __yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
@@ -657,10 +658,18 @@ class Discern2():
         #'node' is an assign variable, and 'ls', the list we're working on 
         for child in ast.iter_child_nodes(node):
             if child.__class__.__name__ == 'Call':
-                if get_name(child) in ls and get_name(node) in ls:
-                    i = ls.index(get_name(child))
-                    self.assigns[get_name(new_variable)] = [get_name(child)]
-                    self.___assignfind(new_variable, child, ls, i-1)
+                if get_name(child) in ls:
+                    if ast.iter_child_nodes(child):
+                        for childchild in ast.walk(child):
+                            if get_name(childchild) in ls or get_name(childchild) in self.assigns: #and childchild != child:
+                                if childchild != child:
+                                    i = ls.index(get_name(child))
+                                    self.assigns[get_name(new_variable)] = [get_name(child)]
+                                    self.___assignfind(new_variable, child, ls, i-1)
+                    else:
+                        self.assigns[get_name(new_variable)] = [get_name(child)]
+                        self.___assignfind(new_variable, child, ls, i-1)
+
             elif child.__class__.__name__ == 'Name':
                 if get_name(child) in self.assigns.keys():
                     try:
@@ -752,7 +761,8 @@ class Discern2():
         if i <= 0: #if this is the case, we want to add this list as a call
             if tuple(ls) in self.calls.keys():
                 if not node.lineno in self.calls[tuple(ls)]:
-                    self.calls[tuple(ls)].append([node, node.lineno])
+                    self.calls[tuple(ls)].append(node.lineno)
+                    self.sm[tuple(ls)].append([node, node.lineno])
                     
                     """
                     {self.path : 
@@ -760,7 +770,9 @@ class Discern2():
                             [node, node.lineno}]}
                     """
             else:
-                self.calls[tuple(ls)] = [node, node.lineno]
+                self.calls[tuple(ls)] = [node.lineno]
+                self.sm[tuple(ls)] = [node, node.lineno]
+
                 #self.sourcemap[self.path] 
         else: #otherwise, we want to continue the same process with its children
             for child in ast.iter_child_nodes(node):
@@ -768,7 +780,7 @@ class Discern2():
     
     def _mapeo(self):
         
-        self.sourcemap[self.path] = self.calls
+        self.sourcemap[self.path] = self.sm
 
         #with open('sourcemap2.json','w') as f:
         #    json.dump(str(self.sourcemap), f, indent=4)
@@ -791,7 +803,9 @@ class FolderCalls():
                     filecode._generatorfind
                     filecode.assign_call_find()
                     #self.allcall[filename] = filecode.assign_call_find()
-                    self.sourcemapfolder[filepath] = filecode.calls
+                    self.sourcemapfolder[filepath] = filecode.sm
+                    self.allcall[filename] = filecode.calls
+        return self.allcall
 
 
     def gen_json(self):
