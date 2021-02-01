@@ -100,7 +100,7 @@ def main(name):
         
             script = FolderCalls(name, ls)
             script.callsites()
-            script.gen_json()
+            script.createids()
 
         end = time.time()
         print("---------")

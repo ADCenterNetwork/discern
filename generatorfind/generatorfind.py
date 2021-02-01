@@ -4,6 +4,7 @@ from ast2json import ast2json
 import time
 from io import open
 from setuptools import setup
+import csv
 
 #print(sys.path)
 #print(os.getcwd())
@@ -424,7 +425,34 @@ class Discern2():
         self.print = []
         self.sourcemap = {}
         self.sm = {}
- 
+        self.smprov = {}
+        self.smdef = {}
+        self.id = {}
+        self.yieldsdict = {}
+        self.yieldslist = []
+
+        i = 0
+        for node in ast.walk(self.tree):
+            self.id[node] = i
+            i+=1
+
+    def sourcemapyield(self, node=None, ls=[]):
+        if node == None:
+            node = self.tree
+        if node.__class__.__name__ == 'Yield':
+                ls.append(node)
+                x = ls[:]
+                self.yieldslist.append(node)
+        else:
+                if ast.iter_child_nodes(node):
+                    for child in ast.iter_child_nodes(node):
+                        y = ls[:]
+                        self.sourcemapyield(child, y)
+        
+        for nodoyield in self.yieldslist:
+            self.yieldsdict[self.id[nodoyield]] = {"id": self.id[nodoyield], "col_offset": nodoyield.col_offset, "lineno": nodoyield.lineno}
+        return self.yieldsdict
+                 
     def __yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
         that contain that generator.
@@ -764,17 +792,18 @@ class Discern2():
             if tuple(ls) in self.calls.keys():
                 if not node.lineno in self.calls[tuple(ls)]:
                     self.calls[tuple(ls)].append(node.lineno)
-                    if not [node, node.lineno] in self.sm[tuple(ls)]:
-                        self.sm[tuple(ls)].append([node, node.lineno])
-                    
-                    """
-                    {self.path : 
-                        self.calls[tuple(ls)]: 
-                            [node, node.lineno}]}
-                    """
+                    str1 = " "
+                    if not [node, node.lineno] in self.sm[str1.join(ls)]:
+                        self.sm[str1.join(ls)].append([self.id[node], node.lineno])
+                        self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}
+                        self.smdef[str1.join(ls)] = self.smprov
+
             else:
                 self.calls[tuple(ls)] = [node.lineno]
-                self.sm[tuple(ls)] = [[node, node.lineno]]
+                str1 = " "
+                self.sm[str1.join(ls)] = [[self.id[node], node.lineno]]
+                self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}
+                self.smdef[str1.join(ls)] = self.smprov
 
                 #self.sourcemap[self.path] 
         else: #otherwise, we want to continue the same process with its children
@@ -795,9 +824,106 @@ class FolderCalls():
         self.allcall = {}
         self.path = name
         self.sourcemapfolder = {} 
-        self.modules = ls_modules
+        self.modules = []
+        self.ids = {}
+        self.sourcemap = {}
+        self.sourcemapmanip = {}
+        self.contador = 0
+    
+    #We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
+    def iternodes(self, filepath, node, contador):
+        self.ids[node] = [self.contador, filepath]
+        padre = self.contador - 1
+        if node.__class__.__name__== "Module":
+            self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": "None", "end_line_number": "None", "col_offset": "None", "end_col_offset": "None"}
+        else:
+            try:
+                self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": node.lineno, "end_line_number": node.end_lineno, "col_offset": node.col_offset, "end_col_offset": node.end_col_offset}
+            except:
+                try:
+                    self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": self.sourcemap[self.contador-1]["line_number"], "end_line_number": self.sourcemap[self.contador-1]["end_line_number"], "col_offset": node.col_offset, "end_col_offset": node.end_col_offset}
+                except:
+                    self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": self.sourcemap[self.contador-1]["line_number"], "end_line_number": self.sourcemap[self.contador-1]["end_line_number"], "col_offset": "None", "end_col_offset": "None"}
+        
+        self.contador += 1     
+        if ast.iter_child_nodes(node):
+            for child in ast.iter_child_nodes(node):
+                self.iternodes(filepath, child, self.contador)
+
+    def createids(self):
+        startci = time.time()
+        for root, directories, files in os.walk(self.path):
+            for filename in files:
+                filepath = os.path.join(root, filename)
+                if filename.endswith('.py') and not filename.startswith('__init__'):
+                    tree = ast.parse(open(filepath, encoding="iso-8859-15", errors='ignore').read())
+                    self.iternodes(filepath, tree, self.contador)  
+
+        #We want to create the names of the .csv and .json files.
+        project = str(self.path).split('/')
+        if project[-1] != '':
+            nameproject = project[-1]
+        else:
+            nameproject = project[-2]
+
+        #We create .json file.
+        with open('sourcemap_'+nameproject+'.json','w', encoding="iso-8859-15", errors='ignore') as f:
+            json.dump(self.sourcemap, f, indent=4)
+
+        field_names = ["node_id", "path", "class_name", "line_number", "end_line_number", "col_offset", "end_col_offset"]
+        write_rows = []
+        for i in self.sourcemap.keys():
+            write_rows.append(self.sourcemap[i])
+
+        #We create .csv file.
+        with open('sourcemap_'+nameproject+'.csv','w', encoding="iso-8859-15", errors='ignore') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames = field_names) 
+            writer.writeheader() 
+            writer.writerows(write_rows) 
+
+
+        #Here we have, commented, a possibility to manipulate the node information because some nodes doesn't have attributes like line number.
+        """
+        i=0
+        for root, directories, files in os.walk(self.path):
+            for filename in files:
+                filepath = os.path.join(root, filename)
+                if filename.endswith('.py') and not filename.startswith('__init__'):
+                    for node in ast.walk(ast.parse( open(filepath, encoding="iso-8859-15", errors='ignore').read() )):
+                        self.ids[node] = i
+
+                        try:
+                            self.sourcemapmanip[i] = {"path":filepath, "class_name": node.__class__.__name__, "line_number": node.lineno, "end_line_number": node.end_lineno, "col_offset": node.col_offset, "end_col_offset": node.end_col_offset}
+                        except:
+                            try:
+                                self.sourcemapmanip[i] = {"path":filepath, "class_name": node.__class__.__name__, "line_number": self.sourcemap[i-1]["line_number"], "end_line_number": self.sourcemapmanip[str(i-1)]["end_line_number"], "col_offset": node.col_offset, "end_col_offset": node.end_col_offset}
+                            except:
+                                self.sourcemapmanip[i] = {"path":filepath, "class_name": node.__class__.__name__, "line_number": self.sourcemapmanip[str(i-1)]["line_number"], "end_line_number": self.sourcemapmanip[str(i-1)]["end_line_number"], "col_offset": None, "end_col_offset": None}
+                        i+=1
+
+        with open('sourcemap_manip_'+nameproject+'.json','w', encoding="iso-8859-15", errors='ignore') as f:
+            json.dump(self.sourcemapmanip, f, indent=4)
+        """
+
+        endci = time.time()
+        print("Tiempo sourcemap", endci-startci)
 
     def callsites(self):
+        startdetect = time.time()
+
+        #First step: we check the files where generators are defined, because that files are interesting in order to search calls.
+        for root, directories, files in os.walk(self.path):
+            for filename in files:
+                filepath = os.path.join(root, filename)
+                if filename.endswith('.py') and not filename.startswith('__init__'):
+                    filecode = Discern2(filepath, self.modules)
+                    if filecode._generatorfind() != []:
+                        self.modules.append(filepath)
+        enddetect = time.time()
+        print('Detectar archivos con generators en:', enddetect-startdetect)
+        print(self.modules)
+
+        #Next step: for every .py file at the project, we search callsites of that generators.
         for root, directories, files in os.walk(self.path):
             for filename in files:
                 filepath = os.path.join(root, filename)
@@ -809,15 +935,7 @@ class FolderCalls():
                     endacf = time.time()
                     print('Tiempo en assigncallfind para', filename, endacf-startacf)
                     #self.allcall[filename] = filecode.assign_call_find()
-                    self.sourcemapfolder[filepath] = filecode.sm
+                    #I think next line should be removed.
+                    self.sourcemapfolder[str(filepath)] = {"yields":filecode.sourcemapyield(), "callsites": filecode.smdef}
                     self.allcall[filename] = filecode.calls
         return self.allcall
-
-
-    def gen_json(self):
-        print(self.sourcemapfolder)
-        json_data = self.sourcemapfolder
-        #json_data_rep = json_data.replace("\'", "\"")
-        #print(json_data_rep)
-        with open('sourcemapproject.json','w', encoding="iso-8859-15", errors='ignore') as f:
-            json.dump(str(json_data), f, indent=4)
