@@ -2,7 +2,13 @@ from generatorfind.generatorfind import Discern, Discern2, FolderCalls, saveast
 from fulltree.fulltree import core, FullTree
 #from repos.respos import download_repos, get_repos
 import sys, os, time, shutil
-
+'''
+TO DO
+- FolderCalls receives two arguments, but the second one is being ignored. 
+- 'elif' needs to become 'else' in  function below DONE
+- line 41 receives one argument but needs two -> yields error.
+- last else needs to print the detected generators and callsites.
+'''
 def main(name):
     start = time.time()
     if len(sys.argv) == 2:
@@ -42,7 +48,7 @@ def main(name):
         print("---------")
         print('Execution time:', end-start, 'seconds.')
         print('-----------------------------------------------------------------------------------------------------\n')
-    elif len(sys.argv) >= 2:
+    else:
         if name.endswith('.py'):
             print("***************************************\n")
             print("***Estamos trabajando con DISCERN2.***\n")
@@ -94,13 +100,16 @@ def main(name):
             print("***Estamos trabajando con FOLDER Y DISCERN2.***\n")
             print("***************************************\n")
 
+            '''
             ls = sys.argv[2:]
             for i in range(len(ls)):
                 ls[i] = os.path.abspath(ls[i])
+                '''
         
-            script = FolderCalls(name, ls)
+            script = FolderCalls(name)
             script.callsites()
             script.createids()
+            
 
         end = time.time()
         print("---------")
@@ -112,10 +121,15 @@ def main(name):
         else:
             print('Execution time:', end-start, 'seconds.')
         print('-----------------------------------------------------------------------------------------------------\n')
+    
+    
 
 
 
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    if len(sys.argv) >= 2:
+        main(sys.argv[1])
+    else:
+        raise IndexError('Expected at least two arguments')

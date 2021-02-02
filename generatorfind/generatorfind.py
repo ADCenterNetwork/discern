@@ -6,6 +6,7 @@ from io import open
 from setuptools import setup
 import csv
 
+
 #print(sys.path)
 #print(os.getcwd())
 
@@ -820,7 +821,7 @@ class Discern2():
         return 
 
 class FolderCalls():
-    def __init__(self, name, ls_modules):
+    def __init__(self, name):
         self.allcall = {}
         self.path = name
         self.sourcemapfolder = {} 

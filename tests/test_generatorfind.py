@@ -37,7 +37,7 @@ def setup_multiple_assign():
 @pytest.fixture
 def setup_folder():
     path = os.path.join(os.getcwd(), 'tests', 'folder')
-    prueba = FolderCalls(path, "nomoreimports")
+    prueba = FolderCalls(path)
     return prueba
 
 @pytest.fixture
