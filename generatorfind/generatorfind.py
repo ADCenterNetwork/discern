@@ -909,9 +909,8 @@ class FolderCalls():
         endci = time.time()
         print("Tiempo sourcemap", endci-startci)
 
-    def callsites(self):
+    def files_with_generators(self):
         startdetect = time.time()
-
         #First step: we check the files where generators are defined, because that files are interesting in order to search calls.
         for root, directories, files in os.walk(self.path):
             for filename in files:
@@ -924,6 +923,7 @@ class FolderCalls():
         print('Detectar archivos con generators en:', enddetect-startdetect)
         print(self.modules)
 
+    def callsites(self):
         #Next step: for every .py file at the project, we search callsites of that generators.
         for root, directories, files in os.walk(self.path):
             for filename in files:

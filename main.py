@@ -107,6 +107,7 @@ def main(name):
                 '''
         
             script = FolderCalls(name)
+            script.files_with_generators()
             script.callsites()
             script.createids()
             
