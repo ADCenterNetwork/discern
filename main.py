@@ -6,7 +6,7 @@ import sys, os, time, shutil
 '''
 Discer2 is used when we only work with one file, 
 and FolderCalls is for folders
-''''
+'''
 
 def main(name):
     start = time.time()
