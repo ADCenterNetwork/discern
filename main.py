@@ -1,128 +1,89 @@
-from generatorfind.generatorfind import Discern, Discern2, FolderCalls, saveast
+from generatorfind.generatorfind import Discern2, FolderCalls, saveast
 from fulltree.fulltree import core, FullTree
 #from repos.respos import download_repos, get_repos
 import sys, os, time, shutil
+
 '''
-TO DO
-- FolderCalls receives two arguments, but the second one is being ignored. 
-- 'elif' needs to become 'else' in  function below DONE
-- line 41 receives one argument but needs two -> yields error.
-- last else needs to print the detected generators and callsites.
-'''
+Discer2 is used when we only work with one file, 
+and FolderCalls is for folders
+''''
+
 def main(name):
     start = time.time()
-    if len(sys.argv) == 2:
-        if name.endswith('.py'):
-            print("***************************************\n")
-            print("***Estamos trabajando con DISCERN1.***\n")
-            print("***************************************\n")
-            script = Discern(name)
-            saveast()      
-            #script.yieldfind()
-            '''
-            print('-----------------------------------------------------------------------------------------------------\n')
-            print('In the following list we find the node\'s namespace of the generators defined in the script of interest:')
-            for i in range(len(script.generators)):
-                print('\n', i, ': \n', script.generators[i])
-            print("----------")
-            '''
-            script._generatorfind()
-            '''
-            print('In the following list we find the namespace of the generators defined in the script of interest:')
-            for i in range(len(script.generators)):
-                print('\n', i, ': \n', script.generators[i])
-            print("----------")
-            '''
-            print(script._generatorfind())
-            script.assign_call_find()
-        else:
-            print("***************************************\n")
-            print("***Estamos trabajando con FOLDER.***\n")
-            print("***************************************\n")
-            script = FolderCalls(name)
-            script.callsites()
-        
-        print('LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
-        print('LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
-        end = time.time()
-        print("---------")
-        print('Execution time:', end-start, 'seconds.')
+    if name.endswith('.py'):
+        print("***************************************\n")
+        print("***Estamos trabajando con DISCERN2.***\n")
+        print("***************************************\n")
+
+        ls = sys.argv[2:]
+        for i in range(len(ls)):
+            ls[i] = os.path.abspath(ls[i])
+        script = Discern2(name, ls)
+        #saveast()      
+        #script.yieldfind()
+        '''
         print('-----------------------------------------------------------------------------------------------------\n')
-    else:
-        if name.endswith('.py'):
-            print("***************************************\n")
-            print("***Estamos trabajando con DISCERN2.***\n")
-            print("***************************************\n")
-
-            ls = sys.argv[2:]
-            for i in range(len(ls)):
-                ls[i] = os.path.abspath(ls[i])
-            script = Discern2(name, ls)
-            #saveast()      
-            #script.yieldfind()
-            '''
-            print('-----------------------------------------------------------------------------------------------------\n')
-            print('In the following list we find the node\'s namespace of the generators defined in the script of interest:')
-            for i in range(len(script.generators)):
-                print('\n', i, ': \n', script.generators[i])
-            print("----------")
-            '''
-            script._generatorfind()
-            '''
-            print('In the following list we find the namespace of the generators defined in the script of interest:')
-            for i in range(len(script.generators)):
-                print('\n', i, ': \n', script.generators[i])
-            print("----------")
-            '''
-            
-            #pj = FullTree(sys.argv[-1])
-            #core(pj)
-            
-            # TO DO 
-            #get_repos(ls)
-            
-            script.assign_call_find()
-            print('->LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
-            print('\n-> LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
-            print('\n-> LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
-            print('\n SOURCEMAP: ', script._mapeo())
-            
-            print('---------------------------------------------------------------------------------------------\n')
-
-
-
-            #we delete the folder we created in the beginning for downloaded folders
-            #shutil.rmtree('downloaded_modules', ignore_errors=True)
-            
-        else: 
-            
-            print("***************************************\n")
-            print("***Estamos trabajando con FOLDER Y DISCERN2.***\n")
-            print("***************************************\n")
-
-            '''
-            ls = sys.argv[2:]
-            for i in range(len(ls)):
-                ls[i] = os.path.abspath(ls[i])
-                '''
+        print('In the following list we find the node\'s namespace of the generators defined in the script of interest:')
+        for i in range(len(script.generators)):
+            print('\n', i, ': \n', script.generators[i])
+        print("----------")
+        '''
+        script._generatorfind()
+        '''
+        print('In the following list we find the namespace of the generators defined in the script of interest:')
+        for i in range(len(script.generators)):
+            print('\n', i, ': \n', script.generators[i])
+        print("----------")
+        '''
         
-            script = FolderCalls(name)
-            script.files_with_generators()
-            script.callsites()
-            script.createids()
-            
+        #pj = FullTree(sys.argv[-1])
+        #core(pj)
+        
+        # TO DO 
+        #get_repos(ls)
+        
+        script.assign_call_find()
+        print('->LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
+        print('\n-> LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
+        print('\n-> LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
+        print('\n SOURCEMAP: ', script._mapeo())
+        
+        print('---------------------------------------------------------------------------------------------\n')
 
-        end = time.time()
-        print("---------")
-        tiempoej = end-start
-        if tiempoej > 60:
-            tiempoejmin = tiempoej//60
-            tiempoejsec = tiempoej%60
-            print('Execution time:', tiempoejmin, 'min and ', tiempoejsec,  'seconds.')
-        else:
-            print('Execution time:', end-start, 'seconds.')
-        print('-----------------------------------------------------------------------------------------------------\n')
+
+
+        #we delete the folder we created in the beginning for downloaded folders
+        #shutil.rmtree('downloaded_modules', ignore_errors=True)
+        
+    else: 
+        
+        print("***************************************\n")
+        print("***Estamos trabajando con FOLDER Y DISCERN2.***\n")
+        print("***************************************\n")
+
+        '''
+        ls = sys.argv[2:]
+        for i in range(len(ls)):
+            ls[i] = os.path.abspath(ls[i])
+            '''
     
+        script = FolderCalls(name)
+        script.files_with_generators()
+        script.callsites()
+        script.createids()
+        
+
+    end = time.time()
+    print("---------")
+    tiempoej = end-start
+    if tiempoej > 60:
+        tiempoejmin = tiempoej//60
+        tiempoejsec = tiempoej%60
+        print('Execution time:', tiempoejmin, 'min and ', tiempoejsec,  'seconds.')
+    else:
+        print('Execution time:', end-start, 'seconds.')
+    print('-----------------------------------------------------------------------------------------------------\n')
+
     
 
 

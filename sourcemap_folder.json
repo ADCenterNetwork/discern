@@ -1,0 +1,3251 @@
+{
+    "0": {
+        "node_id": 0,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Module",
+        "line_number": "None",
+        "end_line_number": "None",
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "1": {
+        "node_id": 1,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "ClassDef",
+        "line_number": 4,
+        "end_line_number": 16,
+        "col_offset": 0,
+        "end_col_offset": 24
+    },
+    "2": {
+        "node_id": 2,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "ClassDef",
+        "line_number": 5,
+        "end_line_number": 10,
+        "col_offset": 4,
+        "end_col_offset": 24
+    },
+    "3": {
+        "node_id": 3,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "FunctionDef",
+        "line_number": 6,
+        "end_line_number": 10,
+        "col_offset": 8,
+        "end_col_offset": 24
+    },
+    "4": {
+        "node_id": 4,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arguments",
+        "line_number": 6,
+        "end_line_number": 10,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "5": {
+        "node_id": 5,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arg",
+        "line_number": 6,
+        "end_line_number": 6,
+        "col_offset": 19,
+        "end_col_offset": 23
+    },
+    "6": {
+        "node_id": 6,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arg",
+        "line_number": 6,
+        "end_line_number": 6,
+        "col_offset": 25,
+        "end_col_offset": 26
+    },
+    "7": {
+        "node_id": 7,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 12,
+        "end_col_offset": 19
+    },
+    "8": {
+        "node_id": 8,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 12,
+        "end_col_offset": 15
+    },
+    "9": {
+        "node_id": 9,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "10": {
+        "node_id": 10,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 18,
+        "end_col_offset": 19
+    },
+    "11": {
+        "node_id": 11,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "While",
+        "line_number": 8,
+        "end_line_number": 10,
+        "col_offset": 12,
+        "end_col_offset": 24
+    },
+    "12": {
+        "node_id": 12,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Compare",
+        "line_number": 8,
+        "end_line_number": 8,
+        "col_offset": 18,
+        "end_col_offset": 25
+    },
+    "13": {
+        "node_id": 13,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 8,
+        "end_line_number": 8,
+        "col_offset": 18,
+        "end_col_offset": 21
+    },
+    "14": {
+        "node_id": 14,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 8,
+        "end_line_number": 8,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "15": {
+        "node_id": 15,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Lt",
+        "line_number": 8,
+        "end_line_number": 8,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "16": {
+        "node_id": 16,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 8,
+        "end_line_number": 8,
+        "col_offset": 24,
+        "end_col_offset": 25
+    },
+    "17": {
+        "node_id": 17,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 8,
+        "end_line_number": 8,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "18": {
+        "node_id": 18,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 9,
+        "end_line_number": 9,
+        "col_offset": 16,
+        "end_col_offset": 25
+    },
+    "19": {
+        "node_id": 19,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Yield",
+        "line_number": 9,
+        "end_line_number": 9,
+        "col_offset": 16,
+        "end_col_offset": 25
+    },
+    "20": {
+        "node_id": 20,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 9,
+        "end_line_number": 9,
+        "col_offset": 22,
+        "end_col_offset": 25
+    },
+    "21": {
+        "node_id": 21,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 9,
+        "end_line_number": 9,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "22": {
+        "node_id": 22,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "AugAssign",
+        "line_number": 10,
+        "end_line_number": 10,
+        "col_offset": 16,
+        "end_col_offset": 24
+    },
+    "23": {
+        "node_id": 23,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 10,
+        "end_line_number": 10,
+        "col_offset": 16,
+        "end_col_offset": 19
+    },
+    "24": {
+        "node_id": 24,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 10,
+        "end_line_number": 10,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "25": {
+        "node_id": 25,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Add",
+        "line_number": 10,
+        "end_line_number": 10,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "26": {
+        "node_id": 26,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 10,
+        "end_line_number": 10,
+        "col_offset": 23,
+        "end_col_offset": 24
+    },
+    "27": {
+        "node_id": 27,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "ClassDef",
+        "line_number": 11,
+        "end_line_number": 16,
+        "col_offset": 4,
+        "end_col_offset": 24
+    },
+    "28": {
+        "node_id": 28,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "FunctionDef",
+        "line_number": 12,
+        "end_line_number": 16,
+        "col_offset": 8,
+        "end_col_offset": 24
+    },
+    "29": {
+        "node_id": 29,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arguments",
+        "line_number": 12,
+        "end_line_number": 16,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "30": {
+        "node_id": 30,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arg",
+        "line_number": 12,
+        "end_line_number": 12,
+        "col_offset": 19,
+        "end_col_offset": 23
+    },
+    "31": {
+        "node_id": 31,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arg",
+        "line_number": 12,
+        "end_line_number": 12,
+        "col_offset": 25,
+        "end_col_offset": 26
+    },
+    "32": {
+        "node_id": 32,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 13,
+        "end_line_number": 13,
+        "col_offset": 12,
+        "end_col_offset": 19
+    },
+    "33": {
+        "node_id": 33,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 13,
+        "end_line_number": 13,
+        "col_offset": 12,
+        "end_col_offset": 15
+    },
+    "34": {
+        "node_id": 34,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 13,
+        "end_line_number": 13,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "35": {
+        "node_id": 35,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 13,
+        "end_line_number": 13,
+        "col_offset": 18,
+        "end_col_offset": 19
+    },
+    "36": {
+        "node_id": 36,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "While",
+        "line_number": 14,
+        "end_line_number": 16,
+        "col_offset": 12,
+        "end_col_offset": 24
+    },
+    "37": {
+        "node_id": 37,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Compare",
+        "line_number": 14,
+        "end_line_number": 14,
+        "col_offset": 18,
+        "end_col_offset": 25
+    },
+    "38": {
+        "node_id": 38,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 14,
+        "end_line_number": 14,
+        "col_offset": 18,
+        "end_col_offset": 21
+    },
+    "39": {
+        "node_id": 39,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 14,
+        "end_line_number": 14,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "40": {
+        "node_id": 40,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Lt",
+        "line_number": 14,
+        "end_line_number": 14,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "41": {
+        "node_id": 41,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 14,
+        "end_line_number": 14,
+        "col_offset": 24,
+        "end_col_offset": 25
+    },
+    "42": {
+        "node_id": 42,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 14,
+        "end_line_number": 14,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "43": {
+        "node_id": 43,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 15,
+        "end_line_number": 15,
+        "col_offset": 16,
+        "end_col_offset": 25
+    },
+    "44": {
+        "node_id": 44,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Yield",
+        "line_number": 15,
+        "end_line_number": 15,
+        "col_offset": 16,
+        "end_col_offset": 25
+    },
+    "45": {
+        "node_id": 45,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 15,
+        "end_line_number": 15,
+        "col_offset": 22,
+        "end_col_offset": 25
+    },
+    "46": {
+        "node_id": 46,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 15,
+        "end_line_number": 15,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "47": {
+        "node_id": 47,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "AugAssign",
+        "line_number": 16,
+        "end_line_number": 16,
+        "col_offset": 16,
+        "end_col_offset": 24
+    },
+    "48": {
+        "node_id": 48,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 16,
+        "end_line_number": 16,
+        "col_offset": 16,
+        "end_col_offset": 19
+    },
+    "49": {
+        "node_id": 49,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 16,
+        "end_line_number": 16,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "50": {
+        "node_id": 50,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Add",
+        "line_number": 16,
+        "end_line_number": 16,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "51": {
+        "node_id": 51,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 16,
+        "end_line_number": 16,
+        "col_offset": 23,
+        "end_col_offset": 24
+    },
+    "52": {
+        "node_id": 52,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "ClassDef",
+        "line_number": 18,
+        "end_line_number": 24,
+        "col_offset": 0,
+        "end_col_offset": 24
+    },
+    "53": {
+        "node_id": 53,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "ClassDef",
+        "line_number": 19,
+        "end_line_number": 24,
+        "col_offset": 4,
+        "end_col_offset": 24
+    },
+    "54": {
+        "node_id": 54,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "FunctionDef",
+        "line_number": 20,
+        "end_line_number": 24,
+        "col_offset": 8,
+        "end_col_offset": 24
+    },
+    "55": {
+        "node_id": 55,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arguments",
+        "line_number": 20,
+        "end_line_number": 24,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "56": {
+        "node_id": 56,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arg",
+        "line_number": 20,
+        "end_line_number": 20,
+        "col_offset": 19,
+        "end_col_offset": 23
+    },
+    "57": {
+        "node_id": 57,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arg",
+        "line_number": 20,
+        "end_line_number": 20,
+        "col_offset": 25,
+        "end_col_offset": 26
+    },
+    "58": {
+        "node_id": 58,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": 12,
+        "end_col_offset": 22
+    },
+    "59": {
+        "node_id": 59,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": 12,
+        "end_col_offset": 15
+    },
+    "60": {
+        "node_id": 60,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "61": {
+        "node_id": 61,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "BinOp",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": 18,
+        "end_col_offset": 22
+    },
+    "62": {
+        "node_id": 62,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": 18,
+        "end_col_offset": 19
+    },
+    "63": {
+        "node_id": 63,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "64": {
+        "node_id": 64,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Pow",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "65": {
+        "node_id": 65,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": 21,
+        "end_col_offset": 22
+    },
+    "66": {
+        "node_id": 66,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "While",
+        "line_number": 22,
+        "end_line_number": 24,
+        "col_offset": 12,
+        "end_col_offset": 24
+    },
+    "67": {
+        "node_id": 67,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Compare",
+        "line_number": 22,
+        "end_line_number": 22,
+        "col_offset": 18,
+        "end_col_offset": 25
+    },
+    "68": {
+        "node_id": 68,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 22,
+        "end_line_number": 22,
+        "col_offset": 18,
+        "end_col_offset": 21
+    },
+    "69": {
+        "node_id": 69,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 22,
+        "end_line_number": 22,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "70": {
+        "node_id": 70,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Gt",
+        "line_number": 22,
+        "end_line_number": 22,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "71": {
+        "node_id": 71,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 22,
+        "end_line_number": 22,
+        "col_offset": 24,
+        "end_col_offset": 25
+    },
+    "72": {
+        "node_id": 72,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 22,
+        "end_line_number": 22,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "73": {
+        "node_id": 73,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 23,
+        "end_line_number": 23,
+        "col_offset": 16,
+        "end_col_offset": 25
+    },
+    "74": {
+        "node_id": 74,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Yield",
+        "line_number": 23,
+        "end_line_number": 23,
+        "col_offset": 16,
+        "end_col_offset": 25
+    },
+    "75": {
+        "node_id": 75,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 23,
+        "end_line_number": 23,
+        "col_offset": 22,
+        "end_col_offset": 25
+    },
+    "76": {
+        "node_id": 76,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 23,
+        "end_line_number": 23,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "77": {
+        "node_id": 77,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "AugAssign",
+        "line_number": 24,
+        "end_line_number": 24,
+        "col_offset": 16,
+        "end_col_offset": 24
+    },
+    "78": {
+        "node_id": 78,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 24,
+        "end_line_number": 24,
+        "col_offset": 16,
+        "end_col_offset": 19
+    },
+    "79": {
+        "node_id": 79,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 24,
+        "end_line_number": 24,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "80": {
+        "node_id": 80,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Sub",
+        "line_number": 24,
+        "end_line_number": 24,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "81": {
+        "node_id": 81,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 24,
+        "end_line_number": 24,
+        "col_offset": 23,
+        "end_col_offset": 24
+    },
+    "82": {
+        "node_id": 82,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "FunctionDef",
+        "line_number": 27,
+        "end_line_number": 35,
+        "col_offset": 0,
+        "end_col_offset": 28
+    },
+    "83": {
+        "node_id": 83,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arguments",
+        "line_number": 27,
+        "end_line_number": 35,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "84": {
+        "node_id": 84,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "FunctionDef",
+        "line_number": 28,
+        "end_line_number": 35,
+        "col_offset": 4,
+        "end_col_offset": 28
+    },
+    "85": {
+        "node_id": 85,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arguments",
+        "line_number": 28,
+        "end_line_number": 35,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "86": {
+        "node_id": 86,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "FunctionDef",
+        "line_number": 29,
+        "end_line_number": 35,
+        "col_offset": 8,
+        "end_col_offset": 28
+    },
+    "87": {
+        "node_id": 87,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arguments",
+        "line_number": 29,
+        "end_line_number": 35,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "88": {
+        "node_id": 88,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arg",
+        "line_number": 29,
+        "end_line_number": 29,
+        "col_offset": 17,
+        "end_col_offset": 18
+    },
+    "89": {
+        "node_id": 89,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 32,
+        "end_line_number": 32,
+        "col_offset": 16,
+        "end_col_offset": 23
+    },
+    "90": {
+        "node_id": 90,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 32,
+        "end_line_number": 32,
+        "col_offset": 16,
+        "end_col_offset": 19
+    },
+    "91": {
+        "node_id": 91,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 32,
+        "end_line_number": 32,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "92": {
+        "node_id": 92,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 32,
+        "end_line_number": 32,
+        "col_offset": 22,
+        "end_col_offset": 23
+    },
+    "93": {
+        "node_id": 93,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "While",
+        "line_number": 33,
+        "end_line_number": 35,
+        "col_offset": 16,
+        "end_col_offset": 28
+    },
+    "94": {
+        "node_id": 94,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Compare",
+        "line_number": 33,
+        "end_line_number": 33,
+        "col_offset": 22,
+        "end_col_offset": 29
+    },
+    "95": {
+        "node_id": 95,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 33,
+        "end_line_number": 33,
+        "col_offset": 22,
+        "end_col_offset": 25
+    },
+    "96": {
+        "node_id": 96,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 33,
+        "end_line_number": 33,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "97": {
+        "node_id": 97,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Lt",
+        "line_number": 33,
+        "end_line_number": 33,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "98": {
+        "node_id": 98,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 33,
+        "end_line_number": 33,
+        "col_offset": 28,
+        "end_col_offset": 29
+    },
+    "99": {
+        "node_id": 99,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 33,
+        "end_line_number": 33,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "100": {
+        "node_id": 100,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 34,
+        "end_line_number": 34,
+        "col_offset": 20,
+        "end_col_offset": 29
+    },
+    "101": {
+        "node_id": 101,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Yield",
+        "line_number": 34,
+        "end_line_number": 34,
+        "col_offset": 20,
+        "end_col_offset": 29
+    },
+    "102": {
+        "node_id": 102,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 34,
+        "end_line_number": 34,
+        "col_offset": 26,
+        "end_col_offset": 29
+    },
+    "103": {
+        "node_id": 103,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 34,
+        "end_line_number": 34,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "104": {
+        "node_id": 104,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "AugAssign",
+        "line_number": 35,
+        "end_line_number": 35,
+        "col_offset": 20,
+        "end_col_offset": 28
+    },
+    "105": {
+        "node_id": 105,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 35,
+        "end_line_number": 35,
+        "col_offset": 20,
+        "end_col_offset": 23
+    },
+    "106": {
+        "node_id": 106,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 35,
+        "end_line_number": 35,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "107": {
+        "node_id": 107,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Add",
+        "line_number": 35,
+        "end_line_number": 35,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "108": {
+        "node_id": 108,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 35,
+        "end_line_number": 35,
+        "col_offset": 27,
+        "end_col_offset": 28
+    },
+    "109": {
+        "node_id": 109,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "FunctionDef",
+        "line_number": 37,
+        "end_line_number": 38,
+        "col_offset": 0,
+        "end_col_offset": 16
+    },
+    "110": {
+        "node_id": 110,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "arguments",
+        "line_number": 37,
+        "end_line_number": 38,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "111": {
+        "node_id": 111,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 38,
+        "end_line_number": 38,
+        "col_offset": 4,
+        "end_col_offset": 16
+    },
+    "112": {
+        "node_id": 112,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Yield",
+        "line_number": 38,
+        "end_line_number": 38,
+        "col_offset": 4,
+        "end_col_offset": 16
+    },
+    "113": {
+        "node_id": 113,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 38,
+        "end_line_number": 38,
+        "col_offset": 10,
+        "end_col_offset": 16
+    },
+    "114": {
+        "node_id": 114,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 41,
+        "end_line_number": 41,
+        "col_offset": 0,
+        "end_col_offset": 17
+    },
+    "115": {
+        "node_id": 115,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 41,
+        "end_line_number": 41,
+        "col_offset": 0,
+        "end_col_offset": 17
+    },
+    "116": {
+        "node_id": 116,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 41,
+        "end_line_number": 41,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "117": {
+        "node_id": 117,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 41,
+        "end_line_number": 41,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "118": {
+        "node_id": 118,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 41,
+        "end_line_number": 41,
+        "col_offset": 5,
+        "end_col_offset": 16
+    },
+    "119": {
+        "node_id": 119,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 41,
+        "end_line_number": 41,
+        "col_offset": 5,
+        "end_col_offset": 14
+    },
+    "120": {
+        "node_id": 120,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 41,
+        "end_line_number": 41,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "121": {
+        "node_id": 121,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 43,
+        "end_line_number": 43,
+        "col_offset": 0,
+        "end_col_offset": 15
+    },
+    "122": {
+        "node_id": 122,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 43,
+        "end_line_number": 43,
+        "col_offset": 0,
+        "end_col_offset": 1
+    },
+    "123": {
+        "node_id": 123,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 43,
+        "end_line_number": 43,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "124": {
+        "node_id": 124,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 43,
+        "end_line_number": 43,
+        "col_offset": 4,
+        "end_col_offset": 15
+    },
+    "125": {
+        "node_id": 125,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 43,
+        "end_line_number": 43,
+        "col_offset": 4,
+        "end_col_offset": 13
+    },
+    "126": {
+        "node_id": 126,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 43,
+        "end_line_number": 43,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "127": {
+        "node_id": 127,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 44,
+        "end_line_number": 44,
+        "col_offset": 0,
+        "end_col_offset": 7
+    },
+    "128": {
+        "node_id": 128,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 44,
+        "end_line_number": 44,
+        "col_offset": 0,
+        "end_col_offset": 7
+    },
+    "129": {
+        "node_id": 129,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 44,
+        "end_line_number": 44,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "130": {
+        "node_id": 130,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 44,
+        "end_line_number": 44,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "131": {
+        "node_id": 131,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 44,
+        "end_line_number": 44,
+        "col_offset": 5,
+        "end_col_offset": 6
+    },
+    "132": {
+        "node_id": 132,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 44,
+        "end_line_number": 44,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "133": {
+        "node_id": 133,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": 0,
+        "end_col_offset": 37
+    },
+    "134": {
+        "node_id": 134,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": 0,
+        "end_col_offset": 37
+    },
+    "135": {
+        "node_id": 135,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "136": {
+        "node_id": 136,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "137": {
+        "node_id": 137,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": 5,
+        "end_col_offset": 36
+    },
+    "138": {
+        "node_id": 138,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": 5,
+        "end_col_offset": 33
+    },
+    "139": {
+        "node_id": 139,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": 5,
+        "end_col_offset": 26
+    },
+    "140": {
+        "node_id": 140,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": 5,
+        "end_col_offset": 24
+    },
+    "141": {
+        "node_id": 141,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": 5,
+        "end_col_offset": 15
+    },
+    "142": {
+        "node_id": 142,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": 5,
+        "end_col_offset": 13
+    },
+    "143": {
+        "node_id": 143,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "144": {
+        "node_id": 144,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "145": {
+        "node_id": 145,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "146": {
+        "node_id": 146,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 49,
+        "end_line_number": 49,
+        "col_offset": 34,
+        "end_col_offset": 35
+    },
+    "147": {
+        "node_id": 147,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 54,
+        "end_line_number": 54,
+        "col_offset": 0,
+        "end_col_offset": 29
+    },
+    "148": {
+        "node_id": 148,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 54,
+        "end_line_number": 54,
+        "col_offset": 0,
+        "end_col_offset": 5
+    },
+    "149": {
+        "node_id": 149,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 54,
+        "end_line_number": 54,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "150": {
+        "node_id": 150,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 54,
+        "end_line_number": 54,
+        "col_offset": 8,
+        "end_col_offset": 29
+    },
+    "151": {
+        "node_id": 151,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 54,
+        "end_line_number": 54,
+        "col_offset": 8,
+        "end_col_offset": 27
+    },
+    "152": {
+        "node_id": 152,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 54,
+        "end_line_number": 54,
+        "col_offset": 8,
+        "end_col_offset": 18
+    },
+    "153": {
+        "node_id": 153,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 54,
+        "end_line_number": 54,
+        "col_offset": 8,
+        "end_col_offset": 16
+    },
+    "154": {
+        "node_id": 154,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 54,
+        "end_line_number": 54,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "155": {
+        "node_id": 155,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 54,
+        "end_line_number": 54,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "156": {
+        "node_id": 156,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 56,
+        "end_line_number": 56,
+        "col_offset": 0,
+        "end_col_offset": 21
+    },
+    "157": {
+        "node_id": 157,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 56,
+        "end_line_number": 56,
+        "col_offset": 0,
+        "end_col_offset": 21
+    },
+    "158": {
+        "node_id": 158,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 56,
+        "end_line_number": 56,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "159": {
+        "node_id": 159,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 56,
+        "end_line_number": 56,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "160": {
+        "node_id": 160,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 56,
+        "end_line_number": 56,
+        "col_offset": 5,
+        "end_col_offset": 20
+    },
+    "161": {
+        "node_id": 161,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 56,
+        "end_line_number": 56,
+        "col_offset": 5,
+        "end_col_offset": 17
+    },
+    "162": {
+        "node_id": 162,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 56,
+        "end_line_number": 56,
+        "col_offset": 5,
+        "end_col_offset": 10
+    },
+    "163": {
+        "node_id": 163,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 56,
+        "end_line_number": 56,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "164": {
+        "node_id": 164,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 56,
+        "end_line_number": 56,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "165": {
+        "node_id": 165,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 56,
+        "end_line_number": 56,
+        "col_offset": 18,
+        "end_col_offset": 19
+    },
+    "166": {
+        "node_id": 166,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 60,
+        "end_line_number": 60,
+        "col_offset": 0,
+        "end_col_offset": 29
+    },
+    "167": {
+        "node_id": 167,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 60,
+        "end_line_number": 60,
+        "col_offset": 0,
+        "end_col_offset": 5
+    },
+    "168": {
+        "node_id": 168,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 60,
+        "end_line_number": 60,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "169": {
+        "node_id": 169,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 60,
+        "end_line_number": 60,
+        "col_offset": 8,
+        "end_col_offset": 29
+    },
+    "170": {
+        "node_id": 170,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 60,
+        "end_line_number": 60,
+        "col_offset": 8,
+        "end_col_offset": 27
+    },
+    "171": {
+        "node_id": 171,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 60,
+        "end_line_number": 60,
+        "col_offset": 8,
+        "end_col_offset": 18
+    },
+    "172": {
+        "node_id": 172,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 60,
+        "end_line_number": 60,
+        "col_offset": 8,
+        "end_col_offset": 16
+    },
+    "173": {
+        "node_id": 173,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 60,
+        "end_line_number": 60,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "174": {
+        "node_id": 174,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 60,
+        "end_line_number": 60,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "175": {
+        "node_id": 175,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 62,
+        "end_line_number": 62,
+        "col_offset": 0,
+        "end_col_offset": 27
+    },
+    "176": {
+        "node_id": 176,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 62,
+        "end_line_number": 62,
+        "col_offset": 0,
+        "end_col_offset": 9
+    },
+    "177": {
+        "node_id": 177,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 62,
+        "end_line_number": 62,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "178": {
+        "node_id": 178,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 62,
+        "end_line_number": 62,
+        "col_offset": 12,
+        "end_col_offset": 27
+    },
+    "179": {
+        "node_id": 179,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 62,
+        "end_line_number": 62,
+        "col_offset": 12,
+        "end_col_offset": 24
+    },
+    "180": {
+        "node_id": 180,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 62,
+        "end_line_number": 62,
+        "col_offset": 12,
+        "end_col_offset": 17
+    },
+    "181": {
+        "node_id": 181,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 62,
+        "end_line_number": 62,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "182": {
+        "node_id": 182,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 62,
+        "end_line_number": 62,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "183": {
+        "node_id": 183,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 62,
+        "end_line_number": 62,
+        "col_offset": 25,
+        "end_col_offset": 26
+    },
+    "184": {
+        "node_id": 184,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 64,
+        "end_line_number": 64,
+        "col_offset": 0,
+        "end_col_offset": 15
+    },
+    "185": {
+        "node_id": 185,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 64,
+        "end_line_number": 64,
+        "col_offset": 0,
+        "end_col_offset": 15
+    },
+    "186": {
+        "node_id": 186,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 64,
+        "end_line_number": 64,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "187": {
+        "node_id": 187,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 64,
+        "end_line_number": 64,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "188": {
+        "node_id": 188,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 64,
+        "end_line_number": 64,
+        "col_offset": 5,
+        "end_col_offset": 14
+    },
+    "189": {
+        "node_id": 189,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 64,
+        "end_line_number": 64,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "190": {
+        "node_id": 190,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": 0,
+        "end_col_offset": 43
+    },
+    "191": {
+        "node_id": 191,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": 0,
+        "end_col_offset": 9
+    },
+    "192": {
+        "node_id": 192,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "193": {
+        "node_id": 193,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": 12,
+        "end_col_offset": 43
+    },
+    "194": {
+        "node_id": 194,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": 12,
+        "end_col_offset": 40
+    },
+    "195": {
+        "node_id": 195,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": 12,
+        "end_col_offset": 33
+    },
+    "196": {
+        "node_id": 196,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": 12,
+        "end_col_offset": 31
+    },
+    "197": {
+        "node_id": 197,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": 12,
+        "end_col_offset": 22
+    },
+    "198": {
+        "node_id": 198,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": 12,
+        "end_col_offset": 20
+    },
+    "199": {
+        "node_id": 199,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "200": {
+        "node_id": 200,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "201": {
+        "node_id": 201,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "202": {
+        "node_id": 202,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 68,
+        "end_line_number": 68,
+        "col_offset": 41,
+        "end_col_offset": 42
+    },
+    "203": {
+        "node_id": 203,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 70,
+        "end_line_number": 70,
+        "col_offset": 0,
+        "end_col_offset": 15
+    },
+    "204": {
+        "node_id": 204,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 70,
+        "end_line_number": 70,
+        "col_offset": 0,
+        "end_col_offset": 15
+    },
+    "205": {
+        "node_id": 205,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 70,
+        "end_line_number": 70,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "206": {
+        "node_id": 206,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 70,
+        "end_line_number": 70,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "207": {
+        "node_id": 207,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 70,
+        "end_line_number": 70,
+        "col_offset": 5,
+        "end_col_offset": 14
+    },
+    "208": {
+        "node_id": 208,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 70,
+        "end_line_number": 70,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "209": {
+        "node_id": 209,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 75,
+        "end_line_number": 75,
+        "col_offset": 0,
+        "end_col_offset": 29
+    },
+    "210": {
+        "node_id": 210,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 75,
+        "end_line_number": 75,
+        "col_offset": 0,
+        "end_col_offset": 5
+    },
+    "211": {
+        "node_id": 211,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 75,
+        "end_line_number": 75,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "212": {
+        "node_id": 212,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 75,
+        "end_line_number": 75,
+        "col_offset": 8,
+        "end_col_offset": 29
+    },
+    "213": {
+        "node_id": 213,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 75,
+        "end_line_number": 75,
+        "col_offset": 8,
+        "end_col_offset": 27
+    },
+    "214": {
+        "node_id": 214,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 75,
+        "end_line_number": 75,
+        "col_offset": 8,
+        "end_col_offset": 18
+    },
+    "215": {
+        "node_id": 215,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 75,
+        "end_line_number": 75,
+        "col_offset": 8,
+        "end_col_offset": 16
+    },
+    "216": {
+        "node_id": 216,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 75,
+        "end_line_number": 75,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "217": {
+        "node_id": 217,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 75,
+        "end_line_number": 75,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "218": {
+        "node_id": 218,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "For",
+        "line_number": 77,
+        "end_line_number": 78,
+        "col_offset": 0,
+        "end_col_offset": 15
+    },
+    "219": {
+        "node_id": 219,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 77,
+        "end_line_number": 77,
+        "col_offset": 4,
+        "end_col_offset": 8
+    },
+    "220": {
+        "node_id": 220,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 77,
+        "end_line_number": 77,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "221": {
+        "node_id": 221,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 77,
+        "end_line_number": 77,
+        "col_offset": 12,
+        "end_col_offset": 27
+    },
+    "222": {
+        "node_id": 222,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 77,
+        "end_line_number": 77,
+        "col_offset": 12,
+        "end_col_offset": 24
+    },
+    "223": {
+        "node_id": 223,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 77,
+        "end_line_number": 77,
+        "col_offset": 12,
+        "end_col_offset": 17
+    },
+    "224": {
+        "node_id": 224,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 77,
+        "end_line_number": 77,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "225": {
+        "node_id": 225,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 77,
+        "end_line_number": 77,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "226": {
+        "node_id": 226,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 77,
+        "end_line_number": 77,
+        "col_offset": 25,
+        "end_col_offset": 26
+    },
+    "227": {
+        "node_id": 227,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 78,
+        "end_line_number": 78,
+        "col_offset": 4,
+        "end_col_offset": 15
+    },
+    "228": {
+        "node_id": 228,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 78,
+        "end_line_number": 78,
+        "col_offset": 4,
+        "end_col_offset": 15
+    },
+    "229": {
+        "node_id": 229,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 78,
+        "end_line_number": 78,
+        "col_offset": 4,
+        "end_col_offset": 9
+    },
+    "230": {
+        "node_id": 230,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 78,
+        "end_line_number": 78,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "231": {
+        "node_id": 231,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 78,
+        "end_line_number": 78,
+        "col_offset": 10,
+        "end_col_offset": 14
+    },
+    "232": {
+        "node_id": 232,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 78,
+        "end_line_number": 78,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "233": {
+        "node_id": 233,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 83,
+        "end_line_number": 83,
+        "col_offset": 0,
+        "end_col_offset": 24
+    },
+    "234": {
+        "node_id": 234,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 83,
+        "end_line_number": 83,
+        "col_offset": 0,
+        "end_col_offset": 11
+    },
+    "235": {
+        "node_id": 235,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 83,
+        "end_line_number": 83,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "236": {
+        "node_id": 236,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 83,
+        "end_line_number": 83,
+        "col_offset": 14,
+        "end_col_offset": 24
+    },
+    "237": {
+        "node_id": 237,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 83,
+        "end_line_number": 83,
+        "col_offset": 14,
+        "end_col_offset": 22
+    },
+    "238": {
+        "node_id": 238,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 83,
+        "end_line_number": 83,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "239": {
+        "node_id": 239,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": 0,
+        "end_col_offset": 38
+    },
+    "240": {
+        "node_id": 240,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": 0,
+        "end_col_offset": 38
+    },
+    "241": {
+        "node_id": 241,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "242": {
+        "node_id": 242,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "243": {
+        "node_id": 243,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": 5,
+        "end_col_offset": 37
+    },
+    "244": {
+        "node_id": 244,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": 5,
+        "end_col_offset": 34
+    },
+    "245": {
+        "node_id": 245,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": 5,
+        "end_col_offset": 27
+    },
+    "246": {
+        "node_id": 246,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": 5,
+        "end_col_offset": 25
+    },
+    "247": {
+        "node_id": 247,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": 5,
+        "end_col_offset": 16
+    },
+    "248": {
+        "node_id": 248,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "249": {
+        "node_id": 249,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "250": {
+        "node_id": 250,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "251": {
+        "node_id": 251,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 85,
+        "end_line_number": 85,
+        "col_offset": 35,
+        "end_col_offset": 36
+    },
+    "252": {
+        "node_id": 252,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 87,
+        "end_line_number": 87,
+        "col_offset": 0,
+        "end_col_offset": 26
+    },
+    "253": {
+        "node_id": 253,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 87,
+        "end_line_number": 87,
+        "col_offset": 0,
+        "end_col_offset": 13
+    },
+    "254": {
+        "node_id": 254,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 87,
+        "end_line_number": 87,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "255": {
+        "node_id": 255,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 87,
+        "end_line_number": 87,
+        "col_offset": 16,
+        "end_col_offset": 26
+    },
+    "256": {
+        "node_id": 256,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 87,
+        "end_line_number": 87,
+        "col_offset": 16,
+        "end_col_offset": 24
+    },
+    "257": {
+        "node_id": 257,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 87,
+        "end_line_number": 87,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "258": {
+        "node_id": 258,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 88,
+        "end_line_number": 88,
+        "col_offset": 0,
+        "end_col_offset": 40
+    },
+    "259": {
+        "node_id": 259,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 88,
+        "end_line_number": 88,
+        "col_offset": 0,
+        "end_col_offset": 13
+    },
+    "260": {
+        "node_id": 260,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 88,
+        "end_line_number": 88,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "261": {
+        "node_id": 261,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 88,
+        "end_line_number": 88,
+        "col_offset": 16,
+        "end_col_offset": 40
+    },
+    "262": {
+        "node_id": 262,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 88,
+        "end_line_number": 88,
+        "col_offset": 16,
+        "end_col_offset": 38
+    },
+    "263": {
+        "node_id": 263,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 88,
+        "end_line_number": 88,
+        "col_offset": 16,
+        "end_col_offset": 29
+    },
+    "264": {
+        "node_id": 264,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 88,
+        "end_line_number": 88,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "265": {
+        "node_id": 265,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 88,
+        "end_line_number": 88,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "266": {
+        "node_id": 266,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 89,
+        "end_line_number": 89,
+        "col_offset": 0,
+        "end_col_offset": 29
+    },
+    "267": {
+        "node_id": 267,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 89,
+        "end_line_number": 89,
+        "col_offset": 0,
+        "end_col_offset": 29
+    },
+    "268": {
+        "node_id": 268,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 89,
+        "end_line_number": 89,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "269": {
+        "node_id": 269,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 89,
+        "end_line_number": 89,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "270": {
+        "node_id": 270,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 89,
+        "end_line_number": 89,
+        "col_offset": 5,
+        "end_col_offset": 28
+    },
+    "271": {
+        "node_id": 271,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 89,
+        "end_line_number": 89,
+        "col_offset": 5,
+        "end_col_offset": 25
+    },
+    "272": {
+        "node_id": 272,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 89,
+        "end_line_number": 89,
+        "col_offset": 5,
+        "end_col_offset": 18
+    },
+    "273": {
+        "node_id": 273,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 89,
+        "end_line_number": 89,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "274": {
+        "node_id": 274,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 89,
+        "end_line_number": 89,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "275": {
+        "node_id": 275,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 89,
+        "end_line_number": 89,
+        "col_offset": 26,
+        "end_col_offset": 27
+    },
+    "276": {
+        "node_id": 276,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 91,
+        "end_line_number": 91,
+        "col_offset": 0,
+        "end_col_offset": 37
+    },
+    "277": {
+        "node_id": 277,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 91,
+        "end_line_number": 91,
+        "col_offset": 0,
+        "end_col_offset": 13
+    },
+    "278": {
+        "node_id": 278,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 91,
+        "end_line_number": 91,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "279": {
+        "node_id": 279,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 91,
+        "end_line_number": 91,
+        "col_offset": 16,
+        "end_col_offset": 37
+    },
+    "280": {
+        "node_id": 280,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 91,
+        "end_line_number": 91,
+        "col_offset": 16,
+        "end_col_offset": 35
+    },
+    "281": {
+        "node_id": 281,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 91,
+        "end_line_number": 91,
+        "col_offset": 16,
+        "end_col_offset": 26
+    },
+    "282": {
+        "node_id": 282,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 91,
+        "end_line_number": 91,
+        "col_offset": 16,
+        "end_col_offset": 24
+    },
+    "283": {
+        "node_id": 283,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 91,
+        "end_line_number": 91,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "284": {
+        "node_id": 284,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 91,
+        "end_line_number": 91,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "285": {
+        "node_id": 285,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Assign",
+        "line_number": 92,
+        "end_line_number": 92,
+        "col_offset": 0,
+        "end_col_offset": 39
+    },
+    "286": {
+        "node_id": 286,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 92,
+        "end_line_number": 92,
+        "col_offset": 0,
+        "end_col_offset": 13
+    },
+    "287": {
+        "node_id": 287,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Store",
+        "line_number": 92,
+        "end_line_number": 92,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "288": {
+        "node_id": 288,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 92,
+        "end_line_number": 92,
+        "col_offset": 16,
+        "end_col_offset": 39
+    },
+    "289": {
+        "node_id": 289,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Attribute",
+        "line_number": 92,
+        "end_line_number": 92,
+        "col_offset": 16,
+        "end_col_offset": 36
+    },
+    "290": {
+        "node_id": 290,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 92,
+        "end_line_number": 92,
+        "col_offset": 16,
+        "end_col_offset": 29
+    },
+    "291": {
+        "node_id": 291,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 92,
+        "end_line_number": 92,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "292": {
+        "node_id": 292,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 92,
+        "end_line_number": 92,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "293": {
+        "node_id": 293,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Constant",
+        "line_number": 92,
+        "end_line_number": 92,
+        "col_offset": 37,
+        "end_col_offset": 38
+    },
+    "294": {
+        "node_id": 294,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Expr",
+        "line_number": 93,
+        "end_line_number": 93,
+        "col_offset": 0,
+        "end_col_offset": 19
+    },
+    "295": {
+        "node_id": 295,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Call",
+        "line_number": 93,
+        "end_line_number": 93,
+        "col_offset": 0,
+        "end_col_offset": 19
+    },
+    "296": {
+        "node_id": 296,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 93,
+        "end_line_number": 93,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "297": {
+        "node_id": 297,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 93,
+        "end_line_number": 93,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "298": {
+        "node_id": 298,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Name",
+        "line_number": 93,
+        "end_line_number": 93,
+        "col_offset": 5,
+        "end_col_offset": 18
+    },
+    "299": {
+        "node_id": 299,
+        "path": "tests/folder\\pruebas.py",
+        "class_name": "Load",
+        "line_number": 93,
+        "end_line_number": 93,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "300": {
+        "node_id": 300,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Module",
+        "line_number": "None",
+        "end_line_number": "None",
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "301": {
+        "node_id": 301,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "ClassDef",
+        "line_number": 1,
+        "end_line_number": 4,
+        "col_offset": 0,
+        "end_col_offset": 24
+    },
+    "302": {
+        "node_id": 302,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "ClassDef",
+        "line_number": 2,
+        "end_line_number": 4,
+        "col_offset": 4,
+        "end_col_offset": 24
+    },
+    "303": {
+        "node_id": 303,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "FunctionDef",
+        "line_number": 3,
+        "end_line_number": 4,
+        "col_offset": 8,
+        "end_col_offset": 24
+    },
+    "304": {
+        "node_id": 304,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "arguments",
+        "line_number": 3,
+        "end_line_number": 4,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "305": {
+        "node_id": 305,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "arg",
+        "line_number": 3,
+        "end_line_number": 3,
+        "col_offset": 14,
+        "end_col_offset": 18
+    },
+    "306": {
+        "node_id": 306,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Expr",
+        "line_number": 4,
+        "end_line_number": 4,
+        "col_offset": 12,
+        "end_col_offset": 24
+    },
+    "307": {
+        "node_id": 307,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Yield",
+        "line_number": 4,
+        "end_line_number": 4,
+        "col_offset": 12,
+        "end_col_offset": 24
+    },
+    "308": {
+        "node_id": 308,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Constant",
+        "line_number": 4,
+        "end_line_number": 4,
+        "col_offset": 18,
+        "end_col_offset": 24
+    },
+    "309": {
+        "node_id": 309,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Expr",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 0,
+        "end_col_offset": 27
+    },
+    "310": {
+        "node_id": 310,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Call",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 0,
+        "end_col_offset": 27
+    },
+    "311": {
+        "node_id": 311,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "312": {
+        "node_id": 312,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "313": {
+        "node_id": 313,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Call",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 5,
+        "end_col_offset": 26
+    },
+    "314": {
+        "node_id": 314,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Attribute",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 5,
+        "end_col_offset": 24
+    },
+    "315": {
+        "node_id": 315,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Call",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 5,
+        "end_col_offset": 22
+    },
+    "316": {
+        "node_id": 316,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Attribute",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 5,
+        "end_col_offset": 20
+    },
+    "317": {
+        "node_id": 317,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Call",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 5,
+        "end_col_offset": 13
+    },
+    "318": {
+        "node_id": 318,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": 5,
+        "end_col_offset": 11
+    },
+    "319": {
+        "node_id": 319,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "320": {
+        "node_id": 320,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "321": {
+        "node_id": 321,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 7,
+        "end_line_number": 7,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "322": {
+        "node_id": 322,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "ClassDef",
+        "line_number": 9,
+        "end_line_number": 10,
+        "col_offset": 0,
+        "end_col_offset": 8
+    },
+    "323": {
+        "node_id": 323,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Pass",
+        "line_number": 10,
+        "end_line_number": 10,
+        "col_offset": 4,
+        "end_col_offset": 8
+    },
+    "324": {
+        "node_id": 324,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "FunctionDef",
+        "line_number": 12,
+        "end_line_number": 13,
+        "col_offset": 0,
+        "end_col_offset": 16
+    },
+    "325": {
+        "node_id": 325,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "arguments",
+        "line_number": 12,
+        "end_line_number": 13,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "326": {
+        "node_id": 326,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Expr",
+        "line_number": 13,
+        "end_line_number": 13,
+        "col_offset": 4,
+        "end_col_offset": 16
+    },
+    "327": {
+        "node_id": 327,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Yield",
+        "line_number": 13,
+        "end_line_number": 13,
+        "col_offset": 4,
+        "end_col_offset": 16
+    },
+    "328": {
+        "node_id": 328,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Constant",
+        "line_number": 13,
+        "end_line_number": 13,
+        "col_offset": 10,
+        "end_col_offset": 16
+    },
+    "329": {
+        "node_id": 329,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Expr",
+        "line_number": 15,
+        "end_line_number": 15,
+        "col_offset": 0,
+        "end_col_offset": 7
+    },
+    "330": {
+        "node_id": 330,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Call",
+        "line_number": 15,
+        "end_line_number": 15,
+        "col_offset": 0,
+        "end_col_offset": 7
+    },
+    "331": {
+        "node_id": 331,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 15,
+        "end_line_number": 15,
+        "col_offset": 0,
+        "end_col_offset": 5
+    },
+    "332": {
+        "node_id": 332,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 15,
+        "end_line_number": 15,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "333": {
+        "node_id": 333,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Assign",
+        "line_number": 17,
+        "end_line_number": 17,
+        "col_offset": 0,
+        "end_col_offset": 11
+    },
+    "334": {
+        "node_id": 334,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 17,
+        "end_line_number": 17,
+        "col_offset": 0,
+        "end_col_offset": 1
+    },
+    "335": {
+        "node_id": 335,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Store",
+        "line_number": 17,
+        "end_line_number": 17,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "336": {
+        "node_id": 336,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Call",
+        "line_number": 17,
+        "end_line_number": 17,
+        "col_offset": 4,
+        "end_col_offset": 11
+    },
+    "337": {
+        "node_id": 337,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 17,
+        "end_line_number": 17,
+        "col_offset": 4,
+        "end_col_offset": 9
+    },
+    "338": {
+        "node_id": 338,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 17,
+        "end_line_number": 17,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "339": {
+        "node_id": 339,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Assign",
+        "line_number": 19,
+        "end_line_number": 19,
+        "col_offset": 0,
+        "end_col_offset": 7
+    },
+    "340": {
+        "node_id": 340,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 19,
+        "end_line_number": 19,
+        "col_offset": 0,
+        "end_col_offset": 1
+    },
+    "341": {
+        "node_id": 341,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Store",
+        "line_number": 19,
+        "end_line_number": 19,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "342": {
+        "node_id": 342,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Call",
+        "line_number": 19,
+        "end_line_number": 19,
+        "col_offset": 4,
+        "end_col_offset": 7
+    },
+    "343": {
+        "node_id": 343,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 19,
+        "end_line_number": 19,
+        "col_offset": 4,
+        "end_col_offset": 5
+    },
+    "344": {
+        "node_id": 344,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 19,
+        "end_line_number": 19,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "345": {
+        "node_id": 345,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Expr",
+        "line_number": 20,
+        "end_line_number": 20,
+        "col_offset": 0,
+        "end_col_offset": 7
+    },
+    "346": {
+        "node_id": 346,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Call",
+        "line_number": 20,
+        "end_line_number": 20,
+        "col_offset": 0,
+        "end_col_offset": 7
+    },
+    "347": {
+        "node_id": 347,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 20,
+        "end_line_number": 20,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "348": {
+        "node_id": 348,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 20,
+        "end_line_number": 20,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "349": {
+        "node_id": 349,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 20,
+        "end_line_number": 20,
+        "col_offset": 5,
+        "end_col_offset": 6
+    },
+    "350": {
+        "node_id": 350,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 20,
+        "end_line_number": 20,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "351": {
+        "node_id": 351,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Expr",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": 0,
+        "end_col_offset": 9
+    },
+    "352": {
+        "node_id": 352,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Call",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": 0,
+        "end_col_offset": 9
+    },
+    "353": {
+        "node_id": 353,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": 0,
+        "end_col_offset": 4
+    },
+    "354": {
+        "node_id": 354,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "355": {
+        "node_id": 355,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Call",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": 5,
+        "end_col_offset": 8
+    },
+    "356": {
+        "node_id": 356,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Name",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": 5,
+        "end_col_offset": 6
+    },
+    "357": {
+        "node_id": 357,
+        "path": "tests/folder\\prueba_simple.py",
+        "class_name": "Load",
+        "line_number": 21,
+        "end_line_number": 21,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "358": {
+        "node_id": 358,
+        "path": "tests/folder\\relativeimports.py",
+        "class_name": "Module",
+        "line_number": "None",
+        "end_line_number": "None",
+        "col_offset": "None",
+        "end_col_offset": "None"
+    },
+    "359": {
+        "node_id": 359,
+        "path": "tests/folder\\relativeimports.py",
+        "class_name": "ImportFrom",
+        "line_number": 1,
+        "end_line_number": 1,
+        "col_offset": 0,
+        "end_col_offset": 35
+    },
+    "360": {
+        "node_id": 360,
+        "path": "tests/folder\\relativeimports.py",
+        "class_name": "alias",
+        "line_number": 1,
+        "end_line_number": 1,
+        "col_offset": "None",
+        "end_col_offset": "None"
+    }
+}
