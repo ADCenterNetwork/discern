@@ -23,7 +23,7 @@ _Note: Initially, this work has been done around "yield" patterns, but ideally w
 
 ---
 
-## What does the user need?
+## What do we need to run the project?
 
 
 When Discern development is complete and a user is ready to use it, he should first understand what does Discern provide to him.
