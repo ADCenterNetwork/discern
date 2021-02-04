@@ -564,30 +564,6 @@ class FolderCalls():
             writer.writeheader() 
             writer.writerows(write_rows) 
 
-
-        #Here we have, commented, a possibility to manipulate the node information because some nodes doesn't have attributes like line number.
-        """
-        i=0
-        for root, directories, files in os.walk(self.path):
-            for filename in files:
-                filepath = os.path.join(root, filename)
-                if filename.endswith('.py') and not filename.startswith('__init__'):
-                    for node in ast.walk(ast.parse( open(filepath, encoding="iso-8859-15", errors='ignore').read() )):
-                        self.ids[node] = i
-
-                        try:
-                            self.sourcemapmanip[i] = {"path":filepath, "class_name": node.__class__.__name__, "line_number": node.lineno, "end_line_number": node.end_lineno, "col_offset": node.col_offset, "end_col_offset": node.end_col_offset}
-                        except:
-                            try:
-                                self.sourcemapmanip[i] = {"path":filepath, "class_name": node.__class__.__name__, "line_number": self.sourcemap[i-1]["line_number"], "end_line_number": self.sourcemapmanip[str(i-1)]["end_line_number"], "col_offset": node.col_offset, "end_col_offset": node.end_col_offset}
-                            except:
-                                self.sourcemapmanip[i] = {"path":filepath, "class_name": node.__class__.__name__, "line_number": self.sourcemapmanip[str(i-1)]["line_number"], "end_line_number": self.sourcemapmanip[str(i-1)]["end_line_number"], "col_offset": None, "end_col_offset": None}
-                        i+=1
-
-        with open('sourcemap_manip_'+nameproject+'.json','w', encoding="iso-8859-15", errors='ignore') as f:
-            json.dump(self.sourcemapmanip, f, indent=4)
-        """
-
         endci = time.time()
         print("Tiempo sourcemap", endci-startci)
 

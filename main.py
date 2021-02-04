@@ -1,5 +1,4 @@
 from generatorfind.generatorfind import Discern2, FolderCalls, saveast
-from fulltree.fulltree import core, FullTree
 #from repos.respos import download_repos, get_repos
 import sys, os, time, shutil
 
@@ -34,11 +33,7 @@ def main(name):
         for i in range(len(script.generators)):
             print('\n', i, ': \n', script.generators[i])
         print("----------")
-        '''
-        
-        #pj = FullTree(sys.argv[-1])
-        #core(pj)
-        
+        '''        
         # TO DO 
         #get_repos(ls)
         
