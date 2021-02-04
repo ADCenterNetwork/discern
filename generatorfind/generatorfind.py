@@ -310,6 +310,13 @@ class Discern2():
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'If']
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'For']
             self.generators[i] = [item for item in self.generators[i] if item.__class__.__name__ != 'Try']
+            #we add this last step to only get the unique elements
+            #because of how we construct this function, there may be repeated elements, which is redundant
+            aux = []
+            for ls in self.generators:
+                if ls not in aux:
+                    aux.append(ls)
+            self.generators = aux[:]
         return self.generators
             
     def assign_call_find(self, node = None):
