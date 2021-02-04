@@ -61,19 +61,22 @@ So, for instance, if in a certain `file.py` of our code we have the following st
 2    def generator:
 3        yield 'example'
 ```
-Then in `patterns.txt` we will get the following result:
+Then in `patterns.yml` we will get the following result:
 ```
 project/file.py:
-    generator pattern
-        lines 1-3
-        namespace: ['Example', 'generator']
+    pattern: 
+        element:           generator
+        line_number:       1
+        end_line_number:   3
+        namespace:         ['Example', 'generator']
 ```
 Plus, if this generator is called in `file2.py`, then we would get the following:
 ```
-project/file2.py
-    generator callsite
-        line *line number*
-        namespace: ['file', 'Example', 'generator']
+project/file2.py:
+    callsite:
+        line_number:       27
+        end_line_number:   27
+        namespace:         ['file', 'Example', 'generator']
 ```
 In a similar way, we would get an equivalent output for patterns like singletons, decorators, composites, etc.
 
