@@ -3,3 +3,5 @@ astree.txt
 .vscode
 .csv
 .json
+*.csv
+*.json

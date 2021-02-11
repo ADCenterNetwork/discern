@@ -64,7 +64,8 @@ def main(name):
     
         script = FolderCalls(name)
         script.files_with_generators()
-        script.callsites()
+        print('Los calls son: ')
+        print(script.callsites())
         script.createids()
         
 

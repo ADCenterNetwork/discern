@@ -574,7 +574,7 @@ class FolderCalls():
             for filename in files:
                 filepath = os.path.join(root, filename)
                 if filename.endswith('.py') and not filename.startswith('__init__'):
-                    filecode = Discern2(filepath, self.modules)
+                    filecode = Discern2(filepath, [])
                     if filecode._generatorfind() != []:
                         self.modules.append(filepath)
         enddetect = time.time()
@@ -596,5 +596,6 @@ class FolderCalls():
                     #self.allcall[filename] = filecode.assign_call_find()
                     #I think next line should be removed.
                     self.sourcemapfolder[str(filepath)] = {"yields":filecode.sourcemapyield(), "callsites": filecode.smdef}
-                    self.allcall[filename] = filecode.calls
+                    if filecode.calls != {}:
+                        self.allcall[filename] = filecode.calls
         return self.allcall
