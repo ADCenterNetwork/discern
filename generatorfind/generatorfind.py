@@ -89,7 +89,7 @@ class Discern2():
         Args:
             name ([string]): [The name of the file that we are obtaining information when we execute _generatorfind.py ]
         """
-        self.tree = ast.parse( open(name, encoding="iso-8859-15", errors='ignore').read() )
+        self.tree = ast.parse( open(name).read() )
         self.generators = []
         self.path = name
         self.calls = {}
@@ -514,24 +514,21 @@ class FolderCalls():
         self.contador = 0
     
     #We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
-    def iternodes(self, filepath, node, contador):
+    def iternodes(self, filepath, node, contador, padre = None):
         self.ids[node] = [self.contador, filepath]
-        padre = self.contador - 1
+        #padre = self.contador - 1
         if node.__class__.__name__== "Module":
-            self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": "None", "end_line_number": "None", "col_offset": "None", "end_col_offset": "None"}
+            self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": "None", "end_line_number": "None", "col_offset": "None", "end_col_offset": "None", 'parent': "None", "Generator": 0}
         else:
             try:
-                self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": node.lineno, "end_line_number": node.end_lineno, "col_offset": node.col_offset, "end_col_offset": node.end_col_offset}
+                self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": node.lineno, "end_line_number": node.end_lineno, "col_offset": node.col_offset, "end_col_offset": node.end_col_offset, "parent_id": padre, "Generator": 0}
             except:
-                try:
-                    self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": self.sourcemap[self.contador-1]["line_number"], "end_line_number": self.sourcemap[self.contador-1]["end_line_number"], "col_offset": node.col_offset, "end_col_offset": node.end_col_offset}
-                except:
-                    self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": self.sourcemap[self.contador-1]["line_number"], "end_line_number": self.sourcemap[self.contador-1]["end_line_number"], "col_offset": "None", "end_col_offset": "None"}
-        
+                self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": "None", "end_line_number": "None", "col_offset": "None", "end_col_offset": "None", "parent_id": padre, "Generator": 0}
+        padre = self.contador
         self.contador += 1     
         if ast.iter_child_nodes(node):
             for child in ast.iter_child_nodes(node):
-                self.iternodes(filepath, child, self.contador)
+                self.iternodes(filepath, child, self.contador, padre)
 
     def createids(self):
         startci = time.time()
