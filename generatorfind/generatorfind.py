@@ -518,7 +518,7 @@ class FolderCalls():
         self.ids[node] = [self.contador, filepath]
         #padre = self.contador - 1
         if node.__class__.__name__== "Module":
-            self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": "None", "end_line_number": "None", "col_offset": "None", "end_col_offset": "None", 'parent': "None", "Generator": 0}
+            self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": "None", "end_line_number": "None", "col_offset": "None", "end_col_offset": "None", 'parent_id': "None", "Generator": 0}
         else:
             try:
                 self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": node.lineno, "end_line_number": node.end_lineno, "col_offset": node.col_offset, "end_col_offset": node.end_col_offset, "parent_id": padre, "Generator": 0}
@@ -550,7 +550,7 @@ class FolderCalls():
         with open('sourcemap_'+nameproject+'.json','w', encoding="iso-8859-15", errors='ignore') as f:
             json.dump(self.sourcemap, f, indent=4)
 
-        field_names = ["node_id", "path", "class_name", "line_number", "end_line_number", "col_offset", "end_col_offset"]
+        field_names = ["node_id", "path", "class_name", "line_number", "end_line_number", "col_offset", "end_col_offset", "parent_id", "Generator"]
         write_rows = []
         for i in self.sourcemap.keys():
             write_rows.append(self.sourcemap[i])
