@@ -89,7 +89,7 @@ class Discern2():
         Args:
             name ([string]): [The name of the file that we are obtaining information when we execute _generatorfind.py ]
         """
-        self.tree = ast.parse( open(name).read() )
+        self.tree = ast.parse( open(name, encoding="iso-8859-15", errors='ignore').read() )
         self.generators = []
         self.path = name
         self.calls = {}
@@ -512,18 +512,29 @@ class FolderCalls():
         self.sourcemap = {}
         self.sourcemapmanip = {}
         self.contador = 0
+        self.node_classification = {}
+
+    def node_classifier(self):
+        file_path = os.path.join(sys.path[0], 'typenodes.txt')
+        with open(file_path) as f:
+            i = 0
+            for node_type in f:
+                node_type = node_type.split('\n')[0]
+                self.node_classification[node_type] = i
+                i += 1
     
     #We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
     def iternodes(self, filepath, node, contador, padre = None):
         self.ids[node] = [self.contador, filepath]
+        self.node_classifier()
         #padre = self.contador - 1
         if node.__class__.__name__== "Module":
-            self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": "None", "end_line_number": "None", "col_offset": "None", "end_col_offset": "None", 'parent': "None", "Generator": 0}
+            self.sourcemap[self.contador] = { "class_name": self.node_classification[node.__class__.__name__], "parent_id": -1, "Generator": 0}
         else:
             try:
-                self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": node.lineno, "end_line_number": node.end_lineno, "col_offset": node.col_offset, "end_col_offset": node.end_col_offset, "parent_id": padre, "Generator": 0}
+                self.sourcemap[self.contador] = {"class_name": self.node_classification[node.__class__.__name__], "parent_id": padre, "Generator": 0}
             except:
-                self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, "line_number": "None", "end_line_number": "None", "col_offset": "None", "end_col_offset": "None", "parent_id": padre, "Generator": 0}
+                self.sourcemap[self.contador] = {"path":filepath, "class_name": self.node_classification[node.__class__.__name__], "parent_id": padre, "Generator": 0}
         padre = self.contador
         self.contador += 1     
         if ast.iter_child_nodes(node):
@@ -550,7 +561,7 @@ class FolderCalls():
         with open('sourcemap_'+nameproject+'.json','w', encoding="iso-8859-15", errors='ignore') as f:
             json.dump(self.sourcemap, f, indent=4)
 
-        field_names = ["node_id", "path", "class_name", "line_number", "end_line_number", "col_offset", "end_col_offset"]
+        field_names = ["class_name", "parent_id", "Generator"]
         write_rows = []
         for i in self.sourcemap.keys():
             write_rows.append(self.sourcemap[i])
