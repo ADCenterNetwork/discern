@@ -534,7 +534,7 @@ class FolderCalls():
             try:
                 self.sourcemap[self.contador] = {"class_name": self.node_classification[node.__class__.__name__], "parent_id": padre, "Generator": 0}
             except:
-                self.sourcemap[self.contador] = {"path":filepath, "class_name": self.node_classification[node.__class__.__name__], "parent_id": padre, "Generator": 0}
+                self.sourcemap[self.contador] = {"class_name": self.node_classification[node.__class__.__name__], "parent_id": padre, "Generator": 0}
         padre = self.contador
         self.contador += 1     
         if ast.iter_child_nodes(node):
@@ -560,7 +560,6 @@ class FolderCalls():
         #We create .json file.
         with open('sourcemap_'+nameproject+'.json','w', encoding="iso-8859-15", errors='ignore') as f:
             json.dump(self.sourcemap, f, indent=4)
-
         field_names = ["class_name", "parent_id", "Generator"]
         write_rows = []
         for i in self.sourcemap.keys():
