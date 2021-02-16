@@ -566,13 +566,13 @@ class FolderCalls():
             write_rows.append(self.sourcemap[i])
 
         #We create .csv file.
-        with open('sourcemap_'+nameproject+'.csv','w', encoding="iso-8859-15", errors='ignore') as csvfile:
+        with open('node_classifier_'+nameproject+'.csv','w', encoding="iso-8859-15", errors='ignore') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames = field_names) 
             writer.writeheader() 
             writer.writerows(write_rows) 
 
         endci = time.time()
-        print("Tiempo sourcemap", endci-startci)
+        print("Tiempo node_classifier", endci-startci)
 
     def files_with_generators(self):
         startdetect = time.time()
