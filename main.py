@@ -44,7 +44,7 @@ def processFolder(name):
     script.files_with_generators()
     print('Los calls son: ')
     print(script.callsites())
-    script.createids()
+    script.labelCreator()
 
 def getFilePathsFromParam2():
     ls = sys.argv[2:]

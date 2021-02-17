@@ -5,7 +5,7 @@ import os, pytest, shutil
 #print(os.getcwd())
 from generatorfind.folderCalls import FolderCalls
 from generatorfind.discern2 import Discern2
-from generatorfind.discern import Discern
+
 
 
 
@@ -66,62 +66,11 @@ def setup_discern2_relativeimports():
     prueba = Discern2(path, [os.path.abspath("tests\\ejemplo\\prueba_simple.py")])
     return prueba
 
-def test_namespace_pruebas(setup):
-    """test_namespace_pruebas asserts that namespaces obtains the expected value on a simple file.
-    """
-    assert setup._generatorfind() == [['Clase1_1', 'Clase1_2', 'firstn'], \
-        ['Clase1_1', 'Clase1_3', 'firstn'], \
-        ['Clase2_1', 'Clase2_2', 'firstn'], ['primera', 'segunda', 'qsfn'], ['generator']]
-
-def test_callsites_pruebas(setup):
-    """test_callsites_pruebas will check that the calls to the generators are the expected on a simple file.
-    """
-    assert setup.assign_call_find() ==  {('generator',): [41, 43, 44], ('Clase1_1', 'Clase1_2', 'firstn'): [49, 56, 68, 70, 77], ('Clase1_1', 'Clase1_3', 'firstn'): [62, 64], 
-('Clase2_1', 'Clase2_2', 'firstn'): [85, 89, 92, 93]}
-
-def test_namespace_pruebas_assign(setup_pruebas_assign):
-    """test_namespace_pruebas asserts that namespaces obtains the expected value on a simple file.
-    """
-    assert setup_pruebas_assign._generatorfind() == [['Clase1', 'funcion']]
-
-def test_callsites_pruebas_assign(setup_pruebas_assign):
-    """test_callsites_pruebas will check that the calls to the generators are the expected on a simple file.
-    """
-    assert setup_pruebas_assign.assign_call_find() ==  {('Clase1', 'funcion'): [8, 10]}
-
-def test_namespace_imports(setup_imports):
-    """test_namespace_imports asserts that namespaces obtains the expected value with a specific
-    case in which generators are in other imported files.
-    """
-    assert setup_imports._generatorfind() == [['folder', 'pruebas', 'Clase1_1', 'Clase1_2', 'firstn'], \
-        ['folder','pruebas', 'Clase1_1', 'Clase1_3', 'firstn'], \
-        ['folder','pruebas', 'Clase2_1', 'Clase2_2', 'firstn'], \
-        ['folder','pruebas', 'primera', 'segunda', 'qsfn'], \
-        ['folder','pruebas', 'generator']]
-
-def test_callsites_imports(setup_imports):
-    """test_callsites_imports will check that the calls to the generators are the expected with a specific
-    case in which generators are in other imported files.
-    """
-    assert setup_imports.assign_call_find() ==  {('folder','pruebas', 'Clase1_1', 'Clase1_2', 'firstn'): [3]}
-
-def test_callsites_importfrom(setup_importfrom):
-    """test_callsites_importfrom will check that the calls to the generators are the expected with a specific
-    case in which generators are imported with ImportFrom statements.
-    """
-    assert setup_importfrom.assign_call_find() ==  {('pruebas', 'Clase1_1', 'Clase1_2', 'firstn'): [4]}
-
-
-def test_generatorfind_multiple_assign(setup_multiple_assign):
-    """test_generatorfind_multiple_assign will check that discern works succesfully with multiple
-    imports of generators at the same line.
-    """
-    assert setup_multiple_assign.assign_call_find() =={('Clase', 'f'):[9,11], ('Clase2', 'g'):[9,13]}
 
 def test_generatorfind_folder(setup_folder):
-    """test_generatorfind_folder will check one bonus functionality on this software: we will input a folder, 
-    and the software will give us the namespace of the generators on the python files inside the input folder.
-    Actually, this is not the main functionality of the software.
+    """We input a folder, 
+    and the software will give us the namespace of the generators on the python files 
+    inside the input folder.
     """
     assert setup_folder.callsites()  == {'pruebas.py': {('generator',): [41, 43, 44], ('Clase1_1', 'Clase1_2', 'firstn'): [49, 56, 68, 70, 77], ('Clase1_1', 'Clase1_3', 'firstn'): [62, 64], ('Clase2_1', 'Clase2_2', 'firstn'): [85, 89, 92, 93]}, 'prueba_simple.py': {('Clase1', 'Clase2', 'f'): [7], ('f',): [7, 19, 20, 21]}}
 

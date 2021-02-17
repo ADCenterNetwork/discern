@@ -19,19 +19,36 @@ class FolderCalls():
         self.contador = 0
         self.node_classification = {}
 
-    def node_classifier(self):
-        file_path = os.path.join(sys.path[0], 'typenodes.txt')
-        with open(file_path) as f:
-            i = 0
-            for node_type in f:
-                node_type = node_type.split('\n')[0]
-                self.node_classification[node_type] = i
-                i += 1
+    def labelCreator(self):
+        startci = time.time()
+        folder_path = self.createFolderForLabels()
+        for root, directories, files in os.walk(self.path):
+            for filename in files:
+                filepath = os.path.join(root, filename)
+                if filename.endswith('.py') and not filename.startswith('__init__'):
+                    tree = ast.parse(open(filepath, encoding="iso-8859-15", errors='ignore').read())
+                    self.nodeAttributeCreator(filepath, tree, self.contador)  
+                    #We create .csv file.
+                    self.labelFileCreator(filename, folder_path)
+
+        endci = time.time()
+        print("Tiempo nodeToNumber", endci-startci)
+    
+    def createFolderForLabels(self):
+        nameproject = self.getNameProject()
+        path = "LabelFolder_" + nameproject
+        path = os.path.join(os.getcwd(), path)
+        try:
+            os.mkdir(path)
+        except FileExistsError:
+            os.rmdir(path)
+            os.mkdir(path)
+        return path
     
     #We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
-    def iternodes(self, filepath, node, contador, padre = None):
+    def nodeAttributeCreator(self, filepath, node, contador, padre = None):
         self.ids[node] = [self.contador, filepath]
-        self.node_classifier()
+        self.nodeToNumber()
         #padre = self.contador - 1
         if node.__class__.__name__== "Module":
             self.sourcemap[self.contador] = { "class_name": self.node_classification[node.__class__.__name__], "parent_id": -1, "Generator": 0}
@@ -44,40 +61,38 @@ class FolderCalls():
         self.contador += 1     
         if ast.iter_child_nodes(node):
             for child in ast.iter_child_nodes(node):
-                self.iternodes(filepath, child, self.contador, padre)
+                self.nodeAttributeCreator(filepath, child, self.contador, padre)
 
-    def createids(self):
-        startci = time.time()
-        for root, directories, files in os.walk(self.path):
-            for filename in files:
-                filepath = os.path.join(root, filename)
-                if filename.endswith('.py') and not filename.startswith('__init__'):
-                    tree = ast.parse(open(filepath, encoding="iso-8859-15", errors='ignore').read())
-                    self.iternodes(filepath, tree, self.contador)  
+    def nodeToNumber(self):
+        file_path = os.path.join(sys.path[0], 'typenodes.txt')
+        with open(file_path) as f:
+            i = 0
+            for node_type in f:
+                node_type = node_type.split('\n')[0]
+                self.node_classification[node_type] = i
+                i += 1
 
-        #We want to create the names of the .csv and .json files.
-        project = str(self.path).split('/')
-        if project[-1] != '':
-            nameproject = project[-1]
-        else:
-            nameproject = project[-2]
+    
+    
+    def getNameProject(self):
+        return os.path.basename(os.path.normpath(self.path))
 
-        #We create .json file.
-        with open('sourcemap_'+nameproject+'.json','w', encoding="iso-8859-15", errors='ignore') as f:
-            json.dump(self.sourcemap, f, indent=4)
+
+    
+    def labelFileCreator(self, nameproject, folder_path):
         field_names = ["class_name", "parent_id", "Generator"]
-        write_rows = []
-        for i in self.sourcemap.keys():
-            write_rows.append(self.sourcemap[i])
-
-        #We create .csv file.
-        with open('node_classifier_'+nameproject+'.csv','w', encoding="iso-8859-15", errors='ignore') as csvfile:
+        write_rows = self.writeRows()
+        file_path = os.path.join(folder_path, 'label_'+nameproject+'.csv')
+        with open(file_path,'w', encoding="iso-8859-15", errors='ignore') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames = field_names) 
             writer.writeheader() 
             writer.writerows(write_rows) 
 
-        endci = time.time()
-        print("Tiempo node_classifier", endci-startci)
+    def writeRows(self):
+        write_rows = []
+        for i in self.sourcemap.keys():
+            write_rows.append(self.sourcemap[i])
+        return write_rows
 
     def files_with_generators(self):
         startdetect = time.time()
