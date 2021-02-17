@@ -3,7 +3,8 @@ import os, pytest, shutil
 
 #print(sys.path)
 #print(os.getcwd())
-from generatorfind.generatorfind import FolderCalls, Discern2
+from generatorfind.folderCalls import FolderCalls
+from generatorfind.discern2 import Discern2
 from generatorfind.discern import Discern
 
 
