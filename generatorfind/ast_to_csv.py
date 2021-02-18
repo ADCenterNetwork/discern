@@ -1,15 +1,11 @@
-import ast, sys, os
+import ast, sys, os, shutil
 import time
 import csv
 
 class AstToCsv():
     def __init__(self, name):
         self.path = name
-        self.sourcemapfolder = {} 
-        self.modules = []
-        self.ids = {}
         self.sourcemap = {}
-        self.sourcemapmanip = {}
         self.contador = 0
         self.node_classification = {}
 
@@ -35,13 +31,13 @@ class AstToCsv():
         try:
             os.mkdir(path)
         except FileExistsError:
-            os.rmdir(path)
+            shutil.rmtree(path, ignore_errors=True)
             os.mkdir(path)
         return path
     
     #We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
     def nodeAttributeCreator(self, filepath, node, contador, padre = None):
-        self.ids[node] = [self.contador, filepath]
+        #self.ids[node] = [self.contador, filepath]
         self.nodeToNumber()
         #padre = self.contador - 1
         if node.__class__.__name__== "Module":

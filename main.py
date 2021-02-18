@@ -1,11 +1,14 @@
 from generatorfind.discern2 import Discern2
 from generatorfind.folderCalls import FolderCalls
 import sys, os, time
+import click
 
 '''
 Discer2 is used when we only work with one file, 
 and FolderCalls is for folders
 '''
+@click.command()
+@click.argument('name', nargs = 1)
 def main(name):
     start = time.time()
     if isOnePythonFile(name):
@@ -64,13 +67,14 @@ def printExecTime(start):
         print('Execution time:', end-start, 'seconds.')
     print('-----------------------------------------------------------------------------------------------------\n')
 
+'''
 if __name__ == '__main__':
     if len(sys.argv) >= 2:
         main(sys.argv[1])
     else:
         raise IndexError('Expected at least two arguments')
-    
+'''
 
-
-
+if __name__ == '__main__':
+    main()
 

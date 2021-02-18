@@ -1,4 +1,4 @@
-import ast, sys, os
+import ast, sys, os, shutil
 import json
 from ast2json import ast2json
 import time
@@ -6,6 +6,7 @@ from io import open
 from setuptools import setup
 import csv
 from .discern2 import Discern2
+
 
 class FolderCalls():
     def __init__(self, name):
@@ -41,7 +42,7 @@ class FolderCalls():
         try:
             os.mkdir(path)
         except FileExistsError:
-            os.rmdir(path)
+            shutil.rmtree(path, ignore_errors=True)
             os.mkdir(path)
         return path
     
