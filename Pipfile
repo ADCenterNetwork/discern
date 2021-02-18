@@ -9,6 +9,7 @@ verify_ssl = true
 ast2json = "*"
 pytest = "*"
 gitpython = "*"
+click = "*"
 
 [requires]
 python_version = "3.8"
