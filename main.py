@@ -1,22 +1,31 @@
 from generatorfind.discern2 import Discern2
 from generatorfind.folderCalls import FolderCalls
+from generatorfind.ast_to_csv import AstToCsv
 import sys, os, time
 import click
 
 '''
-Discer2 is used when we only work with one file, 
+Discern2 is used when we only work with one file, 
 and FolderCalls is for folders
 '''
 @click.command()
 @click.argument('name', nargs = 1)
-def main(name):
+@click.option('--ast', is_flag = True, help='This generates a .csv file with the AST')
+def main(name, ast):
     start = time.time()
-    if isOnePythonFile(name):
-        # name is a python file name
-        processPythonFile(name)
-    else: 
-        # name is a folder
-        processFolder(name)
+    if ast:
+        if isOnePythonFile(name):
+            raise Exception('We can only generate ASTs of full projects')
+        else:
+            generate_ast = AstToCsv(name)
+            generate_ast.labelCreator()
+    else:
+        if isOnePythonFile(name):
+            # name is a python file name
+            processPythonFile(name)
+        else: 
+            # name is a folder
+            processFolder(name)
 
     printExecTime(start)
 
@@ -47,7 +56,6 @@ def processFolder(name):
     script.files_with_generators()
     print('Los calls son: ')
     print(script.callsites())
-    script.labelCreator()
 
 def getFilePathsFromParam2():
     ls = sys.argv[2:]
@@ -67,13 +75,7 @@ def printExecTime(start):
         print('Execution time:', end-start, 'seconds.')
     print('-----------------------------------------------------------------------------------------------------\n')
 
-'''
-if __name__ == '__main__':
-    if len(sys.argv) >= 2:
-        main(sys.argv[1])
-    else:
-        raise IndexError('Expected at least two arguments')
-'''
+
 
 if __name__ == '__main__':
     main()
