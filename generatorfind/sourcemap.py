@@ -1,4 +1,4 @@
-import ast, sys, os
+import ast, sys, os, shutil
 import time
 import csv
 import json
@@ -35,6 +35,15 @@ def get_name(node):
                         return x
                     except AttributeError:
                         return None
+
+
+def eraseFile(path):
+        if os.path.exists(path):
+            try:
+                os.remove(path)
+            except PermissionError('Please Close file first'):
+                pass
+
 
 class Sourcemap():
     def __init__(self, name):
@@ -104,7 +113,9 @@ class Sourcemap():
         return nameproject
 
     def createJson(self, nameproject):
-        with open('sourcemap_'+nameproject+'.json','w', encoding="iso-8859-15", errors='ignore') as f:
+        path = 'sourcemap_'+nameproject+'.json'
+        eraseFile(path)
+        with open(path,'w', encoding="iso-8859-15", errors='ignore') as f:
             json.dump(self.sourcemap, f, indent=4)
 
     def createRows(self):
@@ -116,7 +127,10 @@ class Sourcemap():
         return field_names, write_rows
 
     def createCsv(self, nameproject, field_names, write_rows):
-        with open('sourcemap_'+nameproject+'.csv','w', encoding="iso-8859-15", errors='ignore') as csvfile:
+        path = 'sourcemap_'+nameproject+'.csv'
+        eraseFile(path)
+        with open(path,'w', encoding="iso-8859-15", errors='ignore') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames = field_names) 
             writer.writeheader() 
             writer.writerows(write_rows) 
+
