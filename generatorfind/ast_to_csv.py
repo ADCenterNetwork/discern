@@ -3,39 +3,7 @@ import time
 import csv
 
 
-def onerror(func, path, exc_info):
-        """
-        Error handler for ``shutil.rmtree``.
 
-        From https://stackoverflow.com/a/2656405
-
-        If the error is due to an access error (read only file)
-        it attempts to add write permission and then retries.
-
-        If the error is for another reason it re-raises the error.
-
-        Usage : ``shutil.rmtree(path, onerror=onerror)``
-        """
-        import stat
-        if not os.access(path, os.W_OK):
-            # Is the error an access error ?
-            os.chmod(path, stat.S_IWUSR)
-            func(path)
-        else:
-            raise Exception("Cannot delete dir with shutil.rmtree")
-
-
-def nukedir(dir):
-    if dir[-1] == os.sep: dir = dir[:-1]
-    files = os.listdir(dir)
-    for file in files:
-        if file == '.' or file == '..': continue
-        path = dir + os.sep + file
-        if os.path.isdir(path):
-            nukedir(path)
-        else:
-            os.unlink(path)
-    os.rmdir(dir)
 
 def createDirectory(path):
     try:
@@ -70,6 +38,7 @@ class AstToCsv():
             for filename in files:
                 filepath = os.path.join(root, filename)
                 if filename.endswith('.py') and not filename.startswith('__init__'):
+                    self.dict_no_gen, self.dict_with_gen = {}, {}
                     tree = ast.parse(open(filepath, encoding="iso-8859-15", errors='ignore').read())
                     self.nodeAttributeCreator(filepath, tree, self.contador)  
                     #We create .csv file.
@@ -92,9 +61,7 @@ class AstToCsv():
         
     #We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
     def nodeAttributeCreator(self, filepath, node, contador, padre = None):
-        #self.ids[node] = [self.contador, filepath]
         self.nodeToNumber()
-        #padre = self.contador - 1
         self.dictionaryCreator(node, padre)
         padre = self.contador
         self.contador += 1     

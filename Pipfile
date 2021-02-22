@@ -10,6 +10,7 @@ ast2json = "*"
 pytest = "*"
 gitpython = "*"
 click = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.8"

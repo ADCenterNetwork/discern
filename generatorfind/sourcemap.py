@@ -34,7 +34,10 @@ def get_name(node):
                         x = node.targets[0].id
                         return x
                     except AttributeError:
-                        return None
+                        try:
+                            return node.name
+                        except AttributeError:
+                            return None
 
 
 def eraseFile(path):
@@ -63,7 +66,8 @@ class Sourcemap():
                 filepath = os.path.join(root, filename)
                 if filename.endswith('.py') and not filename.startswith('__init__'):
                     tree = ast.parse(open(filepath, encoding="iso-8859-15", errors='ignore').read())
-                    self.nodeIterator(filepath, tree, self.contador)  
+                    #self.contador = 0
+                    self.nodeIterator(filepath, tree)  
 
         #We want to create the names of the .csv and .json files.
         nameproject = self.file_namesCreator()
@@ -79,7 +83,7 @@ class Sourcemap():
 
     
     #We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
-    def nodeIterator(self, filepath, node, contador, padre = None):
+    def nodeIterator(self, filepath, node, padre = None):
         self.ids[node] = [self.contador, filepath]
         self.generateDictionaries(padre, filepath, node)
         #padre = self.contador - 1
@@ -87,13 +91,13 @@ class Sourcemap():
         self.contador += 1     
         if ast.iter_child_nodes(node):
             for child in ast.iter_child_nodes(node):
-                self.nodeIterator(filepath, child, self.contador, padre)
+                self.nodeIterator(filepath, child, padre)
 
     def generateDictionaries(self, padre, filepath, node):
         if node.__class__.__name__== "Module":
                 self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, \
                 "name":str(get_name(node)), "line_number": "None", "end_line_number": "None", "col_offset": "None", "end_col_offset": "None", \
-                'parent_id': "None", "Generator": 0}
+                'parent_id': -1, "Generator": 0}
         else:
             try:
                 self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, \
@@ -105,12 +109,7 @@ class Sourcemap():
                 "parent_id": padre, "Generator": 0}
 
     def file_namesCreator(self):
-        project = str(self.path).split('/')
-        if project[-1] != '':
-            nameproject = project[-1]
-        else:
-            nameproject = project[-2]
-        return nameproject
+        return os.path.basename(os.path.normpath(self.path))
 
     def createJson(self, nameproject):
         path = 'sourcemap_'+nameproject+'.json'
