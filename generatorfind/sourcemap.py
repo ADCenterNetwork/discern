@@ -94,6 +94,7 @@ class Sourcemap():
                 self.nodeIterator(filepath, child, padre)
 
     def generateDictionaries(self, padre, filepath, node):
+        filepath = self.pathShortener(filepath)
         if node.__class__.__name__== "Module":
                 self.sourcemap[self.contador] = {"node_id": self.contador, "path":filepath, "class_name": node.__class__.__name__, \
                 "name":str(get_name(node)), "line_number": "None", "end_line_number": "None", "col_offset": "None", "end_col_offset": "None", \
@@ -132,4 +133,8 @@ class Sourcemap():
             writer = csv.DictWriter(csvfile, fieldnames = field_names) 
             writer.writeheader() 
             writer.writerows(write_rows) 
+
+    def pathShortener(self, filepath):
+        short_path = filepath.split(self.path)[1][1:]
+        return short_path
 

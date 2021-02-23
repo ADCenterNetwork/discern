@@ -16,7 +16,6 @@ def main(path_of_project, path_info_patterns):
     #we get the information we want about the labels
     path_info_patterns = os.path.join(os.getcwd(), path_info_patterns)
     pattern_df = pd.read_csv(path_info_patterns, delimiter = ';')
-    print(pattern_df)
     sourcemap_df = pd.read_csv(sourcemap_path, delimiter = ',')
     pattern_df = cleanNamespaceColumn(pattern_df)
     getGeneratorIDs(pattern_df, sourcemap_df, project_name)
@@ -40,10 +39,8 @@ def getGeneratorIDs(pattern, sourcemap, project_name):
     for index, row in pattern.iterrows():
         namespace = row['Namespace']
         pattern_line = row['begin_line']
-        print(namespace, pattern_line)
         if namespace != 'None':
-            path_for_sourcemap = os.path.join(project_name, row['Nombre_archivo'])
-            print(f'El path for sourcemap es {path_for_sourcemap}')
+            path_for_sourcemap = os.path.join(os.getcwd(), row['Nombre_archivo'])
             selection = sourcemap[(sourcemap['path'] == path_for_sourcemap) & \
             (sourcemap['name'] == namespace) & (sourcemap['line_number'] == pattern_line)    ]
             print(selection)
