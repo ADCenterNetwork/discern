@@ -39,11 +39,13 @@ def getGeneratorIDs(pattern, sourcemap, project_name):
     for index, row in pattern.iterrows():
         namespace = row['Namespace']
         pattern_line = row['begin_line']
+        path_for_sourcemap = row['Nombre_archivo']
         if namespace != 'None':
-            path_for_sourcemap = os.path.join(os.getcwd(), row['Nombre_archivo'])
             selection = sourcemap[(sourcemap['path'] == path_for_sourcemap) & \
             (sourcemap['name'] == namespace) & (sourcemap['line_number'] == pattern_line)    ]
-            print(selection)
+            print(selection.shape)
+            if selection.shape == (0,10):
+                print(f'namespace: {namespace} \npattern_line: {pattern_line} \npath_for_sourcemap: {path_for_sourcemap}')
             
 
 
