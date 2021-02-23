@@ -12,16 +12,15 @@ def main(path_of_project, path_info_patterns):
     #we now obtain the names of the sourcemap
     project_name = getNameProject(path_of_project)
     sourcemap_path = 'sourcemap_' + project_name +'.csv'
-    ast_path = 'LabelFolder_'+ project_name
-    #we get the information we want about the labels
+    ast_folder_path = getAstPath(project_name)
     path_info_patterns = os.path.join(os.getcwd(), path_info_patterns)
+    #we get the information we want about the labels
     pattern_df = pd.read_csv(path_info_patterns, delimiter = ';')
     sourcemap_df = pd.read_csv(sourcemap_path, delimiter = ',')
     pattern_df = cleanNamespaceColumn(pattern_df)
-    getGeneratorIDs(pattern_df, sourcemap_df, project_name)
+    generator_with_generators = getGeneratorsInSourcemap(pattern_df, sourcemap_df, project_name)
+    getNodeIds(generator_with_generators, pattern_df, sourcemap_df, ast_folder_path)
 
-
-    
 
 def sourcemapCreator(name):
     sourcemap = Sourcemap(name)
@@ -34,21 +33,25 @@ def astCreator(name):
 def getNameProject(name):
         return os.path.basename(os.path.normpath(name))
 
+def getAstPath(project):
+    path = os.path.join('LabelFolder_'+ project, 'LabelFolderWithGen_' + project)
+    return path
 
-def getGeneratorIDs(pattern, sourcemap, project_name):
-    for index, row in pattern.iterrows():
+
+def getGeneratorsInSourcemap(pattern, sourcemap, project_name):
+    for _index, row in pattern.iterrows():
         namespace = row['Namespace']
         pattern_line = row['begin_line']
         path_for_sourcemap = row['Nombre_archivo']
         if namespace != 'None':
             selection = sourcemap[(sourcemap['path'] == path_for_sourcemap) & \
             (sourcemap['name'] == namespace) & (sourcemap['line_number'] == pattern_line)    ]
-            print(selection.shape)
             if selection.shape == (0,10):
                 print(f'namespace: {namespace} \npattern_line: {pattern_line} \npath_for_sourcemap: {path_for_sourcemap}')
+                #TO DO raise exception when we find an empty dataframe
+            yield selection
             
-
-
+            
 def cleanNamespaceColumn(df):
     column = df['Namespace']
     clean_column = []
@@ -65,3 +68,25 @@ def cleanNamespaceColumn(df):
             clean_column.append(item)
     df['Namespace'] = clean_column
     return df
+
+
+def getNodeIds(generator, pattern, sourcemap, ast_folder):
+    filepath = ''
+    for df in generator:
+        ast_df = getAstDf(df, filepath, ast_folder)
+        break
+        #TO DO
+
+
+def getAstDf(df, filepath, folder):
+    df_path = df['path'].iloc[0]
+    if df_path != filepath:
+        ast_df = pd.read_csv(df_path)
+        #TO DO
+    
+
+
+
+
+
+

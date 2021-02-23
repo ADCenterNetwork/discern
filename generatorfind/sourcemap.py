@@ -61,7 +61,7 @@ class Sourcemap():
 
     def main(self):
         startci = time.time()
-        for root, directories, files in os.walk(self.path):
+        for root, _directories, files in os.walk(self.path):
             for filename in files:
                 filepath = os.path.join(root, filename)
                 if filename.endswith('.py') and not filename.startswith('__init__'):
