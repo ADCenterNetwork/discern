@@ -16,7 +16,9 @@ class Discern2():
         that will store the information of interest.
 
         Args:
-            name ([string]): [The name of the file that we are obtaining information when we execute _generatorfind.py ]
+            name:: string = The name of the file that we are obtaining information from,
+                             when we execute method _generatorfind()
+            ls_modules:: [string] = Modules to take into account in the algorithm
         """
         self.tree = ast.parse( open(name, encoding="iso-8859-15", errors='ignore').read() )
         self.generators = []
@@ -37,6 +39,7 @@ class Discern2():
         self.yieldslist = []
 
         i = 0
+        # Iterate over nodes assigning an id to each one
         for node in ast.walk(self.tree):
             self.id[node] = i
             i+=1
@@ -53,11 +56,11 @@ class Discern2():
                     for child in ast.iter_child_nodes(node):
                         y = ls[:]
                         self.sourcemapyield(child, y)
-        
+
         for nodoyield in self.yieldslist:
             self.yieldsdict[self.id[nodoyield]] = {"id": self.id[nodoyield], "col_offset": nodoyield.col_offset, "lineno": nodoyield.lineno}
         return self.yieldsdict
-                 
+
     def __yieldfind(self, node = None, ls = []):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
         that contain that generator.
@@ -69,8 +72,12 @@ class Discern2():
         """
         if node == None:
             node = self.tree
+
+        # If the node type is IMPORT
         if node.__class__.__name__ == 'Import':
+            # Iterate over node.names structure
             for i in range(len(node.names)):
+                # Get the folder name corresponding to the path name
                 folder = _get_folder(self.path)
                 importpath = node.names[i].name.split('.')
                 fullpath = folder
@@ -84,7 +91,9 @@ class Discern2():
                         for item in importpath:
                             ls.append(item)
                     fileimp = fullpath+'.py'
+                    # Parse fileimp with AST library
                     treeimp = ast.parse(open(fileimp, encoding="iso-8859-15", errors='ignore').read())
+                    # Recursive call
                     self.__yieldfind(treeimp, ls)
                     [ ls.pop(0) for n in range(len(importpath)+1) ]
                 elif absolute_path in self.modules: #We are in a folder. We have to modify:
@@ -93,9 +102,10 @@ class Discern2():
                     else:
                         for item in importpath:
                             ls.append(item)
+                    # Calls to find yield commands in folders
                     self.__yieldfind_folders(absolute_path, ls)
 
-
+        # Node Type is ImportFrom
         if node.__class__.__name__ == 'ImportFrom':
             '''In a node like this one, the attribute 'module' contains the name of the left side (from left_side
             import right_side), in the same way it's represented in code (separated by dots)
@@ -156,6 +166,7 @@ class Discern2():
                 self.print.append(filename)
             if os.path.isfile(filename) and (filename in self.modules):
                 tree2 = ast.parse(open(filename, encoding="iso-8859-15", errors='ignore').read())
+                # Recursive call
                 self.__yieldfind(tree2, ls)
             #in this case, it means we have to access the right_side and look for files
             else: 
@@ -166,17 +177,21 @@ class Discern2():
                         #we need to append the name of the file because that's how we'll call it in the function
                         ls.append(alias) 
                         tree2 = ast.parse(open(filename_path,encoding="iso-8859-15", errors='ignore').read())
+                        # Recursive call
                         self.__yieldfind(tree2, ls)
         #iso-8859-15
+        # Yield node found, base case of recursion
         if node.__class__.__name__ == 'Yield':
                 ls.append(node)
                 x = ls[:]
                 self.generators.append(x)
         else:
+                # Iterate over child nodes
                 if ast.iter_child_nodes(node):
                     ls.append(node)
                     for child in ast.iter_child_nodes(node):
                         y = ls[:]
+                        # Recursive call
                         self.__yieldfind(child, y)
         return self.generators
 
@@ -199,13 +214,15 @@ class Discern2():
                         tree2 = ast.parse(open(filename, encoding="iso-8859-15", errors='ignore').read())
                         self.__yieldfind(tree2, ls)
 
-
     def _generatorfind(self):
-        """_generatorfind works with our list 'generators' in order to obtain the correct namespace instead of all the
-        nodes information.
+        """_generatorfind() : works with our list 'generators' in order to
+                              obtain the correct namespace instead of all the nodes information.
         """
         self.generators = []
+        # Search for all yield commands in "self.name"
         self.generators = self.__yieldfind()
+
+        # Iterates over the generated matrix
         for i in range(len(self.generators)):
             k = 0
             for j in range(len(self.generators[i])-1): 
