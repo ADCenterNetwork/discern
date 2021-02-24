@@ -46,9 +46,8 @@ def getGeneratorsInSourcemap(pattern, sourcemap, project_name):
         if namespace != 'None':
             selection = sourcemap[(sourcemap['path'] == path_for_sourcemap) & \
             (sourcemap['name'] == namespace) & (sourcemap['line_number'] == pattern_line)    ]
-            if selection.shape == (0,10):
-                print(f'namespace: {namespace} \npattern_line: {pattern_line} \npath_for_sourcemap: {path_for_sourcemap}')
-                #TO DO raise exception when we find an empty dataframe
+            if selection.shape[0] != 1:
+                raise Exception(f'The data frame has {selection.shape[0]} rows')
             yield selection
             
             
@@ -73,16 +72,34 @@ def cleanNamespaceColumn(df):
 def getNodeIds(generator, pattern, sourcemap, ast_folder):
     filepath = ''
     for df in generator:
-        ast_df = getAstDf(df, filepath, ast_folder)
-        break
-        #TO DO
+        node_id, new_filepath = df.iloc[0]['node_id'], df.iloc[0]['path']
+        if new_filepath != filepath: #this is to prevent the file from being opened more times than necessary
+            ast_df, df_path = getAstDf(new_filepath, ast_folder)
+            print(ast_df.shape)
+            filepath = new_filepath
+        #print(node_id, '\t', filepath)
+        ast_df.loc[ast_df['node_id'] == node_id, 'Generator'] = 1
+        #df.to_csv(df_path, index = 0)
+        #TO DO save the file correctly, right now it's only saving the selected row
+        
+
+        
+        
 
 
-def getAstDf(df, filepath, folder):
-    df_path = df['path'].iloc[0]
-    if df_path != filepath:
-        ast_df = pd.read_csv(df_path)
-        #TO DO
+
+def getAstDf(filepath, ast_folder):
+    path_with_no_file, filename = pathSeparator(filepath)
+    full_path = os.path.join(ast_folder, path_with_no_file, 'label_'+filename+ '.csv')
+    try:
+        df = pd.read_csv(full_path, delimiter = ',')
+        return (df, full_path)
+    except FileNotFoundError:
+        print(f'Cannot find at {full_path}')
+    
+def pathSeparator(path):
+    return os.path.split(path)
+    
     
 
 
