@@ -47,7 +47,7 @@ LtE
 Gt
 GtE
 Is
-Isnot
+IsNot
 In
 NotIn
 Call

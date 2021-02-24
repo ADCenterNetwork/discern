@@ -1,6 +1,8 @@
 from generatorfind.discern2 import Discern2
 from generatorfind.folderCalls import FolderCalls
 from generatorfind.ast_to_csv import AstToCsv
+from generatorfind.sourcemap import Sourcemap
+from generatorfind import labeller
 import sys, os, time
 import click
 
@@ -11,21 +13,33 @@ and FolderCalls is for folders
 @click.command()
 @click.argument('name', nargs = 1)
 @click.option('--ast', is_flag = True, help='This generates a .csv file with the AST')
-def main(name, ast):
+@click.option('--sourcemap', is_flag = True, help = "This generates the sourcemap of our folder")
+@click.option('--calls', is_flag = True)
+@click.option('--label', help = 'Enter the path of the file with the information about the generator')
+def main(name, ast, sourcemap, calls, label):
     start = time.time()
     if ast:
         if isOnePythonFile(name):
             raise Exception('We can only generate ASTs of full projects')
         else:
             generate_ast = AstToCsv(name)
-            generate_ast.labelCreator()
-    else:
+            generate_ast.main()
+    if sourcemap:
+        if isOnePythonFile(name):
+            raise Exception('We can only generate ASTs of full projects')
+        else:
+            generate_ast = Sourcemap(name)
+            generate_ast.main()
+    if calls:
         if isOnePythonFile(name):
             # name is a python file name
             processPythonFile(name)
         else: 
             # name is a folder
             processFolder(name)
+    if label:
+        labeller.main(name, label)
+        
 
     printExecTime(start)
 
