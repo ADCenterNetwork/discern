@@ -34,7 +34,8 @@ class AstToCsv():
     def main(self):
         startci = time.time()
         folders_path_tuple = self.createFolderForLabels()
-        for root, directories, files in os.walk(self.path):
+        for root, _directories, files in os.walk(self.path):
+            subfolders = self.createSubfolder(root, folders_path_tuple)
             for filename in files:
                 filepath = os.path.join(root, filename)
                 if filename.endswith('.py') and not filename.startswith('__init__'):
@@ -42,7 +43,7 @@ class AstToCsv():
                     tree = ast.parse(open(filepath, encoding="iso-8859-15", errors='ignore').read())
                     self.nodeAttributeCreator(filepath, tree, self.contador)  
                     #We create .csv file.
-                    self.labelFileCreator(filename, folders_path_tuple)
+                    self.labelFileCreator(filename, subfolders)
 
         endci = time.time()
         print("Tiempo nodeToNumber", endci-startci)
@@ -57,6 +58,20 @@ class AstToCsv():
         createDirectory(path_subfolder1)
         createDirectory(path_subfolder2)
         return (path_subfolder1, path_subfolder2)
+
+    def createSubfolder(self, root, tuple_folders):
+        ''' We create this function to get the same structure of our project into the
+        LabelFolder... folder '''
+        full_path_tuple = []
+        for path in tuple_folders:
+            x = root[len(self.path)+1:]
+            full_path = os.path.join(path, x)
+            if not os.path.isdir(full_path):
+                os.mkdir(full_path)
+            full_path_tuple.append(full_path)
+        return full_path_tuple
+            
+
 
         
     #We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
