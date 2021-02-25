@@ -77,6 +77,7 @@ def getNodeIds(generator, pattern, sourcemap, ast_folder):
             ast_df, df_path = getAstDf(new_filepath, ast_folder)
             filepath = new_filepath
         ast_df.loc[ast_df['node_id'] == node_id, 'Generator'] = 1
+        ast_df = findChildren(ast_df, node_id)
         ast_df.to_csv(df_path, index = 0)
         
 
@@ -89,6 +90,20 @@ def getAstDf(filepath, ast_folder):
         return (df, full_path)
     except FileNotFoundError:
         print(f'Cannot find at {full_path}')
+
+
+def findChildren(df, node_id):
+    ls_parents = [node_id]
+    while ls_parents != []:
+        print(f'El ls_parents es {ls_parents}')
+        # Change the value of the 'Generator' column to 1 in the corresponding nodes
+        df.loc[df['parent_id'].isin(ls_parents), 'Generator'] = 1
+        # Selecting the 'node_id' of the aforementioned nodes and saving it to a series
+        children_df = df.loc[df['parent_id'].isin(ls_parents), 'node_id']
+        #updating the value of ls_parents
+        ls_parents = children_df.tolist()[:]
+    return df
+
     
 def pathSeparator(path):
     return os.path.split(path)
