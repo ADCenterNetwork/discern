@@ -2,8 +2,8 @@ import ast, os
 from ast2json import ast2json
 from io import open
 from setuptools import setup
-from .generatorfind import *
-from .generatorfind import _get_folder
+from .generatorfind import self_finder
+from .generatorfind import get_folder
 
 class Discern2():
     """Discern2 is a class that contains all the functions involved in the work with the ast of the file of interest.
@@ -61,7 +61,7 @@ class Discern2():
             self.yieldsdict[self.id[nodoyield]] = {"id": self.id[nodoyield], "col_offset": nodoyield.col_offset, "lineno": nodoyield.lineno}
         return self.yieldsdict
 
-    def __yieldfind(self, node = None, ls = []):
+    def __yieldfind(self, node=None, ls=[]):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes 
         that contain that generator.
 
@@ -78,7 +78,7 @@ class Discern2():
             # Iterate over node.names structure
             for i in range(len(node.names)):
                 # Get the folder name corresponding to the path name
-                folder = _get_folder(self.path)
+                folder = get_folder(self.path)
                 importpath = node.names[i].name.split('.')
                 fullpath = folder
                 for j in range(len(importpath)):
@@ -116,7 +116,7 @@ class Discern2():
             If there is a python file, we know this either has to be on the last element of the left_side, or it 
             will be on the right side
             '''
-            getfolder = _get_folder(self.path).split('/')
+            getfolder = get_folder(self.path).split('/')
             if node.module == None: 
                 right_side = node.names
                 full_path2 = os.getcwd()

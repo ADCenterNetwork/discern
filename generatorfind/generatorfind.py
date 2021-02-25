@@ -45,8 +45,8 @@ def saveast():
     f.write(json.dumps(astprint, indent=4))
     f.close()
 
-def _get_folder(filename):
-    """_get_folder applies the os module to get the fullpath of a file. This is usefull because this program will open different files.
+def get_folder(filename):
+    """get_folder applies the os module to get the fullpath of a file. This is usefull because this program will open different files.
 
     Args:
         filename ([string]): [The name of the file we are interested.]
