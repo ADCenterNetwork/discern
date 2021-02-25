@@ -75,17 +75,10 @@ def getNodeIds(generator, pattern, sourcemap, ast_folder):
         node_id, new_filepath = df.iloc[0]['node_id'], df.iloc[0]['path']
         if new_filepath != filepath: #this is to prevent the file from being opened more times than necessary
             ast_df, df_path = getAstDf(new_filepath, ast_folder)
-            print(ast_df.shape)
             filepath = new_filepath
-        #print(node_id, '\t', filepath)
         ast_df.loc[ast_df['node_id'] == node_id, 'Generator'] = 1
-        #df.to_csv(df_path, index = 0)
-        #TO DO save the file correctly, right now it's only saving the selected row
+        ast_df.to_csv(df_path, index = 0)
         
-
-        
-        
-
 
 
 def getAstDf(filepath, ast_folder):
