@@ -4,6 +4,7 @@ from io import open
 from setuptools import setup
 from .generatorfind import self_finder
 from .generatorfind import get_folder
+from .generatorfind import get_name
 
 class Discern2():
     """Discern2 is a class that contains all the functions involved in the work with the ast of the file of interest.
@@ -73,129 +74,153 @@ class Discern2():
         if node == None:
             node = self.tree
 
-        # If the node type is IMPORT
+        # If the node type is IMPORT we will parse that imported file and we will search generators on that file.
         if node.__class__.__name__ == 'Import':
-            # Iterate over node.names structure
-            for i in range(len(node.names)):
-                # Get the folder name corresponding to the path name
-                folder = get_folder(self.path)
-                importpath = node.names[i].name.split('.')
-                fullpath = folder
-                for j in range(len(importpath)):
-                    fullpath = os.path.join(fullpath, importpath[j])
-                absolute_path = os.path.join(os.getcwd(), fullpath)
-                if os.path.isfile(fullpath+'.py')  and (absolute_path+'.py' in self.modules):
-                    if node.names[i].asname:
-                        ls.append(node.names[i].asname)
-                    else:
-                        for item in importpath:
-                            ls.append(item)
-                    fileimp = fullpath+'.py'
-                    # Parse fileimp with AST library
-                    treeimp = ast.parse(open(fileimp, encoding="iso-8859-15", errors='ignore').read())
-                    # Recursive call
-                    self.__yieldfind(treeimp, ls)
-                    [ ls.pop(0) for n in range(len(importpath)+1) ]
-                elif absolute_path in self.modules: #We are in a folder. We have to modify:
-                    if node.names[i].asname:
-                        ls.append(node.names[i].asname)
-                    else:
-                        for item in importpath:
-                            ls.append(item)
-                    # Calls to find yield commands in folders
-                    self.__yieldfind_folders(absolute_path, ls)
+            self._register_generator_of_import_file(node, ls)
 
-        # Node Type is ImportFrom
+        # If the node type is IMPORTFROM we will parse that imported file and we will search generators on that file.
         if node.__class__.__name__ == 'ImportFrom':
-            '''In a node like this one, the attribute 'module' contains the name of the left side (from left_side
-            import right_side), in the same way it's represented in code (separated by dots)
+            self._register_generator_of_importfrom_file(node, ls)
 
-            And the attribute node.names will return a list, where each element is an 'Alias' and it represents
-            the element we're importing, i.e, the right_side. To get its name we apply the attribute '.name', 
-
-            If there is a python file, we know this either has to be on the last element of the left_side, or it 
-            will be on the right side
-            '''
-            getfolder = get_folder(self.path).split('/')
-            if node.module == None: 
-                right_side = node.names
-                full_path2 = os.getcwd()
-                for item in getfolder:
-                    full_path2 = os.path.join(full_path2, item)
-                full_path2 = full_path2.split('\\')
-                if node.level > 0:
-                    for i in range(node.level-1):
-                        full_path2.pop(-1) 
-                full_path = full_path2[0]
-                full_path2.pop(0)
-                variable = 0
-                for item in full_path2:
-                    if not variable == 0:
-                        full_path = os.path.join(full_path,item)
-                    else:
-                        full_path = os.path.join(full_path + os.sep,item)
-                        variable+=1
-            else:                
-                left_side = node.module.split('.') 
-                right_side = node.names
-                #we now form a path from the elements on the left_side
-                full_path2 = os.getcwd()
-                for item in getfolder:
-                    full_path2 = os.path.join(full_path2, item)
-                full_path2 = full_path2.split('\\')
-                if node.level >0:
-                    for i in range(node.level-1):
-                        full_path2.pop(-1)
-                full_path = full_path2[0]
-                full_path2.pop(0)
-                variable=0
-                for item in full_path2:
-                    if not variable == 0:
-                        full_path = os.path.join(full_path, item)
-                    else:
-                        full_path = os.path.join(full_path + os.sep, item)
-                        variable+=1
-                for item in left_side:
-                    full_path = os.path.join(full_path, item)
-            filename = full_path + '.py'
-            
-            if not filename in self.print:
-                #Uncomment next lines if you want to know the status of importfroms.
-                #print("* ImportFrom of", filename, "\n-> Enter:", filename in self.modules)
-                #print(filename)
-                self.print.append(filename)
-            if os.path.isfile(filename) and (filename in self.modules):
-                tree2 = ast.parse(open(filename, encoding="iso-8859-15", errors='ignore').read())
-                # Recursive call
-                self.__yieldfind(tree2, ls)
-            #in this case, it means we have to access the right_side and look for files
-            else: 
-                for alias in right_side:
-                    alias_filename = alias.name + '.py'
-                    filename_path = os.path.join(full_path, alias_filename)
-                    if os.path.isfile(filename_path) and (filename_path in self.modules):
-                        #we need to append the name of the file because that's how we'll call it in the function
-                        ls.append(alias) 
-                        tree2 = ast.parse(open(filename_path,encoding="iso-8859-15", errors='ignore').read())
-                        # Recursive call
-                        self.__yieldfind(tree2, ls)
-        #iso-8859-15
-        # Yield node found, base case of recursion
+        # Yield node found, base case of recursion.
         if node.__class__.__name__ == 'Yield':
-                ls.append(node)
-                x = ls[:]
-                self.generators.append(x)
+            self._register_generator(node, ls)
+
+        # We continue iterating until find a node of interest.
         else:
-                # Iterate over child nodes
-                if ast.iter_child_nodes(node):
-                    ls.append(node)
-                    for child in ast.iter_child_nodes(node):
-                        y = ls[:]
-                        # Recursive call
-                        self.__yieldfind(child, y)
+            if ast.iter_child_nodes(node):
+                self._iterate_over_child_nodes(node, ls)
+
         return self.generators
 
+    def _register_generator_of_import_file(self, node, ls):
+        # We make a loop because we can import multiples files on a time.
+        for i in range(len(node.names)):
+            # We construct the path of the file imported in order to parse it.
+            importpath = node.names[i].name.split('.')
+            absolute_path = os.path.join(os.getcwd(), self._fullpath_imported_file(node, ls, importpath))
+            if self.imported_file_correct(node, ls, importpath, absolute_path): 
+                # In this case, we have imported a file that has generators inside. So, we parse it and search generators.
+                self._parse_and_register_gen(node, ls, importpath, i)
+            elif absolute_path in self.modules: #We are in a folder. We have to modify:
+                self._check_import_alias(node, ls, importpath, i)
+                # Calls to find yield commands in folders
+                self.__yieldfind_folders(absolute_path, ls)
+
+    def _parse_and_register_gen(self, node, ls, importpath, i):
+        self._check_import_alias(node, ls, importpath, i) #We check the asname (if exists) in order to register namespace.
+        fileimp = self._fullpath_imported_file(node, ls, importpath)+'.py'
+        # Parse fileimp with AST library
+        treeimp = ast.parse(open(fileimp, encoding="iso-8859-15", errors='ignore').read())
+        # Recursive call in order to find  yield nodes in the imported file.
+        self.__yieldfind(treeimp, ls)
+        # We remove redundant elements.
+        [ ls.pop(0) for n in range(len(importpath)+1) ]
+
+    def _check_import_alias(self, node, ls, importpath, i):
+        if node.names[i].asname:
+            ls.append(node.names[i].asname)
+        else:
+            for item in importpath:
+                ls.append(item)
+
+    def imported_file_correct(self, node, ls, importpath, absolute_path):
+        return (os.path.isfile(self._fullpath_imported_file(node, ls, importpath)+'.py')  and (absolute_path+'.py' in self.modules))
+
+    def _fullpath_imported_file(self, node, ls, importpath):
+        fullpath = get_folder(self.path)
+        for j in range(len(importpath)):
+            fullpath = os.path.join(fullpath, importpath[j])
+        return fullpath
+
+    def _register_generator_of_importfrom_file(self, node, ls):
+        '''In a node like this one, the attribute 'module' contains the name of the left side (from left_side
+        import right_side), in the same way it's represented in code (separated by dots)
+
+        And the attribute node.names will return a list, where each element is an 'Alias' and it represents
+        the element we're importing, i.e, the right_side. To get its name we apply the attribute '.name', 
+
+        If there is a python file, we know this either has to be on the last element of the left_side, or it 
+        will be on the right side
+        '''
+        getfolder = get_folder(self.path).split('/')
+        if node.module == None: #The importfrom has the structure: from . import file.
+            right_side = node.names
+            full_path2 = os.getcwd()
+            for item in getfolder:
+                full_path2 = os.path.join(full_path2, item)
+            full_path2 = full_path2.split('\\')
+            if node.level > 0:
+                for i in range(node.level-1):
+                    full_path2.pop(-1) 
+            full_path = full_path2[0]
+            full_path2.pop(0)
+            variable = 0
+            for item in full_path2:
+                if not variable == 0:
+                    full_path = os.path.join(full_path,item)
+                else:
+                    full_path = os.path.join(full_path + os.sep,item)
+                    variable+=1
+        else:                
+            left_side = node.module.split('.') 
+            right_side = node.names
+            #we now form a path from the elements on the left_side
+            full_path2 = os.getcwd()
+            for item in getfolder:
+                full_path2 = os.path.join(full_path2, item)
+            full_path2 = full_path2.split('\\')
+            if node.level >0:
+                for i in range(node.level-1):
+                    full_path2.pop(-1)
+            full_path = full_path2[0]
+            full_path2.pop(0)
+            variable=0
+            for item in full_path2:
+                if not variable == 0:
+                    full_path = os.path.join(full_path, item)
+                else:
+                    full_path = os.path.join(full_path + os.sep, item)
+                    variable+=1
+            for item in left_side:
+                full_path = os.path.join(full_path, item)
+        filename = full_path + '.py'
         
+        if not filename in self.print:
+            #Uncomment next lines if you want to know the status of importfroms.
+            #print("* ImportFrom of", filename, "\n-> Enter:", filename in self.modules)
+            #print(filename)
+            self.print.append(filename)
+        if os.path.isfile(filename) and (filename in self.modules):
+            tree2 = ast.parse(open(filename, encoding="iso-8859-15", errors='ignore').read())
+            # Recursive call
+            self.__yieldfind(tree2, ls)
+        #in this case, it means we have to access the right_side and look for files
+        else: 
+            for alias in right_side:
+                alias_filename = alias.name + '.py'
+                filename_path = os.path.join(full_path, alias_filename)
+                if os.path.isfile(filename_path) and (filename_path in self.modules):
+                    #we need to append the name of the file because that's how we'll call it in the function
+                    ls.append(alias) 
+                    tree2 = ast.parse(open(filename_path,encoding="iso-8859-15", errors='ignore').read())
+                    # Recursive call
+                    self.__yieldfind(tree2, ls)
+
+
+    def _register_generator(self, node, ls):
+        ls.append(node)
+        x = ls[:]
+        self.generators.append(x)    
+
+    def _iterate_over_child_nodes(self, node, ls):
+        ls.append(node)
+        for child in ast.iter_child_nodes(node):
+            y = ls[:]
+            # Recursive call
+            self.__yieldfind(child, y)
+
+
     def __yieldfind_folders(self, absolute_path, ls):
         init_filename = os.path.join(absolute_path, '__init__.py')
         if os.path.exists(init_filename):
