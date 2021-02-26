@@ -1,0 +1,10 @@
+nombre_archivo;namespace;line;original_file
+percol\cli.py;read_input;218;percol\cli.py
+percol\display.py;get_attributes;200;percol\display.py
+percol\display.py;get_attributes;260;percol\display.py
+percol\lazyarray.py;get_numbers;63;percol\lazyarray.py
+percol\lazyarray.py;get_numbers;69;percol\lazyarray.py
+percol\markup.py;get_next_chars;48;percol\markup.py
+percol\markup.py;get_next_chars;77;percol\markup.py
+tools\check_colors.py;get_fg_bg;21;tools\check_colors.py
+tools\check_colors.py;get_fg_bg;29;tools\check_colors.py

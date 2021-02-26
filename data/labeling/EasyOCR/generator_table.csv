@@ -1,0 +1,18 @@
+Nombre_archivo;Namespace;begin_line;end_line;yield_line;
+easyocr\model\__init__.py;None;None;None;None;
+ easyocr\model\model.py;None;None;None;None;
+easyocr\model\modules.py;None;None;None;None;
+easyocr\model\vgg_model.py;None;None;None;None;
+easyocr\__init__.py;None;None;None;None; 
+easyocr\cli.py;None;None;None;None; 
+easyocr\config.py;None;None;None;None;
+easyocr\craft_utils.py;None;None;None;None;
+easyocr\craft.py;None;None;None;None;
+easyocr\detection.py;None;None;None;None; 
+easyocr\easyocr.py;None;None;None;None; 
+easyocr\imgproc.py;None;None;None;None;
+easyocr\recognition.py;None;None;None;None;
+easyocr\utils.py;None;None;None;None; 
+ setup.py;None;None;None;None;
+ ; ; ; ; ;
+ ; ; ; ; ;

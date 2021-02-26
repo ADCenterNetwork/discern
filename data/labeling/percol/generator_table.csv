@@ -1,0 +1,18 @@
+Nombre_archivo;Namespace;begin_line;end_line;yield_line
+percol\action.py;None;None;None;None
+percol\actions.py;None;None;None;None
+percol\ansi.py;None;None;None;None
+percol\cli.py;read_input;133;152;151
+percol\command.py;None;None;None;None
+percol\debug.py;None;None;None;None
+percol\display.py;get_attributes;52;55;55
+percol\finder.py;FinderMultiQuery', 'find';87;118;118
+percol\info.py;None;None;None;None
+percol\key.py;None;None;None;None
+percol\lazyarray.py;LazyArray', '__iter__';25;33;28, 33
+percol\lazyarray.py;getnumbers;59;62;62
+percol\markup.py;MarkupParser', 'get_next_chars';34;37;37
+percol\model.py;None;None;None;None
+percol\tty.py;None;None;None;None
+percol\view.py;None;None;None;None
+tools\check_colors.py;get_fb_gb';12;15;15
