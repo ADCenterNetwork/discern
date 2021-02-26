@@ -95,7 +95,6 @@ def getAstDf(filepath, ast_folder):
 def findChildren(df, node_id):
     ls_parents = [node_id]
     while ls_parents != []:
-        print(f'El ls_parents es {ls_parents}')
         # Change the value of the 'Generator' column to 1 in the corresponding nodes
         df.loc[df['parent_id'].isin(ls_parents), 'Generator'] = 1
         # Selecting the 'node_id' of the aforementioned nodes and saving it to a series
