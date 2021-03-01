@@ -54,7 +54,6 @@ def getGeneratorsInSourcemap(pattern, sourcemap, project_name):
             
             
 def cleanNamespaceColumn(df):
-    print(df)
     column = df['Namespace']
     clean_column = []
     for item in column:
@@ -69,7 +68,6 @@ def cleanNamespaceColumn(df):
         else:
             clean_column.append(item)
     df['Namespace'] = clean_column
-    print(df)
     return df
 
 
