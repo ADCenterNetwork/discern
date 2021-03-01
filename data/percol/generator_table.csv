@@ -15,4 +15,4 @@ percol\markup.py;MarkupParser', 'get_next_chars';34;37;37
 percol\model.py;None;None;None;None
 percol\tty.py;None;None;None;None
 percol\view.py;None;None;None;None
-tools\check_colors.py;get_fb_gb';12;15;15
+tools\check_colors.py;get_fg_bg';12;15;15

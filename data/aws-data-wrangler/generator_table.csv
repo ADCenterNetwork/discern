@@ -65,7 +65,7 @@ tests\__init__.py;None;None;None;None;
 tests\_utils.py;path_generator';516;523;521;
 tests\conftest.py;loggroup';42;62;62;
 tests\conftest.py;glue_table';174;180;178;
-tests\conftest.py;glue_table_2';184;189;188;
+tests\conftest.py;glue_table2';184;189;188;
 tests\conftest.py;path';192;194;194;
 tests\conftest.py;path2';197;199;199;
 tests\conftest.py;path3';202;204;204;
