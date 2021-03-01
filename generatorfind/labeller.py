@@ -18,6 +18,7 @@ def main(path_of_project, path_info_patterns):
     pattern_df = pd.read_csv(path_info_patterns, delimiter = ';')
     sourcemap_df = pd.read_csv(sourcemap_path, delimiter = ',')
     pattern_df = cleanNamespaceColumn(pattern_df)
+    pattern_df = cleanPathColumn(pattern_df)
     generator_with_generators = getGeneratorsInSourcemap(pattern_df, sourcemap_df, project_name)
     getNodeIds(generator_with_generators, pattern_df, sourcemap_df, ast_folder_path)
 
@@ -53,6 +54,7 @@ def getGeneratorsInSourcemap(pattern, sourcemap, project_name):
             
             
 def cleanNamespaceColumn(df):
+    print(df)
     column = df['Namespace']
     clean_column = []
     for item in column:
@@ -61,12 +63,34 @@ def cleanNamespaceColumn(df):
             last_name_unclean = splitted_item[-1]
             last_name = ''
             for letter in last_name_unclean:
-                if letter != ' ' and letter != '\'':
+                if notSpecialCharacter(letter):
                     last_name += letter
             clean_column.append(last_name)
         else:
             clean_column.append(item)
     df['Namespace'] = clean_column
+    print(df)
+    return df
+
+
+
+def notSpecialCharacter(letter):
+    if letter != ' ' and letter != '\'' and letter != ']':
+        return True
+    else:
+        return False
+
+
+def cleanPathColumn(df):
+    column = df['Nombre_archivo']
+    clean_column = []
+    for item in column:
+        if item != 'None':
+            item = item.replace('\'', '')
+            clean_column.append(item)
+        else:
+            clean_column.append(item)
+    df['Nombre_archivo'] = clean_column
     return df
 
 
