@@ -18,6 +18,7 @@ def main(path_of_project, path_info_patterns):
     pattern_df = pd.read_csv(path_info_patterns, delimiter = ';')
     sourcemap_df = pd.read_csv(sourcemap_path, delimiter = ',')
     pattern_df = cleanNamespaceColumn(pattern_df)
+    pattern_df = cleanPathColumn(pattern_df)
     generator_with_generators = getGeneratorsInSourcemap(pattern_df, sourcemap_df, project_name)
     getNodeIds(generator_with_generators, pattern_df, sourcemap_df, ast_folder_path)
 
@@ -41,13 +42,12 @@ def getAstPath(project):
 def getGeneratorsInSourcemap(pattern, sourcemap, project_name):
     for _index, row in pattern.iterrows():
         namespace = row['Namespace']
-        pattern_line = row['begin_line']
+        pattern_line = str(row['begin_line'])
         path_for_sourcemap = row['Nombre_archivo']
         if namespace != 'None':
             selection = sourcemap[(sourcemap['path'] == path_for_sourcemap) & \
             (sourcemap['name'] == namespace) & (sourcemap['line_number'] == pattern_line)    ]
             if selection.shape[0] != 1:
-                print(f'We are looking for the row that has the parameters path: {path_for_sourcemap}; name: {namespace}; line_number: {pattern_line}')
                 raise Exception(f'The data frame has {selection.shape[0]} rows')
             yield selection
             
@@ -61,12 +61,33 @@ def cleanNamespaceColumn(df):
             last_name_unclean = splitted_item[-1]
             last_name = ''
             for letter in last_name_unclean:
-                if letter != ' ' and letter != '\'':
+                if notSpecialCharacter(letter):
                     last_name += letter
             clean_column.append(last_name)
         else:
             clean_column.append(item)
     df['Namespace'] = clean_column
+    return df
+
+
+
+def notSpecialCharacter(letter):
+    if letter != ' ' and letter != '\'' and letter != ']':
+        return True
+    else:
+        return False
+
+
+def cleanPathColumn(df):
+    column = df['Nombre_archivo']
+    clean_column = []
+    for item in column:
+        if item != 'None':
+            item = item.replace('\'', '').replace(' ', '')
+            clean_column.append(item)
+        else:
+            clean_column.append(item)
+    df['Nombre_archivo'] = clean_column
     return df
 
 
