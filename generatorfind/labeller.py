@@ -48,6 +48,7 @@ def getGeneratorsInSourcemap(pattern, sourcemap, project_name):
             selection = sourcemap[(sourcemap['path'] == path_for_sourcemap) & \
             (sourcemap['name'] == namespace) & (sourcemap['line_number'] == pattern_line)    ]
             if selection.shape[0] != 1:
+                print(f'We are looking for the row that has the parameters path: {path_for_sourcemap}; name: {namespace}; line_number: {pattern_line}')
                 raise Exception(f'The data frame has {selection.shape[0]} rows')
             yield selection
             
