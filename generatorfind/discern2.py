@@ -148,7 +148,7 @@ class Discern2():
         if node.module is None:  # The importfrom has the structure: "from . import file".
             full_path = self.__construct_import_path_without_left_side(node, getfolder)
             filename = full_path+'.py'
-        else:  # The importfrom has the structure "from .folder import filde".
+        else:  # The importfrom has the structure "from .folder import file".
             full_path = self.__construct_import_path_with_left_side(node, getfolder)
             filename = full_path + '.py'
 
@@ -183,7 +183,7 @@ class Discern2():
         variable = 0
         # We have the path o a list, so on next line we join the elements of the lists with the os library. 
         for item in full_path2:
-            if not variable == 0:
+            if variable > 0:
                 full_path = os.path.join(full_path, item)
             else:
                 full_path = os.path.join(full_path + os.sep, item)
@@ -274,12 +274,6 @@ class Discern2():
                     self.__record_import_name(i, j, k)
                 elif self.generators[i][j].__class__.__name__ == 'ImportFrom':
                     self.__record_importfrom_name(i, j, k)
-                elif self.generators[i][j].__class__.__name__ == 'If':
-                    pass
-                elif self.generators[i][j].__class__.__name__ == 'For':
-                    pass
-                elif self.generators[i][j].__class__.__name__ == 'Try':
-                    pass
             self.__clean_namespace(i)
 
         self.__remove_repeated_elements()
