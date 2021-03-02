@@ -16,6 +16,8 @@ def main(path_of_project, path_info_patterns):
     path_info_patterns = os.path.join(os.getcwd(), path_info_patterns)
     #we get the information we want about the labels
     pattern_df = pd.read_csv(path_info_patterns, delimiter = ';')
+    # Removes empty rows
+    pattern_df = pattern_df.dropna()
     sourcemap_df = pd.read_csv(sourcemap_path, delimiter = ',')
     pattern_df = cleanNamespaceColumn(pattern_df)
     pattern_df = cleanPathColumn(pattern_df)
@@ -48,6 +50,7 @@ def getGeneratorsInSourcemap(pattern, sourcemap, project_name):
             selection = sourcemap[(sourcemap['path'] == path_for_sourcemap) & \
             (sourcemap['name'] == namespace) & (sourcemap['line_number'] == pattern_line)    ]
             if selection.shape[0] != 1:
+                print(pattern.shape)
                 print(f'We are looking for the row that has the parameters path: {path_for_sourcemap}; name: {namespace}; line_number: {pattern_line}')
                 raise Exception(f'The data frame has {selection.shape[0]} rows')
             yield selection
