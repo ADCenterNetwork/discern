@@ -16,10 +16,12 @@ def main(path_of_project, path_info_patterns):
     path_info_patterns = os.path.join(os.getcwd(), path_info_patterns)
     #we get the information we want about the labels
     pattern_df = pd.read_csv(path_info_patterns, delimiter = ';')
+    # Removes empty rows
+    pattern_df = pattern_df.dropna()
     sourcemap_df = pd.read_csv(sourcemap_path, delimiter = ',')
     pattern_df = cleanNamespaceColumn(pattern_df)
     pattern_df = cleanPathColumn(pattern_df)
-    generator_with_generators = getGeneratorsInSourcemap(pattern_df, sourcemap_df, project_name)
+    generator_with_generators = getGeneratorsInSourcemap(pattern_df, sourcemap_df)
     getNodeIds(generator_with_generators, pattern_df, sourcemap_df, ast_folder_path)
 
 
@@ -39,18 +41,37 @@ def getAstPath(project):
     return path
 
 
-def getGeneratorsInSourcemap(pattern, sourcemap, project_name):
+def getGeneratorsInSourcemap(pattern, sourcemap):
     for _index, row in pattern.iterrows():
         namespace = row['Namespace']
         pattern_line = str(row['begin_line'])
         path_for_sourcemap = row['Nombre_archivo']
+        path_for_sourcemap_correct_separator = getCorrectSeparator(path_for_sourcemap)
         if namespace != 'None':
-            selection = sourcemap[(sourcemap['path'] == path_for_sourcemap) & \
+            selection = sourcemap[(sourcemap['path'] == path_for_sourcemap_correct_separator) & \
             (sourcemap['name'] == namespace) & (sourcemap['line_number'] == pattern_line)    ]
             if selection.shape[0] != 1:
-                print(f'We are looking for the row that has the parameters path: {path_for_sourcemap}; name: {namespace}; line_number: {pattern_line}')
-                raise Exception(f'The data frame has {selection.shape[0]} rows')
+                throwException(pattern, sourcemap, path_for_sourcemap, namespace, pattern_line, selection)
             yield selection
+
+def getCorrectSeparator(path):
+    path_ls = path.split('\\')
+    correct_path = ''
+    for item in path_ls:
+        correct_path = os.path.join(correct_path, item)
+    return correct_path
+
+
+def throwException(pattern, sourcemap, path_for_sourcemap, namespace, pattern_line, selection):
+    print(pattern.shape)
+    print(f'We are looking for the row that has the parameters path: {path_for_sourcemap}; name: {namespace}; line_number: {pattern_line}')
+    path_df = sourcemap[sourcemap['path'] == path_for_sourcemap]
+    print(path_df.shape)
+    namespace_df = sourcemap[sourcemap['name']==namespace]
+    print(namespace_df.shape)
+    line_df = sourcemap[sourcemap['line_number'] == pattern_line]
+    print(line_df.shape)
+    raise Exception(f'The data frame has {selection.shape[0]} rows')
             
             
 def cleanNamespaceColumn(df):
