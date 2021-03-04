@@ -70,12 +70,9 @@ class AstToCsv():
                 os.mkdir(full_path)
             full_path_tuple.append(full_path)
         return full_path_tuple
-            
 
-
-        
-    #We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
-    def nodeAttributeCreator(self, filepath, node, contador, padre = None):
+    # We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
+    def nodeAttributeCreator(self, filepath, node, contador, padre=None):
         self.nodeToNumber()
         self.dictionaryCreator(node, padre)
         padre = self.contador
@@ -85,7 +82,7 @@ class AstToCsv():
                 self.nodeAttributeCreator(filepath, child, self.contador, padre)
 
     def dictionaryCreator(self, node, padre):
-        if node.__class__.__name__== "Module":
+        if node.__class__.__name__ == "Module":
             self.dict_with_gen[self.contador] = {"node_id":self.contador, "class_name": self.node_classification[node.__class__.__name__], "parent_id": -1, "Generator": 0}
             self.dict_no_gen[self.contador] = {"node_id":self.contador, "class_name": self.node_classification[node.__class__.__name__], "parent_id": -1}
         else:
@@ -105,13 +102,9 @@ class AstToCsv():
                 self.node_classification[node_type] = i
                 i += 1
 
-    
-    
     def getNameProject(self):
         return os.path.basename(os.path.normpath(self.path))
 
-
-    
     def labelFileCreator(self, nameproject, folders_path_tuple):
         field_names = [["node_id", "class_name", "parent_id", "Generator"], ["node_id", "class_name", "parent_id"]]
         write_rows = self.writeRows()

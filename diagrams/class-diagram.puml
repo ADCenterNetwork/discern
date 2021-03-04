@@ -1,0 +1,70 @@
+@startuml
+' classes
+class Main {
+    + void main()
+    - void processPythonFile()
+    - void processFolder()
+}
+
+class Discern2 {
+    + void sourcemapyield(node:Node,ls=[])
+    + void generatorfind()
+    - void yieldfind(node:Node,ls=[])
+}
+
+class AstToCSV {
+    + void main()
+    - void createFolderForLabels()
+    - void createSubfolder()
+    - void nodeAttributeCreator()
+    - void dictionaryCreator()
+    - void nodeToNumber()
+    - void getNameProject()
+    - void labelFileCreator()
+    - void writeRows()
+}
+
+class FolderCalls {
+    + void files_with_generators()
+    + void callsites()
+}
+
+class SourceMap {
+    + void main()
+    + string get_name(node)
+    - iterator nodeIterator(self, filepath, node, padre)
+    - void generateDictionaries(self, padre, filepath, node)
+    + void createJson(self, nameproject)
+    + void createRows(self):
+    + void createCsv(self, nameproject, field_names, write_rows)
+}
+
+class Labeller {
+    + void main()
+    + void sourcemapCreator(path_of_project: string)
+    + void astCreator(path_of_project: string)
+    + void getNameProject(path_of_project: string)
+    - void getAstPath(project_name: string)
+    - getGeneratorsInSourcemap(pattern_df, sourcemap_df)
+    - getNodeIds(...)
+}
+
+abstract class AST_Library {
+    + Node parse(source: string)
+    + Iterator walk(node: Node)
+    + Iterator iter_child_nodes(node: Node)
+}
+
+Main ..> Discern2 : instanciates
+
+Discern2 --> AST_Library : uses
+
+Main ..> FolderCalls : uses
+
+Main ..> AstToCSV : instanciates
+
+Main --> Labeller : uses
+
+Main --> SourceMap : creates
+
+@enduml

@@ -39,8 +39,7 @@ def main(name, ast, sourcemap, calls, label):
             processFolder(name)
     if label:
         labeller.main(name, label)
-        
-
+ 
     printExecTime(start)
 
 def isOnePythonFile(param):
@@ -82,15 +81,13 @@ def printExecTime(start):
     print("---------")
     tiempoej = end-start
     if tiempoej > 60:
-        tiempoejmin = tiempoej//60
-        tiempoejsec = tiempoej%60
+        tiempoejmin = tiempoej // 60
+        tiempoejsec = tiempoej % 60
         print('Execution time:', tiempoejmin, 'min and ', tiempoejsec,  'seconds.')
     else:
         print('Execution time:', end-start, 'seconds.')
     print('-----------------------------------------------------------------------------------------------------\n')
 
 
-
 if __name__ == '__main__':
     main()
-
