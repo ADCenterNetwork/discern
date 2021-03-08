@@ -3,8 +3,6 @@ import time
 import csv
 
 
-
-
 def createDirectory(path):
     try:
         os.mkdir(path)
@@ -30,6 +28,8 @@ class AstToCsv():
         self.dict_no_gen = {}
         self.contador = 0
         self.node_classification = {}
+        self.parents = {}
+
 
     def main(self):
         startci = time.time()
@@ -41,12 +41,19 @@ class AstToCsv():
                 if filename.endswith('.py') and not filename.startswith('__init__'):
                     self.dict_no_gen, self.dict_with_gen = {}, {}
                     tree = ast.parse(open(filepath, encoding="iso-8859-15", errors='ignore').read())
-                    self.nodeAttributeCreator(filepath, tree, self.contador)
-                    #We create .csv file.
-                    self.labelFileCreator(filename, subfolders)
+                    self.create_parents_dict(tree)
+                    self.nodeAttributeCreator_anc(filepath, tree, self.contador)
+                    # We create .csv file.
+                    self.labelFileCreator_anc(filename, subfolders)
 
         endci = time.time()
-        print("Tiempo nodeToNumber", endci-startci)
+        print("Tiempo df_ancestor", endci-startci)
+
+    def create_parents_dict(self, tree):
+        self.parents[tree] = tree
+        for node in ast.walk(tree):
+            for child in ast.iter_child_nodes(node):
+                self.parents[child] = node
 
     def createFolderForLabels(self):
         nameproject = self.getNameProject()
@@ -72,28 +79,20 @@ class AstToCsv():
         return full_path_tuple
 
     # We iterate the nodes while assigning them an id and more info, with the objective of create a source map.
-    def nodeAttributeCreator(self, filepath, node, contador, padre=None):
-        self.nodeToNumber()
-        self.dictionaryCreator(node, padre)
+    def nodeAttributeCreator_anc(self, filepath, node, contador, padre=-1):
+        self.nodeToNumber_anc()
+        self.dictionaryCreator_anc(node, padre)
         padre = self.contador
         self.contador += 1
         if ast.iter_child_nodes(node):
             for child in ast.iter_child_nodes(node):
-                self.nodeAttributeCreator(filepath, child, self.contador, padre)
+                self.nodeAttributeCreator_anc(filepath, child, self.contador, padre)
 
-    def dictionaryCreator(self, node, padre):
-        if node.__class__.__name__ == "Module":
-            self.dict_with_gen[self.contador] = {"node_id":self.contador, "class_name": self.node_classification[node.__class__.__name__], "parent_id": -1, "Generator": 0}
-            self.dict_no_gen[self.contador] = {"node_id":self.contador, "class_name": self.node_classification[node.__class__.__name__], "parent_id": -1}
-        else:
-            try:
-                self.dict_with_gen[self.contador] = {"node_id":self.contador,"class_name": self.node_classification[node.__class__.__name__], "parent_id": padre, "Generator": 0}
-                self.dict_no_gen[self.contador] = {"node_id":self.contador,"class_name": self.node_classification[node.__class__.__name__], "parent_id": padre}
-            except:
-                self.dict_with_gen[self.contador] = {"node_id":self.contador,"class_name": self.node_classification[node.__class__.__name__], "parent_id": padre, "Generator": 0}
-                self.dict_no_gen[self.contador] = {"node_id":self.contador,"class_name": self.node_classification[node.__class__.__name__], "parent_id": padre}
+    def dictionaryCreator_anc(self, node, padre):
+            self.dict_with_gen[self.contador] = {"node_id":self.contador, "parent_id": padre, "class_name": self.node_classification[node.__class__.__name__], "anc1_class_name": self.node_classification[self.parents[node].__class__.__name__], "anc2_class_name": self.node_classification[self.parents[self.parents[node]].__class__.__name__], "anc3_class_name": self.node_classification[self.parents[self.parents[self.parents[node]]].__class__.__name__], "anc4_class_name": self.node_classification[self.parents[self.parents[self.parents[self.parents[node]]]].__class__.__name__], "Generator": 0}
+            self.dict_no_gen[self.contador] = {"class_name": self.node_classification[node.__class__.__name__], "anc1_class_name": self.node_classification[self.parents[node].__class__.__name__], "anc2_class_name": self.node_classification[self.parents[self.parents[node]].__class__.__name__], "anc3_class_name": self.node_classification[self.parents[self.parents[self.parents[node]]].__class__.__name__], "anc4_class_name": self.node_classification[self.parents[self.parents[self.parents[self.parents[node]]]].__class__.__name__]}
 
-    def nodeToNumber(self):
+    def nodeToNumber_anc(self):
         file_path = os.path.join(sys.path[0], 'typenodes.txt')
         with open(file_path) as f:
             i = 0
@@ -105,8 +104,8 @@ class AstToCsv():
     def getNameProject(self):
         return os.path.basename(os.path.normpath(self.path))
 
-    def labelFileCreator(self, nameproject, folders_path_tuple):
-        field_names = [["node_id", "class_name", "parent_id", "Generator"], ["node_id", "class_name", "parent_id"]]
+    def labelFileCreator_anc(self, nameproject, folders_path_tuple):
+        field_names = [["node_id", "parent_id",  "class_name", "anc1_class_name", "anc2_class_name", "anc3_class_name", "anc4_class_name", "Generator"], ["class_name", "anc1_class_name", "anc2_class_name", "anc3_class_name", "anc4_class_name"]]
         write_rows = self.writeRows()
         i = 0
         for folder_path in folders_path_tuple:

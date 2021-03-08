@@ -3,7 +3,6 @@ from generatorfind.folderCalls import FolderCalls
 from generatorfind.ast_to_csv import AstToCsv
 from generatorfind.sourcemap import Sourcemap
 from generatorfind import labeller
-from generatorfind.dataframe_with_ancestor_info import AncestorInfo
 import sys, os, time
 import click
 
@@ -17,8 +16,7 @@ and FolderCalls is for folders
 @click.option('--sourcemap', is_flag = True, help = "This generates the sourcemap of our folder")
 @click.option('--calls', is_flag = True)
 @click.option('--label', help = 'Enter the path of the file with the information about the generator')
-@click.option('--ancestorinfo', is_flag = True, help='This generates a .csv file with the AST ancestor info.')
-def main(name, ast, sourcemap, calls, label, ancestorinfo):
+def main(name, ast, sourcemap, calls, label):
     start = time.time()
     if ast:
         if isOnePythonFile(name):
@@ -26,12 +24,6 @@ def main(name, ast, sourcemap, calls, label, ancestorinfo):
         else:
             generate_ast = AstToCsv(name)
             generate_ast.main()
-    if ancestorinfo:
-        if isOnePythonFile(name):
-            raise Exception('We can only generate ASTs of full projects')
-        else:
-            generate_ast_ancestor = AncestorInfo(name)
-            generate_ast_ancestor.main()
     if sourcemap:
         if isOnePythonFile(name):
             raise Exception('We can only generate ASTs of full projects')
