@@ -16,9 +16,8 @@ def main(path_of_project, path_info_patterns):
     path_info_patterns = os.path.join(os.getcwd(), path_info_patterns)
     #we get the information we want about the labels
     pattern_df = pd.read_csv(path_info_patterns, delimiter = ';')
+    # gets rid of any unnecessary additional 'Unnamed' column
     pattern_df = pattern_df.loc[:, ~pattern_df.columns.str.contains('^Unnamed')]
-    print(pattern_df)
-    print(pattern_df.shape)
     # Removes empty rows
     pattern_df = pattern_df.dropna()
     sourcemap_df = pd.read_csv(sourcemap_path, delimiter = ',')
