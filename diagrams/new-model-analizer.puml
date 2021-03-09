@@ -1,0 +1,166 @@
+@startuml new-model-analyzer
+' classes
+class ProjectAnalizer {
+    + {static} analyzeProject(p: SoftwareProject, finders: List<AbstractPatternFinder>): AnalysisResult
+}
+
+abstract class AbstractPatternFinder {
+    + {abstract} findPattern(p: SoftwareProject): AnalysisResult
+}
+
+class GeneratorPatternFinder extends AbstractPatternFinder {
+
+    + findPattern(p: SoftwareProject): AnalysisResult
+    
+    - findYieldKeywords(): void
+    - findCalls(): void
+}
+
+class ObserverPatternFinder extends AbstractPatternFinder {
+    + findPattern(p: SoftwareProject): AnalysisResult
+}
+
+class DecoratorPatternFinder extends AbstractPatternFinder {
+    + findPattern(p: SoftwareProject): AnalysisResult
+}
+
+class SoftwareProject {
+    - projectFiles: List<ProjectFile>
+    + construct_from_folder(path: String): SoftwareProject
+    - addFile(file: ProjectFile): void
+}
+
+'class PythonSoftwareProject extends SoftwareProject {
+'    + construct_from_folder(path: String): SoftwareProject
+'}
+
+'class JavaSoftwareProject extends SoftwareProject {
+'    + construct_from_folder(path: String): SoftwareProject
+'}
+
+class ProjectFile {
+    - fileName: String
+    - filePath: String
+    - fileType: String
+    + getFileName(): String
+    + getFilePath(): String
+    + getFileType(): String
+}
+
+class SourceMap implements CSVExportable {
+    + exportToCSV(): CSVFolderStructure
+}
+
+class SourceMapRow {
+    - nodeId: Integer
+    - nodeName: String
+    - nodeType: Integer
+    - nodeTypeName: String
+    - sourcePath: String
+    - nodeTypeAncestorLevel1: Integer
+    - nodeTypeAncestorLevel2: Integer
+    - nodeTypeAncestorLevel3: Integer
+
+    + getNodeId(): Integer
+    + getNodeName(): String
+    + getNodeType(): Integer
+    + getNodeTypeName(): String
+    + getSourcePath(): String
+}
+
+class AnalysisResult {
+
+    - abstractSyntaxTree: AbstractSyntaxTree
+    - classifiedNodes: List<ClassifiedASTNode>
+
+    + getAST(): AbstractSyntaxTree
+    + getClassifiedNodes(): List<ClassifiedASTNode>
+}
+
+class Labeller {
+    - labelledProject: SoftwareProject
+    + generateLabelsForProject(p: SoftwareProject): CSVFolderStructure
+}
+
+class AbstractSyntaxTree implements CSVExportable {
+    - root: ASTNode
+    + exportToCSV(): CSVFolderStructure
+    + getRoot(): ASTNode
+    + walk(): Iterator<ASTNode>
+    + getSourceMap(): SourceMap
+}
+
+class ASTNode {
+    - nodeName: String
+    - nodeType: Integer
+    - nodeTypeName: String
+    - childNodes: List<ASTNode>
+
+    + getNodeName(): String
+    + getNodeType(): Integer
+    + getNodeTypeName(): String
+    + getChildNodes(): List<ASTNode>
+
+}
+
+class ClassifiedASTNode {
+    - node: ASTNode
+    - patternsFound: List<String>
+    
+    + getPatternsFound(): List<String>
+    + getNodeName(): String
+    + getNodeType(): Integer
+    + getNodeTypeName(): String
+    + getChildNodes(): List<ASTNode>
+}
+
+class CSVFolderStructure {
+    - cvsFiles: List<CSVFile>
+    + getFolderLocation(): String
+}
+
+class CSVFile {
+    + getFileLocation(): String
+}
+
+interface CSVExportable {
+    + exportToCSV(): CSVFolderStructure
+}
+
+'Relationships between clases and interfaces
+
+'ProjectAnalizer entry point (main method)
+ProjectAnalizer "one" *--> "many" AbstractPatternFinder : uses
+ProjectAnalizer ..> SoftwareProject : analyzes
+ProjectAnalizer "one" ..> "one" AnalysisResult : obtains
+
+'AnalysisResult
+AnalysisResult ..> AbstractSyntaxTree : holds
+AnalysisResult "one" ..> "many" ClassifiedASTNode : holds
+
+
+'Software Project 
+SoftwareProject "one" *--> "many" ProjectFile : contains
+
+'SourceMap
+SourceMap "one" *--> "many" SourceMapRow : contains
+
+'AbstractSyntaxTree
+AbstractSyntaxTree ..> SourceMap : generates
+AbstractSyntaxTree "one" *--> "one" ASTNode : root
+
+'ASTNode
+ASTNode "zero" *--> "many" ASTNode : children
+ClassifiedASTNode "one" *--> "one" ASTNode : node
+
+'CSVFolderStructure
+CSVFolderStructure "one" *--> "many" CSVFile : contains
+
+'Labeller
+Labeller ..> SoftwareProject : labels
+Labeller ..> CSVFolderStructure : obtains
+
+'Interface CSVExportable
+CSVExportable ..> CSVFolderStructure : returns
+
+@enduml
