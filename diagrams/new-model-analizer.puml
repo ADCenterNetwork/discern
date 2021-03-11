@@ -1,81 +1,90 @@
 @startuml new-model-analyzer
-' classes
+' --------------------------------------------------------------------------
 class PatternFinderMain {
     + {static} findPatterns(path: String): PatternSearchResult
-'    + {static} findPatternCalls(p: SoftwareProject, patternFinders: List<AbstractPatternFinder>): PatternCallsAnalysisResult
 }
+note right of PatternFinderMain::findPatterns
+    finder = new ConcretePatternFinder()
+    ...
+    project = SoftwareProject.construct_from_folder(path)
+    ...
+    return finder.callFinder(project)
+end note
+PatternFinderMain "one" ..> "many" AbstractPatternFinder : uses
 
-class LabellingMain {
-    + {static} generateLabels(path: String): LabellingProcessResult
+' --------------------------------------------------------------------------
+class LabelingMain {
+    + {static} generateLabels(path: String): LabelingProcessResult
 }
+LabelingMain "one" ..> "many" AbstractProjectLabeler : uses
 
+' --------------------------------------------------------------------------
 abstract class AbstractPatternFinder {
+    - {abstract} callFinder: AbstractPatternCallFinder
     + {abstract} findPatterns(p: SoftwareProject): PatternSearchResult
 }
-
+AbstractPatternFinder ..> SoftwareProject : analyzes
+AbstractPatternFinder "one" ..> "one" PatternSearchResult : obtains
+' --------------------------------------------------------------------------
 class GeneratorPatternFinder extends AbstractPatternFinder {
-
+    - callFinder: GeneratorPatternCallFinder
     + findPatterns(p: SoftwareProject): PatternSearchResult
     
     - findYieldKeywords(): void
     - findCalls(): void
 }
-
 class ObserverPatternFinder extends AbstractPatternFinder {
+    - callFinder: ObserverPatternCallFinder
     + findPatterns(p: SoftwareProject): PatternSearchResult
 }
-
 class DecoratorPatternFinder extends AbstractPatternFinder {
+    - callFinder: DecoratorPatternCallFinder
     + findPatterns(p: SoftwareProject): PatternSearchResult
 }
+GeneratorPatternFinder "one" *--> "one" GeneratorPatternCallFinder : "collaborates with"
+DecoratorPatternFinder "one" *--> "one" DecoratorPatternCallFinder : "collaborates with"
+ObserverPatternFinder "one" *--> "one" ObserverPatternCallFinder : "collaborates with"
 
-abstract class AbstractProjectLabeller {
+' --------------------------------------------------------------------------
+abstract class AbstractProjectLabeler {
     + {abstract} generateLabels(p: SoftwareProject): LabelingProcessResult
 }
+AbstractProjectLabeler "one" ..> "one" PatternSearchResult : analyses
+AbstractProjectLabeler "one" ..> "one" LabelingProcessResult : obtains
 
-class GeneratorProjectLabeller extends AbstractProjectLabeller {
+class GeneratorProjectLabeler extends AbstractProjectLabeler {
     + generateLabels(p: SoftwareProject): LabelingProcessResult
 }
-
-class ObserverProjectLabeller extends AbstractProjectLabeller {
+class ObserverProjectLabeler extends AbstractProjectLabeler {
     + generateLabels(p: SoftwareProject): LabelingProcessResult
 }
-
-class DecoratorProjectLabeller extends AbstractProjectLabeller {
+class DecoratorProjectLabeler extends AbstractProjectLabeler {
     + generateLabels(p: SoftwareProject): LabelingProcessResult
 }
+' --------------------------------------------------------------------------
+abstract class AbstractPatternCallFinder {
+    + {abstract} findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
+}
+AbstractPatternCallFinder "one" ..> "one" PatternCallsAnalysisResult : obtains
 
-' abstract class AbstractPatternCallFinder {
-'     + {abstract} findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
-' }
-
-' class GeneratorPatternCallFinder extends AbstractPatternCallFinder {
-'     + findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
-' }
-
-' class ObserverPatternCallFinder extends AbstractPatternCallFinder {
-'     + findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
-' }
-
-' class DecoratorPatternCallFinder extends AbstractPatternCallFinder {
-'     + findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
-' }
-
+class GeneratorPatternCallFinder extends AbstractPatternCallFinder {
+    + findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
+}
+class ObserverPatternCallFinder extends AbstractPatternCallFinder {
+    + findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
+}
+class DecoratorPatternCallFinder extends AbstractPatternCallFinder {
+    + findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
+}
+' --------------------------------------------------------------------------
 class SoftwareProject {
-    - projectFiles: List<ProjectFile>
-    + construct_from_folder(path: String): SoftwareProject
-    - addFile(file: ProjectFile): void
+    - projectFiles: List<SoftwareProjectFile>
+    + {static} construct_from_folder(path: String): SoftwareProject
+    - addFile(file: SoftwareProjectFile): void
 }
+SoftwareProject "one" *--> "many" SoftwareProjectFile : contains
 
-'class PythonSoftwareProject extends SoftwareProject {
-'    + construct_from_folder(path: String): SoftwareProject
-'}
-
-'class JavaSoftwareProject extends SoftwareProject {
-'    + construct_from_folder(path: String): SoftwareProject
-'}
-
-class ProjectFile {
+class SoftwareProjectFile {
     - fileName: String
     - filePath: String
     - fileType: String
@@ -83,136 +92,116 @@ class ProjectFile {
     + getFilePath(): String
     + getFileType(): String
 }
+' --------------------------------------------------------------------------
+' class SourceMap implements CSVExportable {
+'     + exportToCSV(): CSVFolderStructure
+' }
 
-class SourceMap implements CSVExportable {
-    + exportToCSV(): CSVFolderStructure
-}
+' class SourceMapRow {
+'     - nodeId: Integer
+'     - nodeName: String
+'     - nodeType: Integer
+'     - nodeTypeName: String
+'     - sourcePath: String
+'     - nodeTypeAncestorLevel1: Integer
+'     - nodeTypeAncestorLevel2: Integer
+'     - nodeTypeAncestorLevel3: Integer
 
-class SourceMapRow {
-    - nodeId: Integer
-    - nodeName: String
-    - nodeType: Integer
-    - nodeTypeName: String
-    - sourcePath: String
-    - nodeTypeAncestorLevel1: Integer
-    - nodeTypeAncestorLevel2: Integer
-    - nodeTypeAncestorLevel3: Integer
-
-    + getNodeId(): Integer
-    + getNodeName(): String
-    + getNodeType(): Integer
-    + getNodeTypeName(): String
-    + getSourcePath(): String
-}
-
+'     + getNodeId(): Integer
+'     + getNodeName(): String
+'     + getNodeType(): Integer
+'     + getNodeTypeName(): String
+'     + getSourcePath(): String
+' }
+' --------------------------------------------------------------------------
 abstract class ProcessResult {
-
 }
-
-class PatternSearchResult extends ProcessResult {
-
-'    - abstractSyntaxTree: AbstractSyntaxTree
-'    - classifiedNodes: List<ClassifiedASTNode>
-
-'    + getAST(): AbstractSyntaxTree
-'    + getClassifiedNodes(): List<ClassifiedASTNOde>
+class PatternSearchResult extends ProcessResult implements CSVExportable {
+   - rows: List<PatternSearchResultRow>
+   + getRows(): List<PatternSearchResultRow>
 }
+PatternSearchResult "one" *--> "many" PatternSearchResultRow : contains
 
-class PatternCallsAnalysisResult extends ProcessResult {
-
-}
-
-class LabelingProcessResult extends ProcessResult {
-
-}
-
-class AbstractSyntaxTree implements CSVExportable {
-    - root: ASTNode
-    + exportToCSV(): CSVFolderStructure
-    + getRoot(): ASTNode
-    + walk(): Iterator<ASTNode>
-    + getSourceMap(): SourceMap
-}
-
-class ASTNode {
-    - nodeName: String
-    - nodeType: Integer
-    - nodeTypeName: String
-    - childNodes: List<ASTNode>
-
-    + getNodeName(): String
-    + getNodeType(): Integer
-    + getNodeTypeName(): String
-    + getChildNodes(): List<ASTNode>
-
-}
-
-class ClassifiedSyntaxTree implements CSVExportable {
-    - root: ClassifiedASTNode
-    + exportToCSV(): CSVFolderStructure
-    + getRoot(): ClassifiedASTNode
-    + walk(): Iterator<ClassifiedASTNode>
-    + getSourceMap(): SourceMap
-}
-
-class ClassifiedASTNode {
-    - node: ASTNode
+class PatternSearchResultRow {
+    - filePath: String
     - patternsFound: List<String>
-    
-    + getPatternsFound(): List<String>
-    + getNodeName(): String
-    + getNodeType(): Integer
-    + getNodeTypeName(): String
-    + getChildNodes(): List<ASTNode>
+    - lineNumber: Integer
 }
+class PatternCallsAnalysisResult extends ProcessResult {
+}
+class LabelingProcessResult extends ProcessResult implements CSVExportable {
+    - rows: List<LabelingProcessResultRow>
+    + getRows(): List<LabelingProcessResultRow>
+}
+LabelingProcessResult "one" *--> "many" LabelingProcessResultRow : contains
 
+class LabelingProcessResultRow {
+    - filePath: String
+    - labelList: List<String>
+    - lineNumber: Integer
+}
+' --------------------------------------------------------------------------
+' class AbstractSyntaxTree implements CSVExportable {
+'     - root: ASTNode
+'     + exportToCSV(): CSVFolderStructure
+'     + getRoot(): ASTNode
+'     + walk(): Iterator<ASTNode>
+'     + getSourceMap(): SourceMap
+' }
+
+' class ASTNode {
+'     - nodeName: String
+'     - nodeType: Integer
+'     - nodeTypeName: String
+'     - childNodes: List<ASTNode>
+
+'     + getNodeName(): String
+'     + getNodeType(): Integer
+'     + getNodeTypeName(): String
+'     + getChildNodes(): List<ASTNode>
+
+' }
+' class ClassifiedSyntaxTree implements CSVExportable {
+'     - root: ClassifiedASTNode
+'     + exportToCSV(): CSVFolderStructure
+'     + getRoot(): ClassifiedASTNode
+'     + walk(): Iterator<ClassifiedASTNode>
+'     + getSourceMap(): SourceMap
+' }
+' class ClassifiedASTNode {
+'     - node: ASTNode
+'     - patternsFound: List<String>
+'     + getPatternsFound(): List<String>
+'     + getNodeName(): String
+'     + getNodeType(): Integer
+'     + getNodeTypeName(): String
+'     + getChildNodes(): List<ASTNode>
+' }
+' --------------------------------------------------------------------------
 class CSVFolderStructure {
     - cvsFiles: List<CSVFile>
     + getFolderLocation(): String
 }
-
+CSVFolderStructure "one" *--> "many" CSVFile : contains
 class CSVFile {
     + getFileLocation(): String
 }
-
 interface CSVExportable {
     + exportToCSV(): CSVFolderStructure
 }
-
-'Relationships between clases and interfaces
-
-'PatternFinderMain entry point (main method)
-PatternFinderMain "one" ..> "many" AbstractPatternFinder : uses
-LabellingMain "one" ..> "many" AbstractProjectLabeller : uses
-'ProjectAnalyser "one" *--> "many" AbstractPatternCallFinder : uses
-'ProjectAnalyser ..> SoftwareProject : analyzes
-PatternFinderMain "one" ..> "one" ProcessResult : obtains
-
-'Results
-'PatternSearchResult "one" ..> "one" ClassifiedSyntaxTree : holds
-'LabelingProcessResult "one" ..> "one" CSVExportable : holds
-'PatternCallsAnalysisResult "one" ..> "one" CSVExportable : holds
-
-'Software Project 
-SoftwareProject "one" *--> "many" ProjectFile : contains
+CSVExportable ..> CSVFolderStructure : returns
+' --------------------------------------------------------------------------
 
 'SourceMap
 'SourceMap "one" *--> "many" SourceMapRow : contains
 
 'AbstractSyntaxTree
-AbstractSyntaxTree ..> SourceMap : generates
-AbstractSyntaxTree "one" *--> "one" ASTNode : root
+'AbstractSyntaxTree ..> SourceMap : generates
+'AbstractSyntaxTree "one" *--> "one" ASTNode : root
 
 'ASTNode recursive relationship
-ASTNode "zero" *--> "many" ASTNode : children
+'ASTNode "zero" *--> "many" ASTNode : children
 
-'ClassifiedSyntaxTree "one" *--> "one" ClassifiedASTNode : root
-'ClassifiedASTNode "one" *--> "one" ASTNode : node
 
-'CSVFolderStructure
-CSVFolderStructure "one" *--> "many" CSVFile : contains
-
-'Interface CSVExportable
-CSVExportable ..> CSVFolderStructure : returns
 
 @enduml
