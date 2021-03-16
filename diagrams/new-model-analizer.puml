@@ -78,16 +78,26 @@ class DecoratorCallsFinder extends AbstractCallsFinder {
 }
 ' --------------------------------------------------------------------------
 class SoftwareProject {
-    - projectFiles: List<SoftwareProjectFile>
+    - files: List<SoftwareProjectFile>
     + {static} construct_from_folder(path: String): SoftwareProject
-    - addFile(file: SoftwareProjectFile): void
+    - isFileAllowedInProject(fileName: String): Boolean
+    - createProjectFile(fileName: String, filePath: String): ProjectFile
 }
-SoftwareProject "one" *--> "many" SoftwareProjectFile : contains
-
-class SoftwareProjectFile {
+class PythonProject extends SoftwareProject {
+    - isFileAllowedInProject(fileName: String): Boolean
+    - createProjectFile(fileName: String, filePath: String): PythonFile
+}
+SoftwareProject "one" *--> "many" ProjectFile : contains
+class ProjectFile {
     - fileName: String
     - filePath: String
-    - fileType: String
+    + getFileName(): String
+    + getFilePath(): String
+    + getFileType(): String
+}
+class PythonFile extends ProjectFile {
+    - fileName: String
+    - filePath: String
     + getFileName(): String
     + getFilePath(): String
     + getFileType(): String
