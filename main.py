@@ -7,19 +7,21 @@ import sys
 import os
 import time
 import click
-from new_model.software_project import SoftwareProject
-
+from new_model import pattern_finder_main
+from new_model.python_project import PythonProject
+# from new_model.software_project import SoftwareProject
+from new_model.pattern_finder_main import PatternFinderMain
 
 '''
 Discern2 is used when we only work with one file, 
 and FolderCalls is for folders
 '''
 @click.command()
-@click.argument('name', nargs = 1)
-@click.option('--ast', is_flag = True, help='This generates a .csv file with the AST')
-@click.option('--sourcemap', is_flag = True, help = "This generates the sourcemap of our folder")
-@click.option('--calls', is_flag = True)
-@click.option('--label', help = 'Enter the path of the file with the information about the generator')
+@click.argument('name', nargs=1)
+@click.option('--ast', is_flag=True, help='This generates a .csv file with the AST')
+@click.option('--sourcemap', is_flag=True, help='This generates the sourcemap of our folder')
+@click.option('--calls', is_flag=True)
+@click.option('--label', help='Enter the path of the file with the information about the generator')
 def main(name, ast, sourcemap, calls, label):
     start = time.time()
     if ast:
@@ -38,16 +40,18 @@ def main(name, ast, sourcemap, calls, label):
         if isOnePythonFile(name):
             # name is a python file name
             processPythonFile(name)
-        else: 
+        else:
             # name is a folder
             processFolder(name)
     if label:
         labeller.main(name, label)
- 
+
     printExecTime(start)
+
 
 def isOnePythonFile(param):
     return param.endswith('.py')
+
 
 def processPythonFile(name):
     print("***************************************\n")
@@ -65,6 +69,7 @@ def processPythonFile(name):
     print('\n SOURCEMAP: ', script._mapeo())
     print('---------------------------------------------------------------------------------------------\n')
 
+
 def processFolder(name):
     print("***************************************\n")
     print("***Estamos trabajando con FOLDER Y DISCERN2.***\n")
@@ -74,11 +79,13 @@ def processFolder(name):
     print('Los calls son: ')
     print(script.callsites())
 
+
 def getFilePathsFromParam2():
     ls = sys.argv[2:]
     for i in range(len(ls)):
         ls[i] = os.path.abspath(ls[i])
     return ls
+
 
 def printExecTime(start):
     end = time.time()
@@ -94,4 +101,9 @@ def printExecTime(start):
 
 
 if __name__ == '__main__':
-    SoftwareProject('c:\\projects\\discern\\new_model')
+    # project = PythonProject('c:\\projects\\discern\\new_model')
+    # print('Project size: ' + str(project.getProjectSize()))
+    facade = PatternFinderMain()
+    facade.findPatterns('c:\\projects\\discern\\new_model')
+
+    

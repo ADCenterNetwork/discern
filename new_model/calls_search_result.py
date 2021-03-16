@@ -1,4 +1,4 @@
-from . import ProcessResult
+from new_model.process_result import ProcessResult
 
 
 class CallsSearchResult(ProcessResult):

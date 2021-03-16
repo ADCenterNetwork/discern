@@ -1,9 +1,9 @@
-from types import List
-from . import PatternSearchResult
-from . import AbstractPatternFinder
+from typing import List
+from new_model.pattern_search_result import PatternSearchResult
+from new_model.abstract_pattern_finder import AbstractPatternFinder
 
 
 class ObserverPatternFinder(AbstractPatternFinder):
 
-    def findPattern(self, softwareProject) -> List[PatternSearchResult]:
+    def findPatterns(self, softwareProject) -> List[PatternSearchResult]:
         return []
