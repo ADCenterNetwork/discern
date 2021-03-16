@@ -3,8 +3,12 @@ from generatorfind.folderCalls import FolderCalls
 from generatorfind.ast_to_csv import AstToCsv
 from generatorfind.sourcemap import Sourcemap
 from generatorfind import labeller
-import sys, os, time
+import sys
+import os
+import time
 import click
+from new_model.software_project import SoftwareProject
+
 
 '''
 Discern2 is used when we only work with one file, 
@@ -90,4 +94,4 @@ def printExecTime(start):
 
 
 if __name__ == '__main__':
-    main()
+    SoftwareProject('c:\\projects\\discern\\new_model')

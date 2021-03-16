@@ -8,7 +8,7 @@ note right of PatternFinderMain::findPatterns
     ...
     project = SoftwareProject.construct_from_folder(path)
     ...
-    return finder.callFinder(project)
+    return finder.findPatterns(project)
 end note
 PatternFinderMain "one" ..> "many" AbstractPatternFinder : uses
 
@@ -20,30 +20,30 @@ LabelingMain "one" ..> "many" AbstractProjectLabeler : uses
 
 ' --------------------------------------------------------------------------
 abstract class AbstractPatternFinder {
-    - {abstract} callFinder: AbstractPatternCallFinder
+    - {abstract} callsFinder AbstractCallsFinder
     + {abstract} findPatterns(p: SoftwareProject): PatternSearchResult
 }
 AbstractPatternFinder ..> SoftwareProject : analyzes
-AbstractPatternFinder "one" ..> "one" PatternSearchResult : obtains
+AbstractPatternFinder "one" ..> "many" PatternSearchResult : obtains
 ' --------------------------------------------------------------------------
 class GeneratorPatternFinder extends AbstractPatternFinder {
-    - callFinder: GeneratorPatternCallFinder
+    - callsFinder GeneratorCallsFinder
     + findPatterns(p: SoftwareProject): PatternSearchResult
     
     - findYieldKeywords(): void
     - findCalls(): void
 }
 class ObserverPatternFinder extends AbstractPatternFinder {
-    - callFinder: ObserverPatternCallFinder
+    - callsFinder ObserverCallsFinder
     + findPatterns(p: SoftwareProject): PatternSearchResult
 }
 class DecoratorPatternFinder extends AbstractPatternFinder {
-    - callFinder: DecoratorPatternCallFinder
+    - callsFinder DecoratorCallsFinder
     + findPatterns(p: SoftwareProject): PatternSearchResult
 }
-GeneratorPatternFinder "one" *--> "one" GeneratorPatternCallFinder : "collaborates with"
-DecoratorPatternFinder "one" *--> "one" DecoratorPatternCallFinder : "collaborates with"
-ObserverPatternFinder "one" *--> "one" ObserverPatternCallFinder : "collaborates with"
+GeneratorPatternFinder "one" *--> "one" GeneratorCallsFinder : "collaborates with"
+DecoratorPatternFinder "one" *--> "one" DecoratorCallsFinder : "collaborates with"
+ObserverPatternFinder "one" *--> "one" ObserverCallsFinder : "collaborates with"
 
 ' --------------------------------------------------------------------------
 abstract class AbstractProjectLabeler {
@@ -62,19 +62,19 @@ class DecoratorProjectLabeler extends AbstractProjectLabeler {
     + generateLabels(p: SoftwareProject): LabelingProcessResult
 }
 ' --------------------------------------------------------------------------
-abstract class AbstractPatternCallFinder {
-    + {abstract} findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
+abstract class AbstractCallsFinder {
+    + {abstract} findPatternCalls(p: SoftwareProject): CallsSearchResult
 }
-AbstractPatternCallFinder "one" ..> "one" PatternCallsAnalysisResult : obtains
+AbstractCallsFinder "one" ..> "one" CallsSearchResult : obtains
 
-class GeneratorPatternCallFinder extends AbstractPatternCallFinder {
-    + findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
+class GeneratorCallsFinder extends AbstractCallsFinder {
+    + findPatternCalls(p: SoftwareProject): CallsSearchResult
 }
-class ObserverPatternCallFinder extends AbstractPatternCallFinder {
-    + findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
+class ObserverCallsFinder extends AbstractCallsFinder {
+    + findPatternCalls(p: SoftwareProject): CallsSearchResult
 }
-class DecoratorPatternCallFinder extends AbstractPatternCallFinder {
-    + findPatternCalls(p: SoftwareProject): PatternCallsAnalysisResult
+class DecoratorCallsFinder extends AbstractCallsFinder {
+    + findPatternCalls(p: SoftwareProject): CallsSearchResult
 }
 ' --------------------------------------------------------------------------
 class SoftwareProject {
@@ -127,7 +127,7 @@ class PatternSearchResultRow {
     - patternsFound: List<String>
     - lineNumber: Integer
 }
-class PatternCallsAnalysisResult extends ProcessResult {
+class CallsSearchResult extends ProcessResult {
 }
 class LabelingProcessResult extends ProcessResult implements CSVExportable {
     - rows: List<LabelingProcessResultRow>
