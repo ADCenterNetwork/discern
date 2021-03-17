@@ -1,0 +1,140 @@
+@startuml new-model-labeler
+' --------------------------------------------------------------------------
+class LabelingMain {
+    + {static} generateLabels(path: String): LabelingProcessResult
+}
+note right of LabelingMain::findPatterns
+    labeler = new ConcreteProjectLabeler()
+    ...
+    project = SoftwareProject.construct_from_folder(path)
+    ...
+    return labeler.generateLabels(project)
+end note
+LabelingMain "one" ..> "many" AbstractProjectLabeler : uses
+' --------------------------------------------------------------------------
+abstract class AbstractProjectLabeler {
+    + {abstract} generateLabels(p: SoftwareProject): LabelingProcessResult
+}
+AbstractProjectLabeler "one" ..> "one" PatternSearchResult : analyses
+AbstractProjectLabeler "one" ..> "one" LabelingProcessResult : obtains
+
+class GeneratorProjectLabeler extends AbstractProjectLabeler {
+    + generateLabels(p: SoftwareProject): LabelingProcessResult
+}
+class ObserverProjectLabeler extends AbstractProjectLabeler {
+    + generateLabels(p: SoftwareProject): LabelingProcessResult
+}
+class DecoratorProjectLabeler extends AbstractProjectLabeler {
+    + generateLabels(p: SoftwareProject): LabelingProcessResult
+}
+' --------------------------------------------------------------------------
+' class SourceMap implements CSVExportable {
+'     + exportToCSV(): CSVFolderStructure
+' }
+
+' class SourceMapRow {
+'     - nodeId: Integer
+'     - nodeName: String
+'     - nodeType: Integer
+'     - nodeTypeName: String
+'     - sourcePath: String
+'     - nodeTypeAncestorLevel1: Integer
+'     - nodeTypeAncestorLevel2: Integer
+'     - nodeTypeAncestorLevel3: Integer
+
+'     + getNodeId(): Integer
+'     + getNodeName(): String
+'     + getNodeType(): Integer
+'     + getNodeTypeName(): String
+'     + getSourcePath(): String
+' }
+' --------------------------------------------------------------------------
+abstract class ProcessResult {
+}
+class PatternSearchResult extends ProcessResult implements CSVExportable {
+   - rows: List<PatternSearchResultRow>
+   + getRows(): List<PatternSearchResultRow>
+}
+PatternSearchResult "one" *--> "many" PatternSearchResultRow : contains
+
+class PatternSearchResultRow {
+    - filePath: String
+    - patternsFound: List<String>
+    - lineNumber: Integer
+}
+class LabelingProcessResult extends ProcessResult implements CSVExportable {
+    - rows: List<LabelingProcessResultRow>
+    + getRows(): List<LabelingProcessResultRow>
+}
+LabelingProcessResult "one" *--> "many" LabelingProcessResultRow : contains
+
+class LabelingProcessResultRow {
+    - filePath: String
+    - labelList: List<String>
+    - lineNumber: Integer
+}
+' --------------------------------------------------------------------------
+' class AbstractSyntaxTree implements CSVExportable {
+'     - root: ASTNode
+'     + exportToCSV(): CSVFolderStructure
+'     + getRoot(): ASTNode
+'     + walk(): Iterator<ASTNode>
+'     + getSourceMap(): SourceMap
+' }
+
+' class ASTNode {
+'     - nodeName: String
+'     - nodeType: Integer
+'     - nodeTypeName: String
+'     - childNodes: List<ASTNode>
+
+'     + getNodeName(): String
+'     + getNodeType(): Integer
+'     + getNodeTypeName(): String
+'     + getChildNodes(): List<ASTNode>
+
+' }
+' class ClassifiedSyntaxTree implements CSVExportable {
+'     - root: ClassifiedASTNode
+'     + exportToCSV(): CSVFolderStructure
+'     + getRoot(): ClassifiedASTNode
+'     + walk(): Iterator<ClassifiedASTNode>
+'     + getSourceMap(): SourceMap
+' }
+' class ClassifiedASTNode {
+'     - node: ASTNode
+'     - patternsFound: List<String>
+'     + getPatternsFound(): List<String>
+'     + getNodeName(): String
+'     + getNodeType(): Integer
+'     + getNodeTypeName(): String
+'     + getChildNodes(): List<ASTNode>
+' }
+' --------------------------------------------------------------------------
+class CSVFolderStructure {
+    - cvsFiles: List<CSVFile>
+    + getFolderLocation(): String
+}
+CSVFolderStructure "one" *--> "many" CSVFile : contains
+class CSVFile {
+    + getFileLocation(): String
+}
+interface CSVExportable {
+    + exportToCSV(): CSVFolderStructure
+}
+CSVExportable ..> CSVFolderStructure : returns
+' --------------------------------------------------------------------------
+
+'SourceMap
+'SourceMap "one" *--> "many" SourceMapRow : contains
+
+'AbstractSyntaxTree
+'AbstractSyntaxTree ..> SourceMap : generates
+'AbstractSyntaxTree "one" *--> "one" ASTNode : root
+
+'ASTNode recursive relationship
+'ASTNode "zero" *--> "many" ASTNode : children
+
+
+
+@enduml

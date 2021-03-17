@@ -1,4 +1,5 @@
 import os
+from typing import Generator
 from new_model.project_file import ProjectFile
 
 
@@ -36,3 +37,7 @@ class SoftwareProject:
 
     def getProjectSize(self) -> int:
         return len(self.files)
+
+    def getFilesIterator(self) -> Generator[ProjectFile, None, None]:
+        for file in self.files:
+            yield file

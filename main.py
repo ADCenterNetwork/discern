@@ -101,9 +101,10 @@ def printExecTime(start):
 
 
 if __name__ == '__main__':
-    # project = PythonProject('c:\\projects\\discern\\new_model')
-    # print('Project size: ' + str(project.getProjectSize()))
+    project = PythonProject('c:\\projects\\discern\\new_model')
+    print('Project size: ' + str(project.getProjectSize()))
+    print('Iterator over files....')
+    for file in project.getFilesIterator():
+        print(file)
     facade = PatternFinderMain()
     facade.findPatterns('c:\\projects\\discern\\new_model')
-
-    

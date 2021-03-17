@@ -1,4 +1,4 @@
-@startuml new-model-analyzer
+@startuml new-model-finder
 ' --------------------------------------------------------------------------
 class PatternFinderMain {
     + {static} findPatterns(path: String): PatternSearchResult
@@ -11,13 +11,6 @@ note right of PatternFinderMain::findPatterns
     return finder.findPatterns(project)
 end note
 PatternFinderMain "one" ..> "many" AbstractPatternFinder : uses
-
-' --------------------------------------------------------------------------
-class LabelingMain {
-    + {static} generateLabels(path: String): LabelingProcessResult
-}
-LabelingMain "one" ..> "many" AbstractProjectLabeler : uses
-
 ' --------------------------------------------------------------------------
 abstract class AbstractPatternFinder {
     - {abstract} callsFinder AbstractCallsFinder
@@ -44,23 +37,6 @@ class DecoratorPatternFinder extends AbstractPatternFinder {
 GeneratorPatternFinder "one" *--> "one" GeneratorCallsFinder : "collaborates with"
 DecoratorPatternFinder "one" *--> "one" DecoratorCallsFinder : "collaborates with"
 ObserverPatternFinder "one" *--> "one" ObserverCallsFinder : "collaborates with"
-
-' --------------------------------------------------------------------------
-abstract class AbstractProjectLabeler {
-    + {abstract} generateLabels(p: SoftwareProject): LabelingProcessResult
-}
-AbstractProjectLabeler "one" ..> "one" PatternSearchResult : analyses
-AbstractProjectLabeler "one" ..> "one" LabelingProcessResult : obtains
-
-class GeneratorProjectLabeler extends AbstractProjectLabeler {
-    + generateLabels(p: SoftwareProject): LabelingProcessResult
-}
-class ObserverProjectLabeler extends AbstractProjectLabeler {
-    + generateLabels(p: SoftwareProject): LabelingProcessResult
-}
-class DecoratorProjectLabeler extends AbstractProjectLabeler {
-    + generateLabels(p: SoftwareProject): LabelingProcessResult
-}
 ' --------------------------------------------------------------------------
 abstract class AbstractCallsFinder {
     + {abstract} findPatternCalls(p: SoftwareProject): CallsSearchResult
@@ -139,17 +115,6 @@ class PatternSearchResultRow {
 }
 class CallsSearchResult extends ProcessResult {
 }
-class LabelingProcessResult extends ProcessResult implements CSVExportable {
-    - rows: List<LabelingProcessResultRow>
-    + getRows(): List<LabelingProcessResultRow>
-}
-LabelingProcessResult "one" *--> "many" LabelingProcessResultRow : contains
-
-class LabelingProcessResultRow {
-    - filePath: String
-    - labelList: List<String>
-    - lineNumber: Integer
-}
 ' --------------------------------------------------------------------------
 ' class AbstractSyntaxTree implements CSVExportable {
 '     - root: ASTNode
@@ -201,7 +166,6 @@ interface CSVExportable {
 }
 CSVExportable ..> CSVFolderStructure : returns
 ' --------------------------------------------------------------------------
-
 'SourceMap
 'SourceMap "one" *--> "many" SourceMapRow : contains
 
@@ -211,7 +175,5 @@ CSVExportable ..> CSVFolderStructure : returns
 
 'ASTNode recursive relationship
 'ASTNode "zero" *--> "many" ASTNode : children
-
-
 
 @enduml
