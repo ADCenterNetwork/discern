@@ -5,5 +5,8 @@ from new_model.abstract_pattern_finder import AbstractPatternFinder
 
 class ObserverPatternFinder(AbstractPatternFinder):
 
-    def findPatterns(self, softwareProject) -> List[PatternSearchResult]:
+    def __init__(self, softwareProject):
+        pass
+
+    def findPatterns(self) -> List[PatternSearchResult]:
         return []

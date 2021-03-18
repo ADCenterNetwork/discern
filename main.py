@@ -7,21 +7,23 @@ import sys
 import os
 import time
 import click
-from new_model import pattern_finder_main
-from new_model.python_project import PythonProject
+# from new_model.python_project import PythonProject
 # from new_model.software_project import SoftwareProject
 from new_model.pattern_finder_main import PatternFinderMain
+
 
 '''
 Discern2 is used when we only work with one file, 
 and FolderCalls is for folders
 '''
+
+
 @click.command()
 @click.argument('name', nargs=1)
-@click.option('--ast', is_flag=True, help='This generates a .csv file with the AST')
-@click.option('--sourcemap', is_flag=True, help='This generates the sourcemap of our folder')
+@click.option('--ast', is_flag=True, help='This generates a .csv file with the AST')  # noqa: E501
+@click.option('--sourcemap', is_flag=True, help='This generates the sourcemap of our folder')  # noqa: E501
 @click.option('--calls', is_flag=True)
-@click.option('--label', help='Enter the path of the file with the information about the generator')
+@click.option('--label', help='Enter the path of the file with the information about the generator')  # noqa: E501
 def main(name, ast, sourcemap, calls, label):
     start = time.time()
     if ast:
@@ -60,14 +62,13 @@ def processPythonFile(name):
 
     ls = getFilePathsFromParam2()
     script = Discern2(name, ls)
-    script._generatorfind()
     script.assign_call_find()
 
     print('->LOS ASSIGNS SON LOS SIGUIENTES: ', script.assigns)
     print('\n-> LOS GENERATORS SON LOS SIGUIENTES: ', script.generators)
-    print('\n-> LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)
+    print('\n-> LOS CALLS QUE HEMOS ENCONTRADO SON LOS SIGUIENTES: \n', script.calls)  # noqa: E501
     print('\n SOURCEMAP: ', script._mapeo())
-    print('---------------------------------------------------------------------------------------------\n')
+    print('---------------------------------------------------------------------------------------------\n')  # noqa: E501
 
 
 def processFolder(name):
@@ -94,17 +95,20 @@ def printExecTime(start):
     if tiempoej > 60:
         tiempoejmin = tiempoej // 60
         tiempoejsec = tiempoej % 60
-        print('Execution time:', tiempoejmin, 'min and ', tiempoejsec,  'seconds.')
+        print('Execution time:', tiempoejmin, 'min and ', tiempoejsec,  'seconds.')  # noqa: E501
     else:
         print('Execution time:', end-start, 'seconds.')
-    print('-----------------------------------------------------------------------------------------------------\n')
+    print('-----------------------------------------------------------------------------------------------------\n')  # noqa: E501
 
 
 if __name__ == '__main__':
-    project = PythonProject('c:\\projects\\discern\\new_model')
-    print('Project size: ' + str(project.getProjectSize()))
-    print('Iterator over files....')
-    for file in project.getFilesIterator():
-        print(file)
-    facade = PatternFinderMain()
-    facade.findPatterns('c:\\projects\\discern\\new_model')
+    # project = PythonProject('c:\\projects\\discern\\new_model')
+    # print('Project size: ' + str(project.getProjectSize()))
+    # print('Iterator over files....')
+    # for file in project.getFilesGenerator():
+    #     print(file)
+    # PatternFinderMain.findPatterns(path='c:\\projects\\discern\\new_model',
+    #                                mainFile='software_project.py')  # noqa: E501
+
+    PatternFinderMain.findPatterns(path='c:\\projects\\discern\\tests',
+                                   mainFile='pruebas.py')  # noqa: E501

@@ -7,5 +7,5 @@ class AbstractPatternFinder:
     def __init__(self):
         pass
 
-    def findPatterns(self, softwareProject) -> List[PatternSearchResult]:
+    def findPatterns(self) -> List[PatternSearchResult]:
         pass

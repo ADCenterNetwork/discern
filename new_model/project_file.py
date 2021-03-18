@@ -14,3 +14,6 @@ class ProjectFile:
 
     def getFileType() -> str:
         return 'General file'
+
+    def getFullPath(self) -> str:
+        return self.fullPath
