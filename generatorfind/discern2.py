@@ -1,7 +1,6 @@
-import ast, os
-from ast2json import ast2json
+import ast
+import os
 from io import open
-from setuptools import setup
 from .generatorfind import self_finder
 from .generatorfind import get_folder
 from .generatorfind import get_name
