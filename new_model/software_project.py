@@ -5,16 +5,25 @@ from new_model.project_file import ProjectFile
 
 
 class SoftwareProject:
+    '''
+        This class models a general Software Project.
+    '''
 
+    # the collection of ProjectFiles objects
+    # the project consists of (initially empty).
     files = []
+
+    # The main folder of the project (absolute path)
     projectPath = ''
+
+    # The name of the main file inside the project (relative path)
     mainFile = ''
 
     def __init__(self, folderPath):
         self.__checkIfFolderExists__(folderPath)
         self.projectPath = folderPath
         self.__read_folder__(folderPath)
-        self.mainFile = self.files[0].getFullPath()  # must be at least one file # noqa: E501
+        # self.setMainFile(self.files[0].getFullPath())  # must be at least one file
         # print process
         print('\nGeneral project read successfully. Files in project are:\n')
         for file in self.files:

@@ -112,19 +112,26 @@ class GeneratorPatternFinder(AbstractPatternFinder):
             importpath = node.names[i].name.split('.')
             absolute_path = os.path.join(os.getcwd(),
                                          self.__fullpath_imported_file(node, ls, importpath))  # noqa: E501
-            if self.__imported_file_correct(node, ls, importpath, absolute_path):
-                # In this case, we have imported a file that has generators inside. So, we parse it and search generators.
+            if self.__imported_file_correct(node,
+                                            ls, importpath,
+                                            absolute_path):
+                # In this case, we have imported a file that has
+                # generators inside. So, we parse it and search generators.
                 self.__parse_and_register_gen(node, ls, importpath, i)
-            elif absolute_path in self.modules:  # We are in a folder. We have to modify:
+            elif absolute_path in self.modules:  # We are in a folder
+                # We have to modify:
                 self.__check_import_alias(node, ls, importpath, i)
                 # Calls to find yield commands in folders
                 self.__yieldfind_folders(absolute_path, ls)
 
     def __parse_and_register_gen(self, node, ls, importpath, i):
-        self.__check_import_alias(node, ls, importpath, i) #We check the asname (if exists) in order to register namespace.
+        # We check the asname (if exists) in order to register namespace.
+        self.__check_import_alias(node, ls, importpath, i)
         fileimp = self.__fullpath_imported_file(node, ls, importpath)+'.py'
         # Parse fileimp with AST library
-        treeimp = ast.parse(io.open(fileimp, encoding="iso-8859-15", errors='ignore').read())
+        treeimp = ast.parse(io.open(fileimp,
+                                    encoding="iso-8859-15",
+                                    errors='ignore').read())
         # Recursive call in order to find  yield nodes in the imported file.
         self.__yieldfind(treeimp, ls)
         # We remove redundant elements.
@@ -138,7 +145,9 @@ class GeneratorPatternFinder(AbstractPatternFinder):
                 ls.append(item)
 
     def __imported_file_correct(self, node, ls, importpath, absolute_path):
-        return (os.path.isfile(self.__fullpath_imported_file(node, ls, importpath)+'.py')  and (absolute_path+'.py' in self.modules))
+        return (os.path.isfile(
+                self.__fullpath_imported_file(node, ls, importpath)+'.py')
+                and (absolute_path+'.py' in self.modules))
 
     def __fullpath_imported_file(self, node, ls, importpath):
         fullpath = GeneratorFinderUtils.get_folder(self.path)
@@ -147,14 +156,17 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         return fullpath
 
     def __register_generator_of_importfrom_file(self, node, ls):
-        '''In a node like this one, the attribute 'module' contains the name of the left side (from left_side
-        import right_side), in the same way it's represented in code (separated by dots)
+        '''In a node like this one, the attribute 'module' contains
+           the name of the left side (from left_side import right_side),
+           in the same way it's represented in code (separated by dots)
 
-        And the attribute node.names will return a list, where each element is an 'Alias' and it represents
-        the element we're importing, i.e, the right_side. To get its name we apply the attribute '.name', 
-
-        If there is a python file, we know this either has to be on the last element of the left_side, or it 
-        will be on the right side
+           And the attribute node.names will return a list, where each
+           element is an 'Alias' and it represents the element
+           we're importing, i.e, the right_side.
+           To get its name we apply the attribute '.name':
+           If there is a python file, we know this either has to be on
+           the last element of the left_side, or it
+           will be on the right side
         '''
         getfolder = GeneratorFinderUtils.get_folder(self.path).split('/')
         if node.module is None:  # The importfrom has the structure: "from . import file".
@@ -353,15 +365,15 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         """
         for s in range(len(self.generators)):
             self.__assignfind(node, node,  self.generators[s][:], 0)
-            if GeneratorFinderUtils.get_name(node) in self.assigns.keys() and self.assigns[GeneratorFinderUtils.get_name(node)] in self.generators:
+            nodeName = GeneratorFinderUtils.get_name(node)
+            if nodeName in self.assigns.keys() and\
+               self.assigns[nodeName] in self.generators:
                 break
 
-
     def __assignfind(self, new_variable, node, ls, i):
-        """__assignfind will travel the branches of the tree in order to detect assignments to our element of interest
-        in the namespace of 'generators'.
-
-
+        """__assignfind will travel the branches of the tree
+            in order to detect assignments to our element of interest
+            in the namespace of 'generators'.
         Args:
             node ([ast object], optional): [We node we are working in.]
             sublista([list]): [We are searching assignments of our generators in every node. In sublista we record

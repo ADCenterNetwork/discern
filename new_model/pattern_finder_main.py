@@ -17,6 +17,12 @@ class PatternFinderMain():
         '''
         This is the main entry point for the process of finding patterns
         in this framework.
+
+        path: must be a folder in the filesystem, where the file, project or
+              folder structure is located.
+        mainFile: by default, the project sets the first file as main file.
+                  If this parameter is passed, the main file for the project
+                  is set, where the patterns are searched for.
         '''
         start = time.time()
         project = PythonProject(path)
