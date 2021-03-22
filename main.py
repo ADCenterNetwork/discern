@@ -110,5 +110,6 @@ if __name__ == '__main__':
     # PatternFinderMain.findPatterns(path='c:\\projects\\discern\\new_model',
     #                                mainFile='software_project.py')  # noqa: E501
 
-    PatternFinderMain.findPatterns(path='c:\\projects\\discern\\tests',
-                                   mainFile='pruebas.py')  # noqa: E501
+    # PatternFinderMain.findPatterns(path='c:\\projects\\discern\\tests',
+    #                                mainFile='pruebas.py')
+    PatternFinderMain.findPatterns(path='c:\\projects\\discern\\tests')

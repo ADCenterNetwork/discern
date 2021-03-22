@@ -1,4 +1,5 @@
-
+import io
+import ast
 
 class ProjectFile:
 
@@ -17,3 +18,9 @@ class ProjectFile:
 
     def getFullPath(self) -> str:
         return self.fullPath
+
+    def getNodeForFile(self):
+        file = io.open(self.getFullPath(), encoding="iso-8859-15", errors='ignore')
+        astNode = ast.parse(file.read())
+        file.close()
+        return astNode

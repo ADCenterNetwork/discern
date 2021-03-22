@@ -23,7 +23,6 @@ class SoftwareProject:
         self.__checkIfFolderExists__(folderPath)
         self.projectPath = folderPath
         self.__read_folder__(folderPath)
-        # self.setMainFile(self.files[0].getFullPath())  # must be at least one file
         # print process
         print('\nGeneral project read successfully. Files in project are:\n')
         for file in self.files:
@@ -68,8 +67,18 @@ class SoftwareProject:
     def getProjectPath(self) -> str:
         return self.projectPath
 
-    def getMainFile(self) -> str:
+    def getMainFileAsString(self) -> str:
         return self.mainFile
+
+    def getMainFile(self):
+        mainFile = list(filter(lambda file: (file.getFullPath() == self.getMainFileAsString()), self.files))
+        if (len(mainFile) == 0):
+            return ValueError('No main file found for project in folder: ' + self.getProjectPath())
+        else:
+            return mainFile[0]
+
+    def hasMainFile(self) -> bool:
+        return (self.mainFile != '');
 
     def setMainFile(self, fileName):
         '''

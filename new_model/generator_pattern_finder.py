@@ -11,11 +11,21 @@ from new_model.abstract_pattern_finder import AbstractPatternFinder
 class GeneratorPatternFinder(AbstractPatternFinder):
 
     def findPatterns(self) -> List[PatternSearchResult]:
-        self._generatorfind()
         results = []
+        if (self.soft_project.hasMainFile()):
+            mainFile = self.soft_project.getMainFile()
+            self.__find_generators_for_file(mainFile, results)
+        else:
+            for file in self.soft_project.getFilesGenerator():
+                self.__find_generators_for_file(file, results)
+
+        return results
+    
+    def __find_generators_for_file(self, file, results):
+        tree = file.getNodeForFile()
+        self._generatorfind(tree)
         for generator in self.generators:
             results.append(GeneratorSearchResult(generator))
-        return results
 
     def __init__(self, softwareProject):
         """We define some variables that are essential in the process of obtaining information and other variables # noqa: E501 
@@ -29,16 +39,14 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         # Save software project object and its path
         self.soft_project = softwareProject
         self.path = softwareProject.getProjectPath()
-        self.tree = ast.parse(io.open(softwareProject.getMainFile(),
-                                      encoding="iso-8859-15", errors='ignore').read())  # noqa: E501
+        self.tree = None
         self.generators = []
         self.calls = {}
         self.assigns = {}
         self.new_variable = None
         self.modules = []  # ls_modules
         self.temporalassign = {}
-        self.utils = GeneratorFinderUtils()
-        self.self_dictionary = GeneratorFinderUtils.self_finder(self.tree, '', {})  # noqa: E501
+        self.self_dictionary = {}
         self.print = []
         self.sourcemap = {}
         self.sm = {}
@@ -48,11 +56,11 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         self.yieldsdict = {}
         self.yieldslist = []
 
-        i = 0
-        # Iterate over nodes assigning an id to each one
-        for node in ast.walk(self.tree):
-            self.id[node] = i
-            i += 1
+        # i = 0
+        # # Iterate over nodes assigning an id to each one
+        # for node in ast.walk(self.tree):
+        #     self.id[node] = i
+        #     i += 1
 
     def sourcemapyield(self, node=None, ls=[]):
         if node is None:
@@ -73,7 +81,7 @@ class GeneratorPatternFinder(AbstractPatternFinder):
                                                    "lineno": nodoyield.lineno}
         return self.yieldsdict
 
-    def __yieldfind(self, node=None, ls=[]):
+    def __yieldfind(self, node, ls=[]):
         """Yieldfind search 'Yield's nodes and walk up the tree branch, saving all the nodes  # noqa: E501
         that contain that generator.
 
@@ -82,8 +90,8 @@ class GeneratorPatternFinder(AbstractPatternFinder):
             At first, we will input the module object]. Defaults to None.
             ls (list, optional): [List that we record the nodes we travel until find the yield node.]. Defaults to [].
         """
-        if node is None:
-            node = self.tree
+        # if node is None:
+        #     node = self.tree
 
         # If the node type is IMPORT we will parse that imported file
         # and we will search generators on that file.
@@ -273,12 +281,14 @@ class GeneratorPatternFinder(AbstractPatternFinder):
                         tree2 = ast.parse(io.open(filename, encoding="iso-8859-15", errors='ignore').read())
                         self.__yieldfind(tree2, ls)
 
-    def _generatorfind(self):
+    def _generatorfind(self, tree):
         """_generatorfind() : works with our list 'generators' in order to
         obtain the correct namespace instead of all the nodes information.
         """
+        self.tree = tree
+        self.self_dictionary = GeneratorFinderUtils.self_finder(tree, '', {})
         self.generators = []  # Restart generator's list.
-        self.generators = self.__yieldfind()
+        self.generators = self.__yieldfind(tree)
 
         # Iterates over the generated matrix
         for i in range(len(self.generators)):
@@ -332,7 +342,7 @@ class GeneratorPatternFinder(AbstractPatternFinder):
     def __node_with_name(self, node):
         return (not node.__class__.__name__ == 'Import' and not node.__class__.__name__ == 'Module' and not node.__class__.__name__ == 'If' and not node.__class__.__name__ == 'For' and not node.__class__.__name__ == 'If' and not node.__class__.__name__ == 'Try')
 
-    def assign_call_find(self, node=None):
+    def assign_call_find(self, node):
         """assign_call_find is an idea to search the call to new assignments at the moment they are assigned  # noqa: E501
          and it still is in development.
 
@@ -340,9 +350,10 @@ class GeneratorPatternFinder(AbstractPatternFinder):
             node ([ast object], optional): [We node we are working in. The idea is to start at the Module node # noqa: E501
             and walk up the tree branches.]. Defaults to None.
         """
-        self._generatorfind()
-        if node is None:
-            node = self.tree
+
+        self._generatorfind(node)
+        # if node is None:
+        #     node = self.tree
 
         for child in ast.iter_child_nodes(node):
             if self.generators == []:
