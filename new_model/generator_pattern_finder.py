@@ -4,16 +4,17 @@ import io
 from new_model.generator_finder_utils import GeneratorFinderUtils
 from typing import List
 from new_model.pattern_search_result import PatternSearchResult
+from new_model.generator_search_result import GeneratorSearchResult
 from new_model.abstract_pattern_finder import AbstractPatternFinder
 
 
 class GeneratorPatternFinder(AbstractPatternFinder):
 
     def findPatterns(self) -> List[PatternSearchResult]:
-        self.assign_call_find()
+        self._generatorfind()
         results = []
         for generator in self.generators:
-            results.append(PatternSearchResult(generator))
+            results.append(GeneratorSearchResult(generator))
         return results
 
     def __init__(self, softwareProject):
