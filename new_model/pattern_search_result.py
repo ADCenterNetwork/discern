@@ -8,6 +8,19 @@ class PatternSearchResult(ProcessResult):
     def __init__(self, arr):
         self.nodeList = arr
 
+    def __eq__(self, other): 
+        if not isinstance(other, PatternSearchResult):
+            return False
+
+        equal = True
+        i = 0
+        for str in self.nodeList:
+            # compare strings
+            equal = equal and (str == other.nodeList[i])
+            i = i + 1
+        return equal
+
+
     def __str__(self):
         str = ''
         for elem in self.nodeList:
