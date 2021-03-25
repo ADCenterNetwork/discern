@@ -40,7 +40,7 @@ class SoftwareProject:
             for filename in files:
                 # file_path has the full path of filename
                 file_path = os.path.join(root, filename)
-
+                file_path = file_path.replace("\\\\", "\\")
                 # filtering made by subclasses (see template method pattern):
                 if (self.__isFileAllowedInProject__(filename)):
                     projectFile = self.__createProjectFile__(filename, file_path)  # noqa: E501

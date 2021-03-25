@@ -112,4 +112,4 @@ if __name__ == '__main__':
 
     # PatternFinderMain.findPatterns(path='c:\\projects\\discern\\tests',
     #                                mainFile='pruebas.py')
-    PatternFinderMain.findPatterns(path='c:\\projects\\discern\\tests')
+    PatternFinderMain.findPatterns(path='C:\\Users\\dminetca\\OneDrive - Capgemini\\Desktop\\generatorfind\\discern\\tests', mainFile="pruebas2.py")

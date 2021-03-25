@@ -7,11 +7,11 @@ from new_model.pattern_search_result import PatternSearchResult
 from new_model.generator_search_result import GeneratorSearchResult
 from new_model.abstract_pattern_finder import AbstractPatternFinder
 
-
 class GeneratorPatternFinder(AbstractPatternFinder):
 
     def findPatterns(self) -> List[PatternSearchResult]:
         results = []
+        self.__load_files_with_gen2__()
         if (self.soft_project.hasMainFile()):
             mainFile = self.soft_project.getMainFile()
             self.__find_generators_for_file(mainFile, results)
@@ -20,6 +20,13 @@ class GeneratorPatternFinder(AbstractPatternFinder):
                 self.__find_generators_for_file(file, results)
 
         return results
+
+    def __load_files_with_gen2__(self):
+        self.modules = []
+        for file in self.soft_project.getFilesGenerator():
+            tree = file.getNodeForFile()
+            if self._generatorfind(tree) != []:
+                self.modules.append(file.getFullPath())
 
     def __find_generators_for_file(self, file, results):
         tree = file.getNodeForFile()
@@ -44,7 +51,7 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         self.calls = {}
         self.assigns = {}
         self.new_variable = None
-        self.modules = []  # ls_modules
+        #self.modules = softwareProject.__load_files_with_gen__(self.path)  # ls_modules
         self.temporalassign = {}
         self.self_dictionary = {}
         self.print = []
@@ -100,11 +107,11 @@ class GeneratorPatternFinder(AbstractPatternFinder):
 
         # If the node type is IMPORTFROM we will parse that imported file
         # and we will search generators on that file.
-        if node.__class__.__name__ == 'ImportFrom':
+        elif node.__class__.__name__ == 'ImportFrom':
             self.__register_generator_of_importfrom_file(node, ls)
 
         # Yield node found, base case of recursion.
-        if node.__class__.__name__ == 'Yield':
+        elif node.__class__.__name__ == 'Yield':
             self.__register_generator(node, ls)
 
         # We continue iterating until find a node of interest.
@@ -119,7 +126,7 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         for i in range(len(node.names)):
             # We construct the path of the file imported in order to parse it.
             importpath = node.names[i].name.split('.')
-            absolute_path = os.path.join(os.getcwd(),
+            absolute_path = os.path.join(self.path,
                                          self.__fullpath_imported_file(node, ls, importpath))  # noqa: E501
             if self.__imported_file_correct(node,
                                             ls, importpath,
@@ -154,12 +161,11 @@ class GeneratorPatternFinder(AbstractPatternFinder):
                 ls.append(item)
 
     def __imported_file_correct(self, node, ls, importpath, absolute_path):
-        return (os.path.isfile(
-                self.__fullpath_imported_file(node, ls, importpath)+'.py')
-                and (absolute_path+'.py' in self.modules))
+        absolute_path2 = os.path.abspath(absolute_path+'.py')
+        return (os.path.isfile(self.__fullpath_imported_file(node, ls, importpath)+'.py') and (absolute_path2 in self.modules))
 
     def __fullpath_imported_file(self, node, ls, importpath):
-        fullpath = GeneratorFinderUtils.get_folder(self.path)
+        fullpath = self.path
         for j in range(len(importpath)):
             fullpath = os.path.join(fullpath, importpath[j])
         return fullpath
@@ -177,7 +183,7 @@ class GeneratorPatternFinder(AbstractPatternFinder):
            the last element of the left_side, or it
            will be on the right side
         '''
-        getfolder = GeneratorFinderUtils.get_folder(self.path).split('/')
+        getfolder = self.path.split('/')
         if node.module is None:  # The importfrom has the structure: "from . import file".  # noqa: E501
             full_path = self.__construct_import_path_without_left_side(node, getfolder)  # noqa: E501
             filename = full_path+'.py'

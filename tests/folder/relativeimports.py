@@ -1,1 +1,1 @@
-from ..ejemplo import prueba_simple
+from ..ejemplo import prueba_simple_ejemplo
