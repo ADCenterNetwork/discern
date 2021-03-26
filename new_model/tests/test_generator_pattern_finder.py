@@ -66,7 +66,7 @@ def setup_pruebas_assign():
 def setup_discern2_relativeimports():
     path = os.path.join(tests_path)
     project = PythonProject(path)
-    project.setMainFile('\\folder\\relativeimports.py')
+    project.setMainFile('folder\\relativeimports.py')
     finder = GeneratorPatternFinder(project)
     return finder
 
@@ -124,8 +124,8 @@ def test_relativeimports(setup_discern2_relativeimports):
     result = setup_discern2_relativeimports.findPatterns()
 
     expected = []
-    expected.append(GeneratorSearchResult(['prueba_simple', 'Clase1', 'Clase2', 'f']))   # noqa: E501
-    expected.append(GeneratorSearchResult(['prueba_simple', 'f']))
+    expected.append(GeneratorSearchResult(['prueba_simple_ejemplo', 'Clase1', 'Clase2', 'f']))   # noqa: E501
+    expected.append(GeneratorSearchResult(['prueba_simple_ejemplo', 'f']))
     assert len(result) == 2
     for i in range(2):
         # compare the real results with expected

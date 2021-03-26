@@ -247,11 +247,12 @@ class GeneratorPatternFinder(AbstractPatternFinder):
 
     def __check_relative_level(self, node, full_path2):
         if node.level > 0:
-            for i in range(node.level-1):
+            for i in range(node.level-2):
                 full_path2.pop(-1)
 
     def __separate_path_elements(self, node, getfolder):
-        full_path2 = os.getcwd()
+        #full_path2 = os.getcwd()
+        full_path2 = self.path
         for item in getfolder:
             full_path2 = os.path.join(full_path2, item)
         full_path2 = full_path2.split('\\')

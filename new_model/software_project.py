@@ -85,8 +85,8 @@ class SoftwareProject:
             Sets the main file of the project (to process first in the search of patterns).  # noqa: E501
             The fileName is the name inside the project folder (relative to project path). # noqa: E501
         '''
-        fullPath = self.projectPath + '\\' + fileName
-        if (not os.path.isfile(fullPath)):
-            raise ValueError('The main file does not exist: "' + fullPath + '"')
+        fullPath_mainFile = self.projectPath + '\\' + fileName
+        if (not os.path.isfile(fullPath_mainFile)):
+            raise ValueError('The main file does not exist: "' + fullPath_mainFile + '"')
         else:
-            self.mainFile = fullPath
+            self.mainFile = fullPath_mainFile

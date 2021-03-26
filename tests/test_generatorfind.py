@@ -63,7 +63,7 @@ def setup_pruebas_assign():
 @pytest.fixture
 def setup_discern2_relativeimports():
     path = os.path.join(os.getcwd(), 'tests', 'folder', 'relativeimports.py')
-    prueba = Discern2(path, [os.path.abspath("tests\\ejemplo\\prueba_simple.py")])
+    prueba = Discern2(path, [os.path.abspath("tests\\ejemplo\\prueba_simple_ejemplo.py")])
     return prueba
 
 
@@ -141,4 +141,4 @@ def test_relativeimports(setup_discern2_relativeimports):
     """test_namespace_imports asserts that namespaces obtains the expected value with a specific
     case in which generators are in other imported files.
     """
-    assert setup_discern2_relativeimports._generatorfind() == [['prueba_simple', 'Clase1', 'Clase2', 'f'], ['prueba_simple', 'f']]
+    assert setup_discern2_relativeimports._generatorfind() == [['prueba_simple_ejemplo', 'Clase1', 'Clase2', 'f'], ['prueba_simple_ejemplo', 'f']]
