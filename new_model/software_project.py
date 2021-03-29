@@ -16,7 +16,7 @@ class SoftwareProject:
     # The main folder of the project (absolute path)
     projectPath = ''
 
-    # The name of the main file inside the project (relative path)
+    # The name of the main file inside the project (absolute path)
     mainFile = ''
 
     def __init__(self, folderPath):
@@ -71,21 +71,23 @@ class SoftwareProject:
         return self.mainFile
 
     def getMainFile(self):
-        mainFile = list(filter(lambda file: (file.getFullPath() == self.getMainFileAsString()), self.files))
-        if (len(mainFile) == 0):
+        # It looks into the list of files of the project for the one in self.mainFile variable
+        mainFiles = list(filter(lambda file: (file.getFullPath() == self.mainFile), self.files))
+        if (len(mainFiles) == 0):
             return ValueError('No main file found for project in folder: ' + self.getProjectPath())
         else:
-            return mainFile[0]
+            return mainFiles[0]
 
     def hasMainFile(self) -> bool:
         return (self.mainFile != '');
 
-    def setMainFile(self, fileName):
+    def setMainFile(self, relativePath):
         '''
-            Sets the main file of the project (to process first in the search of patterns).  # noqa: E501
-            The fileName is the name inside the project folder (relative to project path). # noqa: E501
+            Sets the main file of the project (to process first in the search of patterns).
+            The relativePath is the name inside the project folder (relative to project path).
+            self.mainFile is an absolute path, so we reconstruct it and check for existence here.
         '''
-        fullPath_mainFile = self.projectPath + '\\' + fileName
+        fullPath_mainFile = self.projectPath + '\\' + relativePath
         if (not os.path.isfile(fullPath_mainFile)):
             raise ValueError('The main file does not exist: "' + fullPath_mainFile + '"')
         else:

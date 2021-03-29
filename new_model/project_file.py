@@ -1,3 +1,4 @@
+import os
 import io
 import ast
 
@@ -7,6 +8,8 @@ class ProjectFile:
     fullPath = ''
 
     def __init__(self, fileName, fullPath):
+        if (not os.path.isfile(fullPath)):
+            raise ValueError('Error creating ProjectFile. Path does not exist: ' + fullPath)
         self.fileName = fileName
         self.fullPath = fullPath
 
