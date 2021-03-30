@@ -47,13 +47,6 @@ def setup_discern2_importpackage():
     finder = GeneratorPatternFinder(project)
     return finder
 
-
-# @pytest.fixture
-#     def setup_project(mainFile):
-#         project = PythonProject(tests_path)
-#         project.setMainFile(mainFile)
-#         finder = GeneratorPatternFinder(project)
-#         return finder
 @pytest.fixture
 def setup_pruebas_assign():
     project = PythonProject(tests_path)

@@ -311,7 +311,7 @@ class Discern2():
          and it still is in development.
 
         Args:
-            node ([ast object], optional): [We node we are working in. The idea is to start at the Module node
+            node ([ast object], optional): [The node we are working in. The idea is to start at the Module node
             and walk up the tree branches.]. Defaults to None.
         """
         self._generatorfind()
@@ -382,6 +382,7 @@ class Discern2():
                         self.assigns[get_name(new_variable)] = [get_name(child)]
                         self.___assignfind(new_variable, child, ls, i-1)
         else:
+            i = ls.index(get_name(child))
             self.assigns[get_name(new_variable)] = [get_name(child)]
             self.___assignfind(new_variable, child, ls, i-1)
 

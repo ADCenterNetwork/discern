@@ -20,6 +20,16 @@ class GeneratorPatternFinder(AbstractPatternFinder):
                 self.__find_generators_for_file(file, results)
 
         return results
+    
+    def findCalls(self):
+        self.__load_files_with_gen2__()
+        if (self.soft_project.hasMainFile()):
+            mainFile = self.soft_project.getMainFile()
+            tree = mainFile.getNodeForFile()
+            self._generatorfind(tree)
+            return self.assign_call_find(tree)
+        else:
+            return {}
 
     def __load_files_with_gen2__(self):
         self.modules = []
@@ -350,24 +360,25 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         return (not node.__class__.__name__ == 'Import' and not node.__class__.__name__ == 'Module' and not node.__class__.__name__ == 'If' and not node.__class__.__name__ == 'For' and not node.__class__.__name__ == 'If' and not node.__class__.__name__ == 'Try')  # noqa: E501
 
     def assign_call_find(self, node):
-        """assign_call_find is an idea to search the call to new assignments at the moment they are assigned  # noqa: E501
+        """assign_call_find is an idea to search the call to new assignments at the moment they are assigned
          and it still is in development.
 
         Args:
-            node ([ast object], optional): [We node we are working in. The idea is to start at the Module node # noqa: E501
+            node ([ast object], optional): [We node we are working in. The idea is to start at the Module node
             and walk up the tree branches.]. Defaults to None.
         """
-        self._generatorfind(node)
+        # self._generatorfind(node)
         for child in ast.iter_child_nodes(node):
             if self.generators == []:
                 break
             if isinstance(child, ast.Assign):
                 self.new_variable = child
                 self._assignsearch(child)
-            if isinstance(child, ast.Call):
+            elif isinstance(child, ast.Call):
                 # This _findcall only detects call to our generator list.
                 self._findcall(child)
-            self.assign_call_find(child)
+            else:
+                self.assign_call_find(child)
 
         return self.calls
 
@@ -423,6 +434,7 @@ class GeneratorPatternFinder(AbstractPatternFinder):
                         self.assigns[GeneratorFinderUtils.get_name(new_variable)] = [GeneratorFinderUtils.get_name(child)]  # noqa: E501
                         self.___assignfind(new_variable, child, ls, i-1)
         else:
+            i = ls.index(GeneratorFinderUtils.get_name(child))
             self.assigns[GeneratorFinderUtils.get_name(new_variable)] = [GeneratorFinderUtils.get_name(child)]  # noqa: E501
             self.___assignfind(new_variable, child, ls, i-1)
 
