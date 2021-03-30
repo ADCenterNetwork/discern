@@ -14,6 +14,6 @@ def finderPruebas2():
 
 def test_callsites_imports(finderPruebas2):
     calls = finderPruebas2.findCalls()
-    
+
     assert calls ==  {('folder','pruebas', 'Clase1_1', 'Clase1_2', 'firstn'): [3]}
 

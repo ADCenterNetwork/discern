@@ -484,8 +484,11 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         return i
 
     def _findcall(self, node):
+        current_calls = self.calls
         for sublist in self.generators:
             self.__findcall(node, sublist, len(sublist)-1)
+            if current_calls != self.calls:
+                break
 
     def __findcall(self, node, ls, i):
         if node.__class__.__name__ == 'Call':
@@ -546,9 +549,9 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         else:
             self.calls[tuple(ls)] = [node.lineno]
             str1 = " "
-            self.sm[str1.join(ls)] = [[self.id[node], node.lineno]]
-            self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}  # noqa: E501
-            self.smdef[str1.join(ls)] = self.smprov
+            #self.sm[str1.join(ls)] = [[self.id[node], node.lineno]]
+            #self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}  # noqa: E501
+            #self.smdef[str1.join(ls)] = self.smprov
 
     def _mapeo(self):
         self.sourcemap[self.path] = self.sm
