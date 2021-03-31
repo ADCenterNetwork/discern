@@ -34,6 +34,14 @@ class GeneratorPatternFinder(AbstractPatternFinder):
     def __load_files_with_gen2__(self):
         self.modules = []
         for file in self.soft_project.getFilesGenerator():
+            if file.fileName == '__init__.py':
+                path = file.getFullPath().split('\\')
+                path.pop(-1)
+                folderpath = path[0]+'\\'
+                path.pop(0)
+                for j in range(len(path)):
+                    folderpath = os.path.join(folderpath, path[j])
+                self.modules.append(folderpath)
             tree = file.getNodeForFile()
             if self._generatorfind(tree) != []:
                 self.modules.append(file.getFullPath())
@@ -417,6 +425,7 @@ class GeneratorPatternFinder(AbstractPatternFinder):
                 self.__check_multiple_assign(node, ls)
             else:
                 self.__assignfind(new_variable, child, ls, i)
+            #self.__assignfind(new_variable, child, ls, i)
 
     def __check_multiple_assign(self, node, ls):
         try:  # We put a try/except for cases a,b = function_that_returns_two_objects. We have to include this case.  # noqa: E501
@@ -484,11 +493,11 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         return i
 
     def _findcall(self, node):
-        current_calls = self.calls
+        #current_calls = self.calls
         for sublist in self.generators:
             self.__findcall(node, sublist, len(sublist)-1)
-            if current_calls != self.calls:
-                break
+            #if current_calls != self.calls:
+            #    break
 
     def __findcall(self, node, ls, i):
         if node.__class__.__name__ == 'Call':
@@ -542,10 +551,10 @@ class GeneratorPatternFinder(AbstractPatternFinder):
             if not node.lineno in self.calls[tuple(ls)]:
                 self.calls[tuple(ls)].append(node.lineno)
                 str1 = " "
-                if not [node, node.lineno] in self.sm[str1.join(ls)]:
-                    self.sm[str1.join(ls)].append([self.id[node], node.lineno])
-                    self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}  # noqa: E501
-                    self.smdef[str1.join(ls)] = self.smprov
+#                if not [node, node.lineno] in self.sm[str1.join(ls)]:
+#                    self.sm[str1.join(ls)].append([self.id[node], node.lineno])
+#                    self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}  # noqa: E501
+#                    self.smdef[str1.join(ls)] = self.smprov
         else:
             self.calls[tuple(ls)] = [node.lineno]
             str1 = " "
