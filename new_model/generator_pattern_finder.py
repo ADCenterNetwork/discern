@@ -374,11 +374,11 @@ class GeneratorPatternFinder(AbstractPatternFinder):
             if isinstance(child, ast.Assign):
                 self.new_variable = child
                 self._assignsearch(child)
-            elif isinstance(child, ast.Call):
+            if isinstance(child, ast.Call):
                 # This _findcall only detects call to our generator list.
                 self._findcall(child)
-            else:
-                self.assign_call_find(child)
+            # In all cases call recursively
+            self.assign_call_find(child)
 
         return self.calls
 
