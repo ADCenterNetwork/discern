@@ -4,7 +4,7 @@ class Clase1:
             yield 'hola'
 
 
-next(Clase1().Clase2().f())
+next(Clase1.Clase2().f())
 
 class Clase:
     pass

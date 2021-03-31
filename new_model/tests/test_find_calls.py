@@ -119,7 +119,7 @@ def test_generatorfind_folder(setup_folder):
     and the software will give us the namespace of the generators on the python files   # noqa: E501
     inside the input folder.
     """
-    assert setup_folder.findCalls() == {'pruebas.py': {('generator',): [41, 43, 44], ('Clase1_1', 'Clase1_2', 'firstn'): [49, 56, 68, 70, 77], ('Clase1_1', 'Clase1_3', 'firstn'): [62, 64], ('Clase2_1', 'Clase2_2', 'firstn'): [85, 89, 92, 93]}, 'prueba_simple.py': {('Clase1', 'Clase2', 'f'): [7], ('f',): [7, 19, 20, 21]}}  # noqa: E501
+    assert setup_folder.findCalls() == {'pruebas.py': {('generator',): [41, 43, 44], ('Clase1_1', 'Clase1_2', 'firstn'): [49, 56, 68, 70, 77], ('Clase1_1', 'Clase1_3', 'firstn'): [62, 64], ('Clase2_1', 'Clase2_2', 'firstn'): [85, 89, 92, 93]}, 'prueba_simple.py': {('Clase1', 'Clase2', 'f'): [7], ('f',): [19, 20, 21]}, 'relativeimports.py': {}}  # noqa: E501
 
 
 def test_discern_callsites_pruebas2(finderPruebas2):

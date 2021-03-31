@@ -20,7 +20,7 @@ class GeneratorPatternFinder(AbstractPatternFinder):
                 self.__find_generators_for_file(file, results)
 
         return results
-    
+
     def findCalls(self):
         self.__load_files_with_gen2__()
         if (self.soft_project.hasMainFile()):
@@ -29,7 +29,15 @@ class GeneratorPatternFinder(AbstractPatternFinder):
             self._generatorfind(tree)
             return self.assign_call_find(tree)
         else:
-            return {}
+            folderCalls = {}
+            for file in self.soft_project.getFilesGenerator():
+                self.calls = {}
+                if file.fileName != '__init__.py':
+                    tree = file.getNodeForFile()
+                    self._generatorfind(tree)
+
+                    folderCalls[file.fileName] = self.assign_call_find(tree)
+            return folderCalls
 
     def __load_files_with_gen2__(self):
         self.modules = []
@@ -74,9 +82,6 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         self.self_dictionary = {}
         self.print = []
         self.sourcemap = {}
-        self.sm = {}
-        self.smprov = {}
-        self.smdef = {}
         self.id = {}  # dictionary with key=NODE and value=INT_ID
         self.yieldsdict = {}
         self.yieldslist = []
@@ -425,7 +430,6 @@ class GeneratorPatternFinder(AbstractPatternFinder):
                 self.__check_multiple_assign(node, ls)
             else:
                 self.__assignfind(new_variable, child, ls, i)
-            #self.__assignfind(new_variable, child, ls, i)
 
     def __check_multiple_assign(self, node, ls):
         try:  # We put a try/except for cases a,b = function_that_returns_two_objects. We have to include this case.  # noqa: E501
@@ -493,11 +497,24 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         return i
 
     def _findcall(self, node):
-        #current_calls = self.calls
+        current_calls = self.calls.copy()
+        prov_calls = []
         for sublist in self.generators:
             self.__findcall(node, sublist, len(sublist)-1)
-            #if current_calls != self.calls:
-            #    break
+            if current_calls != self.calls:
+                prov_calls.append(sublist)
+                current_calls = self.calls.copy()
+        self.__filter_redundant_calls(node, prov_calls)
+
+    def __filter_redundant_calls(self, node, prov_calls):
+        if len(prov_calls) >= 2:
+            len_pv = list(map(lambda x: len(x), prov_calls))
+            max_item = max(len_pv, key=int)
+            max_item_index = len_pv.index(max_item)
+            correct_gen = prov_calls[max_item_index]
+            for sublista in prov_calls:
+                if sublista != correct_gen:
+                    self.calls[tuple(sublista)].remove(node.lineno)
 
     def __findcall(self, node, ls, i):
         if node.__class__.__name__ == 'Call':
@@ -550,18 +567,7 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         if tuple(ls) in self.calls.keys():
             if not node.lineno in self.calls[tuple(ls)]:
                 self.calls[tuple(ls)].append(node.lineno)
-                str1 = " "
-#                if not [node, node.lineno] in self.sm[str1.join(ls)]:
-#                    self.sm[str1.join(ls)].append([self.id[node], node.lineno])
-#                    self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}  # noqa: E501
-#                    self.smdef[str1.join(ls)] = self.smprov
+
         else:
             self.calls[tuple(ls)] = [node.lineno]
-            str1 = " "
-            #self.sm[str1.join(ls)] = [[self.id[node], node.lineno]]
-            #self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}  # noqa: E501
-            #self.smdef[str1.join(ls)] = self.smprov
 
-    def _mapeo(self):
-        self.sourcemap[self.path] = self.sm
-        return
