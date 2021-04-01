@@ -1,10 +1,10 @@
 import time
 from typing import List
-from new_model.pattern_search_result import PatternSearchResult
-from new_model.python_project import PythonProject
-from new_model.decorator_pattern_finder import DecoratorPatternFinder
-from new_model.observer_pattern_finder import ObserverPatternFinder
-from new_model.generator_pattern_finder import GeneratorPatternFinder
+from discern_fwk.pattern_finders.result_types.pattern_search_result import PatternSearchResult
+from discern_fwk.software_project.python_project import PythonProject
+from discern_fwk.pattern_finders.decorator_pattern_finder import DecoratorPatternFinder
+from discern_fwk.pattern_finders.observer_pattern_finder import ObserverPatternFinder
+from discern_fwk.pattern_finders.generator_pattern_finder import GeneratorPatternFinder
 
 
 class PatternFinderMain():

@@ -1,9 +1,9 @@
 import ast, sys
 import os, pytest, shutil
 # from generatorfind.folderCalls import FolderCalls
-from new_model.generator_pattern_finder import GeneratorPatternFinder
-from new_model.python_project import PythonProject
-from new_model.generator_search_result import GeneratorSearchResult
+from discern_fwk.pattern_finders.generator_pattern_finder import GeneratorPatternFinder
+from discern_fwk.software_project.python_project import PythonProject
+from discern_fwk.pattern_finders.result_types.generator_search_result import GeneratorSearchResult
 
 tests_path = os.path.join(os.getcwd(), 'tests')
 

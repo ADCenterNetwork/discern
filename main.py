@@ -7,9 +7,9 @@ import sys
 import os
 import time
 import click
-# from new_model.python_project import PythonProject
-# from new_model.software_project import SoftwareProject
-from new_model.pattern_finder_main import PatternFinderMain
+# from discern_fwk.software_project.python_project import PythonProject
+# from discern_fwk.software_project.software_project import SoftwareProject
+from discern_fwk.pattern_finder_main import PatternFinderMain
 
 
 '''
@@ -102,14 +102,16 @@ def printExecTime(start):
 
 
 if __name__ == '__main__':
-    # project = PythonProject('c:\\projects\\discern\\new_model')
+    # project = PythonProject('c:\\projects\\discern\\discern_fwk')
     # print('Project size: ' + str(project.getProjectSize()))
     # print('Iterator over files....')
     # for file in project.getFilesGenerator():
     #     print(file)
-    # PatternFinderMain.findPatterns(path='c:\\projects\\discern\\new_model',
+    # PatternFinderMain.findPatterns(path='c:\\projects\\discern\\discern_fwk',
     #                                mainFile='software_project.py')  # noqa: E501
 
     # PatternFinderMain.findPatterns(path='c:\\projects\\discern\\tests',
     #                                mainFile='pruebas.py')
-    PatternFinderMain.findPatterns(path='C:\\Users\\dminetca\\OneDrive - Capgemini\\Desktop\\generatorfind\\discern\\tests', mainFile="pruebas2.py")
+
+    project_folder = os.getcwd() + '\\tests'
+    PatternFinderMain.findPatterns(project_folder, mainFile="pruebas2.py")

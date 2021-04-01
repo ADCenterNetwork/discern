@@ -1,5 +1,5 @@
 from typing import List
-from new_model.pattern_search_result import PatternSearchResult
+from discern_fwk.pattern_finders.result_types.pattern_search_result import PatternSearchResult
 
 
 class AbstractPatternFinder:

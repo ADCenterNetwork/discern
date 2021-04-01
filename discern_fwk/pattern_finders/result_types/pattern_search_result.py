@@ -1,4 +1,4 @@
-from new_model.process_result import ProcessResult
+from discern_fwk.pattern_finders.result_types.process_result import ProcessResult
 
 
 class PatternSearchResult(ProcessResult):
@@ -12,13 +12,14 @@ class PatternSearchResult(ProcessResult):
         if not isinstance(other, PatternSearchResult):
             return False
 
-        equal = True
-        i = 0
-        for str in self.nodeList:
-            # compare strings
-            equal = equal and (str == other.nodeList[i])
-            i = i + 1
-        return equal
+        return self.nodeList == other.nodeList
+        # equal = True
+        # i = 0
+        # for str in self.nodeList:
+        #     # compare strings
+        #     equal = equal and (str == other.nodeList[i])
+        #     i = i + 1
+        # return equal
 
 
     def __str__(self):

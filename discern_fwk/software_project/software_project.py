@@ -1,7 +1,7 @@
 import os
 from typing import Generator
 from typing import List
-from new_model.project_file import ProjectFile
+from discern_fwk.software_project.project_file import ProjectFile
 
 
 class SoftwareProject:

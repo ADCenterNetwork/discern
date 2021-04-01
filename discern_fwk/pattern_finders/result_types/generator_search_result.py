@@ -1,4 +1,4 @@
-from new_model.pattern_search_result import PatternSearchResult
+from discern_fwk.pattern_finders.result_types.pattern_search_result import PatternSearchResult
 
 class GeneratorSearchResult(PatternSearchResult):
 
@@ -8,7 +8,7 @@ class GeneratorSearchResult(PatternSearchResult):
     def __str__(self):
         str = ''
         for elem in self.nodeList:
-            str = str + elem + ', '  # noqa: E501
+            str = str + elem + ', '
 
         if (len(self.nodeList) > 0):
             # left the last comma out

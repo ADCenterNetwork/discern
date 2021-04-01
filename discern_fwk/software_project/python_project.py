@@ -1,6 +1,6 @@
 from tests import folder
-from new_model.python_file import PythonFile
-from new_model.software_project import SoftwareProject
+from discern_fwk.software_project.python_file import PythonFile
+from discern_fwk.software_project.software_project import SoftwareProject
 
 
 class PythonProject(SoftwareProject):
