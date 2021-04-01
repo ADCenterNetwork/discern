@@ -2,7 +2,7 @@ import ast
 import os
 import io
 from new_model.generator_finder_utils import GeneratorFinderUtils
-from typing import List
+from typing import Dict, List, Tuple
 from new_model.pattern_search_result import PatternSearchResult
 from new_model.generator_search_result import GeneratorSearchResult
 from new_model.abstract_pattern_finder import AbstractPatternFinder
@@ -384,14 +384,17 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         for child in ast.iter_child_nodes(node):
             if self.generators == []:
                 break
-            if isinstance(child, ast.Assign):
+            elif isinstance(child, ast.Assign):
                 self.new_variable = child
                 self._assignsearch(child)
-            if isinstance(child, ast.Call):
+                # Check for calls to generators in the same node
+                self.assign_call_find(child)
+            elif isinstance(child, ast.Call):
                 # This _findcall only detects call to our generator list.
                 self._findcall(child)
-            # In all cases call recursively
-            self.assign_call_find(child)
+            else:
+                # Else call recursively
+                self.assign_call_find(child)
 
         return self.calls
 
@@ -497,77 +500,94 @@ class GeneratorPatternFinder(AbstractPatternFinder):
         return i
 
     def _findcall(self, node):
+        '''
+            Finds calls to the generator list self.generators, 
+            and saves them into the self.calls collection.
+            Internally, it uses the self.self_dictionary to know the types of the processed nodes.
+        '''
         current_calls = self.calls.copy()
+        calls_temp = self.calls.copy()
         prov_calls = []
-        for sublist in self.generators:
-            self.__findcall(node, sublist, len(sublist)-1)
-            if current_calls != self.calls:
-                prov_calls.append(sublist)
-                current_calls = self.calls.copy()
-        self.__filter_redundant_calls(node, prov_calls)
+        for generator in self.generators:
+            self.__findcall(node, generator, len(generator)-1, self.assigns, current_calls)
+            if current_calls != calls_temp:
+                prov_calls.append(generator)
+                calls_temp = current_calls.copy()
 
-    def __filter_redundant_calls(self, node, prov_calls):
+        self.__filter_incorrect_calls_same_line(node, prov_calls, calls_temp)
+        # last, save the calculated list into self.calls
+        self.calls = calls_temp
+
+    def __filter_incorrect_calls_same_line(self, node, prov_calls, calls):
         if len(prov_calls) >= 2:
             len_pv = list(map(lambda x: len(x), prov_calls))
             max_item = max(len_pv, key=int)
             max_item_index = len_pv.index(max_item)
             correct_gen = prov_calls[max_item_index]
             for sublista in prov_calls:
-                if sublista != correct_gen:
-                    self.calls[tuple(sublista)].remove(node.lineno)
+                if sublista != correct_gen and tuple(sublista) in calls:
+                    calls[tuple(sublista)].remove(node.lineno)
+                    if len(calls[tuple(sublista)]) == 0:
+                        # if the list is empty, remove the key
+                        del calls[tuple(sublista)]
 
-    def __findcall(self, node, ls, i):
+    def __findcall(self, node, ls, i, assigns, calls):
         if node.__class__.__name__ == 'Call':
-            i = self.__check_call_and_return_i(node, ls, i)
+            i = self.__check_call_and_return_i(node, ls, i, assigns, calls)
         elif node.__class__.__name__ == 'Name':
             # We will enter here when we do not have a 'call', to check if it's an assigned variable  # noqa: E501
             if GeneratorFinderUtils.get_name(node) in self.assigns:
-                self.__check_call_to_assign(node, ls, i)
+                self.__check_call_to_assign(node, ls, i, assigns, calls)
             elif GeneratorFinderUtils.get_name(node) == ls[i]:
-                self.___findcall(node, ls, i)
+                self.___findcall(node, ls, i, assigns, calls)
             elif node.id == 'self':
-                self.__check_class(node, ls, i)
+                self.__check_class(node, ls, i, assigns, calls)
         elif node.__class__.__name__ == 'Attribute' and node.value.__class__.__name__ == 'Attribute':  # noqa: E501
             if node.value.attr == ls[i]:
-                self.___findcall(node.value, ls, i)
+                self.___findcall(node.value, ls, i, assigns, calls)
         else:
             for child in ast.iter_child_nodes(node):
-                self.__findcall(child, ls, i)
+                self.__findcall(child, ls, i, assigns, calls)
 
-    def __check_class(self, node, ls, i):
+    def __check_class(self, node, ls, i, assigns, calls):
         if node in self.self_dictionary.keys():
             if self.self_dictionary[node] == ls[i]:
-                self.___findcall(node, ls, i)
+                self.___findcall(node, ls, i, assigns, calls)
 
-    def __check_call_to_assign(self, node, ls, i):
-        i = i - len(self.assigns[GeneratorFinderUtils.get_name(node)])
-        original_variables = self.assigns[GeneratorFinderUtils.get_name(node)]
+    def __check_call_to_assign(self, node, ls, i, assigns, calls):
+        i = i - len(assigns[GeneratorFinderUtils.get_name(node)])
+        original_variables = assigns[GeneratorFinderUtils.get_name(node)]
         if set(original_variables).issubset(ls):
-            self.___findcall(node, ls, i)
+            self.___findcall(node, ls, i, assigns, calls)
 
-    def __check_call_and_return_i(self, node, ls, i):
+    def __check_call_and_return_i(self, node, ls, i, assigns, calls):
         if GeneratorFinderUtils.get_name(node) == ls[i]:
-            self.___findcall(node, ls, i)
+            self.___findcall(node, ls, i, assigns, calls)
         else:
             for child in ast.iter_child_nodes(node):
-                self.__findcall(child, ls, i)
+                self.__findcall(child, ls, i, assigns, calls)
         return i
 
-    def ___findcall(self, node, ls, i):
+    def ___findcall(self, node, ls, i, assigns, calls):
         '''we create this function to simplify '__findcall' and add the list to our
         dictionary of calls if we're in index 0, or continue
         in __findcall otherwise'''
         if i <= 0:  # If this is the case, we want to add this list as a call
-            self.__save_call(node, ls, i)
+            self.__save_call(node, ls, calls)
         else:  # Otherwise, we want to continue the same process with its children  # noqa: E501
             for child in ast.iter_child_nodes(node):
-                self.__findcall(child, ls, i-1)
+                self.__findcall(child, ls, i-1, assigns, calls)
 
-    def __save_call(self, node, ls, i):
-        if tuple(ls) in self.calls.keys():
-            if not node.lineno in self.calls[tuple(ls)]:
-                self.calls[tuple(ls)].append(node.lineno)
-
+    def __save_call(self, node, ls, calls):
+        '''
+            Adds the line number of the node to the namespace to the "calls" collection
+            or creates the first element accordingly.
+        '''
+        if tuple(ls) in calls.keys():
+            if not node.lineno in calls[tuple(ls)]:
+                calls[tuple(ls)].append(node.lineno)
         else:
-            self.calls[tuple(ls)] = [node.lineno]
+            calls[tuple(ls)] = [node.lineno]
+
+        return calls
 
