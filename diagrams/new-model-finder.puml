@@ -1,0 +1,178 @@
+@startuml new-model-finder
+' --------------------------------------------------------------------------
+class PatternFinderMain {
+    + {static} findPatterns(path: String, mainFile: String): List[PatternSearchResult]
+}
+note right of PatternFinderMain::findPatterns
+    finder = new ConcretePatternFinder()
+    ...
+    project = SoftwareProject.construct_from_folder(path)
+    ...
+    return finder.findPatterns(project)
+end note
+PatternFinderMain "one" ..> "many" AbstractPatternFinder : uses
+' --------------------------------------------------------------------------
+abstract class AbstractPatternFinder {
+    + {abstract} findPatterns(p: SoftwareProject): List[PatternSearchResult]
+    + {abstract} findCalls(p: SoftwareProject): List[CallsSearchResult]
+}
+AbstractPatternFinder ..> SoftwareProject : analyzes
+AbstractPatternFinder "one" ..> "many" PatternSearchResult : obtains
+' --------------------------------------------------------------------------
+class GeneratorPatternFinder extends AbstractPatternFinder {
+    + findPatterns(p: SoftwareProject): List[PatternSearchResult]
+    + findCalls(p: SoftwareProject): List[CallsSearchResult]
+}
+class ObserverPatternFinder extends AbstractPatternFinder {
+    + findPatterns(p: SoftwareProject): List[PatternSearchResult]
+    + findCalls(p: SoftwareProject): List[CallsSearchResult]
+}
+class DecoratorPatternFinder extends AbstractPatternFinder {
+    + findPatterns(p: SoftwareProject): List[PatternSearchResult]
+    + findCalls(p: SoftwareProject): List[CallsSearchResult]
+}
+GeneratorPatternFinder "one" ..> "one" GeneratorCallsFinder : "collaborates with"
+DecoratorPatternFinder "one" ..> "one" DecoratorCallsFinder : "collaborates with"
+ObserverPatternFinder "one" ..> "one" ObserverCallsFinder : "collaborates with"
+' --------------------------------------------------------------------------
+abstract class AbstractCallsFinder {
+    + {abstract} findPatternCalls(p: SoftwareProject): List[CallsSearchResult]
+}
+AbstractCallsFinder "one" ..> "one" CallsSearchResult : obtains
+
+class GeneratorCallsFinder extends AbstractCallsFinder {
+    + findPatternCalls(p: SoftwareProject): List[CallsSearchResult]
+}
+class ObserverCallsFinder extends AbstractCallsFinder {
+    + findPatternCalls(p: SoftwareProject): List[CallsSearchResult]
+}
+class DecoratorCallsFinder extends AbstractCallsFinder {
+    + findPatternCalls(p: SoftwareProject): List[CallsSearchResult]
+}
+' --------------------------------------------------------------------------
+class SoftwareProject {
+    - files: List[SoftwareProjectFile]
+    + {static} construct_from_folder(path: String): SoftwareProject
+    - isFileAllowedInProject(fileName: String): Boolean
+    - createProjectFile(fileName: String, filePath: String): ProjectFile
+}
+class PythonProject extends SoftwareProject {
+    - isFileAllowedInProject(fileName: String): Boolean
+    - createProjectFile(fileName: String, filePath: String): PythonFile
+}
+SoftwareProject "one" *--> "many" ProjectFile : contains
+class ProjectFile {
+    - fileName: String
+    - filePath: String
+    + getFileName(): String
+    + getFilePath(): String
+    + getFileType(): String
+}
+class PythonFile extends ProjectFile {
+    - fileName: String
+    - filePath: String
+    + getFileName(): String
+    + getFilePath(): String
+    + getFileType(): String
+}
+' --------------------------------------------------------------------------
+' class SourceMap implements CSVExportable {
+'     + exportToCSV(): CSVFolderStructure
+' }
+
+' class SourceMapRow {
+'     - nodeId: Integer
+'     - nodeName: String
+'     - nodeType: Integer
+'     - nodeTypeName: String
+'     - sourcePath: String
+'     - nodeTypeAncestorLevel1: Integer
+'     - nodeTypeAncestorLevel2: Integer
+'     - nodeTypeAncestorLevel3: Integer
+
+'     + getNodeId(): Integer
+'     + getNodeName(): String
+'     + getNodeType(): Integer
+'     + getNodeTypeName(): String
+'     + getSourcePath(): String
+' }
+' --------------------------------------------------------------------------
+abstract class ProcessResult {
+}
+class PatternSearchResult extends ProcessResult {
+   - nodeList: List[String]
+   + equals(other: PatternSearchResult): Boolean
+   + toString(): String
+}
+class GeneratorSearchResult extends PatternSearchResult {
+    + toString(): String
+}
+class CallsSearchResult extends ProcessResult {
+    - filesDict: Dictionary[File, Matches]
+    + equals(other: CallsSearchResult): Boolean
+    + setPatternCallsForFile(filename: String, callsites: Dictionary[GeneratorId, List[Integer]])
+    + getPatternCallsForFile(filename: String): Dictionary[GeneratorId, List[Integer]]
+}
+
+' --------------------------------------------------------------------------
+' class AbstractSyntaxTree implements CSVExportable {
+'     - root: ASTNode
+'     + exportToCSV(): CSVFolderStructure
+'     + getRoot(): ASTNode
+'     + walk(): Iterator<ASTNode]
+'     + getSourceMap(): SourceMap
+' }
+
+' class ASTNode {
+'     - nodeName: String
+'     - nodeType: Integer
+'     - nodeTypeName: String
+'     - childNodes: List[ASTNode]
+
+'     + getNodeName(): String
+'     + getNodeType(): Integer
+'     + getNodeTypeName(): String
+'     + getChildNodes(): List[ASTNode]
+
+' }
+' class ClassifiedSyntaxTree implements CSVExportable {
+'     - root: ClassifiedASTNode
+'     + exportToCSV(): CSVFolderStructure
+'     + getRoot(): ClassifiedASTNode
+'     + walk(): Iterator<ClassifiedASTNode]
+'     + getSourceMap(): SourceMap
+' }
+' class ClassifiedASTNode {
+'     - node: ASTNode
+'     - patternsFound: List[String]
+'     + getPatternsFound(): List[String]
+'     + getNodeName(): String
+'     + getNodeType(): Integer
+'     + getNodeTypeName(): String
+'     + getChildNodes(): List[ASTNode]
+' }
+' --------------------------------------------------------------------------
+' class CSVFolderStructure {
+'     - cvsFiles: List[CSVFile]
+'     + getFolderLocation(): String
+' }
+' CSVFolderStructure "one" *--> "many" CSVFile : contains
+' class CSVFile {
+'     + getFileLocation(): String
+' }
+' interface CSVExportable {
+'     + exportToCSV(): CSVFolderStructure
+' }
+' CSVExportable ..> CSVFolderStructure : returns
+' --------------------------------------------------------------------------
+'SourceMap
+'SourceMap "one" *--> "many" SourceMapRow : contains
+
+'AbstractSyntaxTree
+'AbstractSyntaxTree ..> SourceMap : generates
+'AbstractSyntaxTree "one" *--> "one" ASTNode : root
+
+'ASTNode recursive relationship
+'ASTNode "zero" *--> "many" ASTNode : children
+
+@enduml

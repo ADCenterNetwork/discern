@@ -1,7 +1,6 @@
-import ast, os
-from ast2json import ast2json
+import ast
+import os
 from io import open
-from setuptools import setup
 from .generatorfind import self_finder
 from .generatorfind import get_folder
 from .generatorfind import get_name
@@ -312,7 +311,7 @@ class Discern2():
          and it still is in development.
 
         Args:
-            node ([ast object], optional): [We node we are working in. The idea is to start at the Module node
+            node ([ast object], optional): [The node we are working in. The idea is to start at the Module node
             and walk up the tree branches.]. Defaults to None.
         """
         self._generatorfind()
@@ -346,10 +345,9 @@ class Discern2():
 
 
     def __assignfind(self, new_variable, node, ls, i):
-        """__assignfind will travel the branches of the tree in order to detect assignments to our element of interest
-        in the namespace of 'generators'.
-
-
+        """__assignfind will travel the branches of the tree 
+            in order to detect assignments to our element of interest
+            in the namespace of 'generators'.
         Args:
             node ([ast object], optional): [We node we are working in.]
             sublista([list]): [We are searching assignments of our generators in every node. In sublista we record
@@ -360,33 +358,40 @@ class Discern2():
         for child in ast.iter_child_nodes(node):
             if child.__class__.__name__ == 'Call':
                 if get_name(child) in ls:
-                    if ast.iter_child_nodes(child):
-                        for childchild in ast.walk(child):
-                            if get_name(childchild) in ls or get_name(childchild) in self.assigns: #and childchild != child:
-                                if childchild != child:
-                                    i = ls.index(get_name(child))
-                                    self.assigns[get_name(new_variable)] = [get_name(child)]
-                                    self.___assignfind(new_variable, child, ls, i-1)
-                    else:
-                        self.assigns[get_name(new_variable)] = [get_name(child)]
-                        self.___assignfind(new_variable, child, ls, i-1)
-
+                    self.__check_assign_is_correct(child, ls, new_variable)
             elif child.__class__.__name__ == 'Name':
-                if get_name(child) in self.assigns.keys():
-                    try:
-                        if node.lineno==64:
-                            print('si pasa')
-                        self.assigns[node.targets[0].id] = self.assigns[get_name(child)]
-                    except:
-                        pass
+                self.__check_previous_assign(node, child)
             elif child.__class__.__name__ == 'Tuple':
-                try: #We put a try/except for cases a,b = function_that_returns_two_objects. We have to include this case.
-                    for j in range(len(node.value.elts)):
-                        self.__assignfind_multiple(node.targets[0].elts[j], node.value.elts[j], ls)
-                except AttributeError:
-                    pass
+                self.__check_multiple_assign(node, ls)
             else:
                 self.__assignfind(new_variable, child, ls, i)
+
+    def __check_multiple_assign(self, node, ls):
+        try: #We put a try/except for cases a,b = function_that_returns_two_objects. We have to include this case.
+            for j in range(len(node.value.elts)):
+                self.__assignfind_multiple(node.targets[0].elts[j], node.value.elts[j], ls)
+        except AttributeError:
+            pass
+
+    def __check_assign_is_correct(self, child, ls, new_variable):
+        if ast.iter_child_nodes(child):
+            for childchild in ast.walk(child):
+                if get_name(childchild) in ls or get_name(childchild) in self.assigns: #and childchild != child:
+                    if childchild != child:
+                        i = ls.index(get_name(child))
+                        self.assigns[get_name(new_variable)] = [get_name(child)]
+                        self.___assignfind(new_variable, child, ls, i-1)
+        else:
+            i = ls.index(get_name(child))
+            self.assigns[get_name(new_variable)] = [get_name(child)]
+            self.___assignfind(new_variable, child, ls, i-1)
+
+    def __check_previous_assign(self, node, child):
+        if get_name(child) in self.assigns.keys():
+            try:
+                self.assigns[node.targets[0].id] = self.assigns[get_name(child)]
+            except:
+                pass
 
     def __assignfind_multiple(self, left_side, right_side, ls):
         
@@ -395,24 +400,17 @@ class Discern2():
                 i = ls.index(get_name(right_side))
                 self.assigns[get_name(left_side)] = [get_name(right_side)]
                 self.___assignfind(left_side, right_side, ls, i-1)
-
         if right_side.__class__.__name__ == 'Name':
             if get_name(right_side) in self.assigns.keys():
-                    self.assigns[get_name(left_side)] = self.assigns[get_name(right_side)]
+                self.assigns[get_name(left_side)] = self.assigns[get_name(right_side)]
 
-    def ___assignfind(self,new_variable, node, ls, i):
+    def ___assignfind(self, new_variable, node, ls, i):
         '''we want to check if any of the descendants of 'node' is in our list ls in the index i'''
         #if ast.iter_child_nodes(node) and i >= 0:
         for child in ast.iter_child_nodes(node):
             if child.__class__.__name__ == 'Call':
-                if get_name(child) == ls[i]:
-                    self.assigns[get_name(new_variable)].insert(0, get_name(child))
-                    i = i-1
-                else:
-                    try:
-                        del self.assigns[get_name(new_variable)]
-                    except:
-                        pass
+                i = self.__save_assign_and_return_i(child, new_variable, ls, i)
+
             elif child.__class__.__name__ == 'Name':
                 if get_name(child) in self.assigns.keys():
                     for item in self.assigns[get_name(child)]:
@@ -421,8 +419,17 @@ class Discern2():
                 else:
                     self.___assignfind(new_variable, child, ls, i)
             self.___assignfind(new_variable, child, ls, i)
-        #else:
-        #    self.assigns[get_name(new_variable)] = self.temporalassign[get_name(new_variable)]
+
+    def __save_assign_and_return_i(self, child, new_variable, ls, i):
+        if get_name(child) == ls[i]:
+            self.assigns[get_name(new_variable)].insert(0, get_name(child))
+            i = i-1
+        else:
+            try:
+                del self.assigns[get_name(new_variable)]
+            except:
+                pass
+        return i
 
     def _findcall(self, node):
         for sublist in self.generators:
@@ -430,24 +437,15 @@ class Discern2():
 
     def __findcall(self, node, ls, i):
         if node.__class__.__name__ == 'Call':
-            if get_name(node) == ls[i]:
-                self.___findcall(node, ls, i) 
-            else:
-                for child in ast.iter_child_nodes(node):
-                    self.__findcall(child, ls, i) 
+            i = self.__check_call_and_return_i(node, ls, i)
         elif node.__class__.__name__ == 'Name':
             #we will enter here when we do not have a 'call', to check if it's an assigned variable
             if get_name(node) in self.assigns:
-                i = i - len(self.assigns[get_name(node)])
-                original_variables = self.assigns[get_name(node)]
-                if set(original_variables).issubset(ls):
-                    self.___findcall(node, ls, i)
+                self.__check_call_to_assign(node, ls, i)
             elif get_name(node) == ls[i]:
                 self.___findcall(node, ls, i)
             elif node.id == 'self':
-                if node in self.self_dictionary.keys():
-                    if self.self_dictionary[node] == ls[i]:
-                        self.___findcall(node, ls, i)
+                self.__check_class(node, ls, i)
         elif node.__class__.__name__ == 'Attribute' and node.value.__class__.__name__ == 'Attribute':
             if node.value.attr == ls[i]:
                 self.___findcall(node.value, ls, i) 
@@ -455,32 +453,51 @@ class Discern2():
             for child in ast.iter_child_nodes(node):
                 self.__findcall(child, ls, i)
 
+    def __check_class(self, node, ls, i):
+        if node in self.self_dictionary.keys():
+            if self.self_dictionary[node] == ls[i]:
+                self.___findcall(node, ls, i)
+
+    def __check_call_to_assign(self, node, ls, i):
+        i = i - len(self.assigns[get_name(node)])
+        original_variables = self.assigns[get_name(node)]
+        if set(original_variables).issubset(ls):
+            self.___findcall(node, ls, i)
+
+    def __check_call_and_return_i(self, node, ls, i):
+        if get_name(node) == ls[i]:
+            self.___findcall(node, ls, i) 
+        else:
+            for child in ast.iter_child_nodes(node):
+                self.__findcall(child, ls, i) 
+        return i
+
     def ___findcall(self, node, ls, i):
         '''we create this function to simplify '__findcall' and add the list to our
         dictionary of calls if we're in index 0, or continue
         in __findcall otherwise'''
         if i <= 0: #if this is the case, we want to add this list as a call
-            if tuple(ls) in self.calls.keys():
-                if not node.lineno in self.calls[tuple(ls)]:
-                    self.calls[tuple(ls)].append(node.lineno)
-                    str1 = " "
-                    if not [node, node.lineno] in self.sm[str1.join(ls)]:
-                        self.sm[str1.join(ls)].append([self.id[node], node.lineno])
-                        self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}
-                        self.smdef[str1.join(ls)] = self.smprov
-
-            else:
-                self.calls[tuple(ls)] = [node.lineno]
-                str1 = " "
-                self.sm[str1.join(ls)] = [[self.id[node], node.lineno]]
-                self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}
-                self.smdef[str1.join(ls)] = self.smprov
-
-                #self.sourcemap[self.path] 
+            self.__save_call(node, ls, i)
         else: #otherwise, we want to continue the same process with its children
             for child in ast.iter_child_nodes(node):
                 self.__findcall(child, ls, i-1)
     
+    def __save_call(self, node, ls, i):
+        if tuple(ls) in self.calls.keys():
+            if not node.lineno in self.calls[tuple(ls)]:
+                self.calls[tuple(ls)].append(node.lineno)
+                str1 = " "
+                if not [node, node.lineno] in self.sm[str1.join(ls)]:
+                    self.sm[str1.join(ls)].append([self.id[node], node.lineno])
+                    self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}
+                    self.smdef[str1.join(ls)] = self.smprov
+        else:
+            self.calls[tuple(ls)] = [node.lineno]
+            str1 = " "
+            self.sm[str1.join(ls)] = [[self.id[node], node.lineno]]
+            self.smprov[self.id[node]] = {"node_id": self.id[node], "line": node.lineno}
+            self.smdef[str1.join(ls)] = self.smprov
+
     def _mapeo(self):
         
         self.sourcemap[self.path] = self.sm

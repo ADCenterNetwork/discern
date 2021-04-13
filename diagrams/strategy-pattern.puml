@@ -1,0 +1,30 @@
+@startuml new-model-analyzer
+' --------------------------------------------------------------------------
+abstract class AbstractStrategy {
+    + m1(): Result
+}
+
+class ConcreteStrategy1 extends AbstractStrategy {
+    + m1(): Result
+}
+
+class ConcreteStrategy2 extends AbstractStrategy {
+    + m1(): Result
+}
+
+class ConcreteStrategy3 extends AbstractStrategy {
+    + m1(): Result
+}
+
+class Context {
+    + algorithm(): Result
+}
+note right of Context::algorithm
+    strategy = new ConcreteStrategy2()
+    ...
+    return result = strategy.m1()
+end note
+
+Context *--> AbstractStrategy : strategy
+
+@enduml
